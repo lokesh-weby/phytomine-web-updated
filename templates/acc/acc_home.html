@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+    <base href="/static/acc/home/">
+    <meta charset="utf-8">
+    <title>Accumulator</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <style>
+        * { font-family: 'Outfit', sans-serif !important; }
+        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+    </style>
+
+</head>
+
+<body>
+
+<script>
+{% for message in messages %}
+    var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+    var tag = "{{ message.tags|default:'' }}";
+    
+    if (tag.indexOf("error") !== -1) {
+        bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+    } else if (tag.indexOf("warning") !== -1) {
+        bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+    } else if (tag.indexOf("success") !== -1) {
+        bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+    } else if (tag.indexOf("info") !== -1 || tag === "") {
+        bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
+    }
+
+    Toastify({
+        text: '{{ message }}',
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: bgColor
+        }
+    }).showToast();
+{% endfor %}
+</script>
+
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+    <!-- Navbar Start -->
+    <div class="container-fluid sticky-top">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg navbar-dark p-0">
+                <a href="/acc_home/" class="navbar-brand">
+                    <h1 class="text-white">ACCUMULATOR<span class="text-dark"></span></h1>
+                </a>
+                <button type="button" class="navbar-toggler ms-auto me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav ms-auto">
+                        <a href="/acc_home/" class="nav-item nav-link active">HOME</a>
+                        <a href="/acc_req/" class="nav-item nav-link">ABSORPTION</a>
+                        <a href="/acc_ana/" class="nav-item nav-link">CHELATION</a>
+                        <a href="/acc_rep/" class="nav-item nav-link">RESERVOIR</a>
+                        <a href="/acc_logout/" class="nav-item nav-link">LOGOUT</a>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+    <!-- Navbar End -->
+
+
+    <!-- Hero Start -->
+    <div class="container-fluid pt-5 bg-primary hero-header mb-5">
+        <div class="container pt-5">
+            <div class="row g-5 pt-5">
+                <div class="col-lg-6 align-self-center text-center text-lg-start mb-lg-5" style="margin-top: 18%;">
+                    <h1 class="display-4 text-white mb-4 animated slideInRight">Artificial Intelligence for Your Business</h1>
+                    <a href="/acc_home/" class="btn btn-light py-sm-3 px-sm-5 rounded-pill me-3 animated slideInRight">HOME</a>
+                </div>
+                {% comment %} <div class="col-lg-6 align-self-end text-center text-lg-end">
+                    <img class="img-fluid" src="img/hero-img.png" alt="">
+                </div> {% endcomment %}
+            </div>
+        </div>
+    </div>
+    <!-- Hero End -->
+
+
+    <!-- About Start -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="row g-5 align-items-center">
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.1s">
+                    <div class="about-img">
+                        <img class="img-fluid" src="img/about-img.jpg">
+                    </div>
+                </div>
+                <div class="col-lg-6 wow fadeIn" data-wow-delay="0.5s">
+                    <h1 class="mb-4">About Us</h1>
+                    <p class="mb-4">Tempor erat elitr rebum at clita. Diam dolor diam ipsum et tempor sit. Aliqu diam
+                        amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no labore lorem sit. Sanctus
+                        clita duo justo et tempor eirmod magna dolore erat amet</p>
+                    <p class="mb-4">Aliqu diam amet diam et eos labore. Clita erat ipsum et lorem et sit, sed stet no
+                        labore lorem sit. Sanctus clita duo justo et tempor.</p>
+                    
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square back-to-top pt-2"><i class="bi bi-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

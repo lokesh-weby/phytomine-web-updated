@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>{% block title %}Phytomine{% endblock %}</title>
+  <style>
+    /* Alert box styling */
+    .alert {
+      padding: 15px;
+      background-color: #f44336; /* Default red */
+      color: white;
+      margin-bottom: 15px;
+      border-radius: 4px;
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      min-width: 100%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      z-index: 9999;
+    }
+    .alert.hide {
+      opacity: 0;
+    }
+  </style>
+  {% block extra_head %}{% endblock %}
+
+    <style>
+        * { font-family: 'Outfit', sans-serif !important; }
+        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+    </style>
+
+</head>
+<body>
+
+  {% block content %}{% endblock %}
+
+  <script>
+    /**
+     * Show a custom alert that disappears after a given time
+     * @param {string} message - The message to display
+     * @param {number} duration - Time in milliseconds before auto close
+     */
+    function showAutoCloseAlert(message, duration = 3000) {
+        const alertBox = document.createElement('div');
+        alertBox.className = 'alert';
+        alertBox.textContent = message;
+        document.body.appendChild(alertBox);
+
+        setTimeout(() => {
+            alertBox.classList.add('hide');
+            setTimeout(() => alertBox.remove(), 500);
+        }, duration);
+    }
+
+    
+        showAutoCloseAlert(msg, 3000);
+    
+  </script>
+
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

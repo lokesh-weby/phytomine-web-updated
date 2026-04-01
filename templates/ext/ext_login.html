@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <title>Login & Registration</title>
+    <base href="/static/ext/login/">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <style>
+        * { font-family: 'Outfit', sans-serif !important; }
+        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+    </style>
+
+</head>
+
+<body>
+
+<script>
+{% for message in messages %}
+    var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+    var tag = "{{ message.tags|default:'' }}";
+    
+    if (tag.indexOf("error") !== -1) {
+        bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+    } else if (tag.indexOf("warning") !== -1) {
+        bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+    } else if (tag.indexOf("success") !== -1) {
+        bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+    } else if (tag.indexOf("info") !== -1 || tag === "") {
+        bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
+    }
+
+    Toastify({
+        text: '{{ message }}',
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: bgColor
+        }
+    }).showToast();
+{% endfor %}
+</script>
+
+<div class="outer-container">
+    <div class="container">
+
+        <!-- INFO PANEL -->
+        <div class="info-container">
+            <div class="info-item log-in">
+                <p>Have an account?</p>
+                <div class="btn">Log In</div>
+            </div>
+
+            <div class="tree">
+                <div class="leaves"></div>
+                <div class="trunk"></div>
+            </div>
+
+            <div class="info-item sign-up">
+                <p>Don't have an account?</p>
+                <div class="btn">Sign Up</div>
+            </div>
+        </div>
+
+        <!-- FORM PANEL -->
+        <div class="form-container">
+            <div class="form-item">
+
+                <!-- LOGIN FORM -->
+                <form class="form-log-in animated" action="/ext_validate_login/" method="post">
+                    {% csrf_token %}
+
+                    <h2 style="text-align:center; margin-bottom:20px; color:#053D48;">
+                        EXTRACTOR LOGIN
+                    </h2>
+
+                    <input type="text" name="email" placeholder="Username" required>
+
+                    <div style="position: relative;">
+                        <input type="password" id="loginPassword" name="password" placeholder="Password" required>
+                        <span id="toggleLoginPassword"
+                              style="position:absolute; right:15px; top:50%; transform:translateY(-50%); cursor:pointer;">
+                            👁
+                        </span>
+                    </div>
+
+                    <!-- BUTTON GROUP -->
+                    <div style="margin-top:20px; text-align:center;">
+                        <button type="submit" class="btn">LOGIN</button>
+
+                        <a href="/" class="btn" style="margin-top:7px; width:80%; margin-left:-6%; display:inline-block;">
+                            BACK
+                        </a>
+                    </div>
+                </form>
+
+                <!-- SIGNUP FORM -->
+                <form class="form-sign-up animated" action="/ext_reg/" method="post">
+                    {% csrf_token %}
+
+                    <h2 style="text-align:center; margin-bottom:20px; color:#053D48;">
+                        EXTRACTOR REGISTRATION
+                    </h2>
+
+                    <input type="text" name="name" placeholder="Username" required>
+                    <input type="email" name="email" placeholder="Email" required>
+                    <input type="text" name="department" value="EXTRACTOR" readonly required>
+                    <input type="text" name="mobile_no" placeholder="Mobile Number" required>
+
+                    <!-- BUTTON GROUP -->
+                    <div style="margin-top:20px; text-align:center;">
+                        <button type="submit" class="btn">SIGN UP</button>
+
+                        <a href="/" class="btn" style="margin-top:7px; width:75%; margin-left:-13%; display:inline-block;">
+                            BACK
+                        </a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LIBRARIES -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TimelineMax.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/utils/CustomEase.min.js"></script>
+
+<!-- MAIN SCRIPT -->
+<script src="script.js"></script>
+
+<!-- PASSWORD TOGGLE -->
+<script>
+document.getElementById("toggleLoginPassword").onclick = function () {
+    const pwd = document.getElementById("loginPassword");
+    pwd.type = pwd.type === "password" ? "text" : "password";
+};
+</script>
+
+</body>
+</html>

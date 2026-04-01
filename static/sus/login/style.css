@@ -1,0 +1,204 @@
+@import url("https://fonts.googleapis.com/css?family=Roboto");
+
+/* CSS Variables (replacement for $ variables) */
+:root {
+  --brand-color-1: #1C6663;
+  --brand-color-2: #053D48;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Outfit', sans-serif !important;
+}
+
+.outer-container {
+  background-color: var(--brand-color-2);
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  background-color: var(--brand-color-1);
+  width: 685px;
+  height: 320px;
+  display: flex;
+  position: relative;
+}
+
+/* Form Container */
+.form-container {
+  margin-left: 25px;
+  background-color: white;
+  height: 380px;
+  width: 360px;
+  align-self: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  transition: margin-left 1.5s;
+}
+
+.form-container.active {
+  margin-left: 275px;
+}
+
+/* Fire SVG */
+.fire {
+  top: -75px;
+  position: absolute;
+  z-index: 0;
+}
+
+.fire svg {
+  width: 300px;
+  height: auto;
+  visibility: hidden;
+}
+
+.fire {
+    width: 200px;
+    margin: auto;
+}
+
+.flameSVG {
+    width: 100%;
+    height: auto;
+}
+
+/* Forms */
+.form-item form {
+  z-index: 2;
+  position: relative;
+}
+
+.form-item form.form-sign-up {
+  margin-top: 30px;
+  display: none;
+}
+
+.form-item input {
+  display: block;
+  padding: 10px;
+  width: 250px;
+  margin: 5px;
+  /* margin-left: 25px; */
+}
+
+/* Buttons */
+.form-item .btn {
+  cursor: pointer;
+  display: block;
+  padding: 10px;
+  width: 250px;
+  margin: 5px;
+  text-align: center;
+  border: 2px solid var(--brand-color-1);
+  background-color: var(--brand-color-1);
+  color: white;
+}
+
+.form-item .btn:hover {
+  opacity: 0.7;
+}
+
+/* Info Section */
+.info-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  position: relative;
+}
+
+.info-item {
+  color: white;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-weight: 500;
+  font-size: 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.log-in {
+  text-align: center;
+  margin-right: 40px;
+}
+
+.sign-up {
+  margin-left: 40px;
+  text-align: center;
+}
+
+.info-container .btn {
+  cursor: pointer;
+  background-color: transparent;
+  width: 60px;
+  padding: 10px 15px;
+  border: 1px solid white;
+  font-size: 16px;
+}
+
+.info-container .btn:hover {
+  opacity: 0.7;
+}
+
+/* Tree */
+.tree {
+  width: 300px;
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.leaves {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 100px 100px 100px;
+  border-radius: 30%;
+  border-color: transparent transparent #6B8E23 transparent;
+  position: relative;
+  bottom: 40px;
+}
+
+.leaves::before {
+  content: "";
+  border-style: solid;
+  border-width: 0 65px 100px 65px;
+  border-radius: 30%;
+  border-color: transparent transparent #6B8E23 transparent;
+  position: absolute;
+  left: -65px;
+  top: -100px;
+}
+
+.leaves::after {
+  content: "";
+  border-style: solid;
+  border-width: 0 85px 100px 85px;
+  border-radius: 30%;
+  border-color: transparent transparent #6B8E23 transparent;
+  position: absolute;
+  left: -85px;
+  top: -50px;
+}
+
+.trunk {
+  width: 100px;
+  height: 50px;
+  background-color: #8B4513;
+  position: absolute;
+  bottom: 0;
+}

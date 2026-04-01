@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <base href="/static/home/">
+    <meta charset="utf-8">
+    <title>Home</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <style>
+        .carousel-caption {
+            left: 5% !important;
+            right: 5% !important;
+            width: 90% !important;
+        }
+    </style>
+
+    <style>
+        * {
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .navbar-nav .nav-link,
+        .navbar-brand,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif !important;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <script>
+        {% for message in messages %}
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+        var tag = "{{ message.tags|default:'' }}";
+
+        if (tag.indexOf("error") !== -1) {
+            bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+        } else if (tag.indexOf("warning") !== -1) {
+            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+        } else if (tag.indexOf("success") !== -1) {
+            bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+        } else if (tag.indexOf("info") !== -1 || tag === "") {
+            bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
+        }
+
+        Toastify({
+            text: '{{ message }}',
+            duration: 3000,
+            gravity: "top",
+            position: "right",
+            style: {
+                background: bgColor
+            }
+        }).showToast();
+        {% endfor %}
+    </script>
+
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+        <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+    <!-- Spinner End -->
+
+
+
+
+
+    <!-- Navbar & Hero Start -->
+    <div class="container-fluid sticky-top px-0">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
+            <a href="/" class="navbar-brand p-0">
+                <h1 class="text-secondary display-6">PHYTOMINE</h1>
+                <!-- <img src="img/logo.png" alt="Logo"> -->
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <span class="fa fa-bars"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+                <div class="navbar-nav ms-auto pt-2 pt-lg-0">
+                    <a href="/" class="nav-item nav-link active">HOME</a>
+                    <a href="/admins_login/" class="nav-item nav-link">ADMIN</a>
+                    <a href="/cul_login/" class="nav-item nav-link">CULTIVATOR</a>
+                    <a href="/acc_login/" class="nav-item nav-link">ACCUMULATOR</a>
+                    <a href="/ext_login/" class="nav-item nav-link">EXTRACTOR</a>
+                    <a href="/sus_login/" class="nav-item nav-link">SUSTAINER</a>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- Navbar & Hero End -->
+
+    <!-- Carousel Start -->
+    <div class="container-fluid overflow-hidden px-0">
+        <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
+            <ol class="carousel-indicators fadeInUp animate__animated" data-animation="fadeInUp" data-delay="1s"
+                style="animation-delay: 1s;">
+                <li data-bs-target="#carouselId" data-bs-slide-to="0" class="active" aria-current="true"
+                    aria-label="First slide"></li>
+                <li data-bs-target="#carouselId" data-bs-slide-to="1" aria-label="Second slide"></li>
+            </ol>
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                    <img src="img/nickel_extraction.png" class="img-fluid w-100" alt="First slide" />
+                    <div class="carousel-caption">
+                        <h1 class="display-1 text-capitalize text-white mb-4 fadeInUp animate__animated"
+                            data-animation="fadeInUp" data-delay="1.3s" style="animation-delay: 1.3s;">Mining the
+                            Future, Naturally.</h1>
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-primary d-flex py-3 px-5 me-2 flex-shrink-0 fadeInUp animate__animated"
+                                data-animation="fadeInUp" data-delay="1.5s" style="animation-delay: 1.7s;"
+                                href="/">Home</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="carousel-item">
+                    <img src="img/carousel-2.jpg" class="img-fluid w-100" alt="Second slide" />
+                    <div class="carousel-caption">
+                        <h1 class="display-1 text-capitalize text-white mb-4 fadeInUp animate__animated"
+                            data-animation="fadeInUp" data-delay="1.3s" style="animation-delay: 1.3s;">Eco-Intelligent
+                            Extraction through Phytomining.</h1>
+                        <div class="d-flex justify-content-center">
+                            <a class="btn btn-secondary d-inline-block py-3 px-5 ms-2 flex-shrink-0 fadeInUp animate__animated"
+                                data-animation="fadeInUp" data-delay="1.5s" style="animation-delay: 1.7s;"
+                                href="/">Home</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon btn-lg-square fadeInLeft animate__animated" aria-hidden="true"
+                    data-animation="fadeInLeft" data-delay="1.1s" style="animation-delay: 1.3s;"><i
+                        class="fas fa-chevron-left fa-2x"></i></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
+                <span class="carousel-control-next-icon btn-lg-square fadeInRight animate__animated" aria-hidden="true"
+                    data-animation="fadeInRight" data-delay="1.1s" style="animation-delay: 1.3s;"><i
+                        class="fas fa-chevron-right fa-2x"></i></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+    <!-- About Start -->
+    <div class="container-fluid about py-5">
+        <div class="container py-5">
+            <div class="row g-5 align-items-center">
+                {% comment %} <div class="col-xl-6 wow fadeInLeft" data-wow-delay="0.1s"> {% endcomment %}
+                    {% comment %} <div class="about-item-image d-flex"> {% endcomment %}
+                        <img src="img/about.jpg" class="img-1 img-fluid w-50" alt="">
+                        {% comment %} <img src="img/about-3.jpg" class="img-2 img-fluid w-50" alt=""> {% endcomment %}
+                        {% comment %} <div class="about-item-image-content">
+                            <img src="img/about-1.png" class="img-fluid w-100 h-100" style="object-fit: cover;" alt="">
+                        </div> {% endcomment %}
+                        {% comment %}
+                    </div> {% endcomment %}
+                    {% comment %} </div> {% endcomment %}
+                <div class="col-xl-6 wow fadeInRight" data-wow-delay="0.1s">
+                    <div class="about-item-content">
+                        <h2 class="display-4 text-capitalize mb-3">ABOUT US</h2>
+                        <p class="mb-4 fs-5" style="text-align:justify;">Phytomine is an innovative research-driven
+                            platform focused on sustainable extraction of rare earth elements using natural biological
+                            processes. Instead of relying on traditional, environmentally damaging mining techniques,
+                            Phytomine leverages the unique ability of certain plants to absorb and accumulate valuable
+                            metals from soil, offering an eco-friendly alternative for metal recovery.</p>
+                        <p class="mb-4 fs-5" style="text-align:justify;">The system is built around the concept of
+                            phytomining, where hyperaccumulator plants such as ferns are cultivated in metal-rich soils
+                            to naturally extract rare earth elements. These plants absorb metals during their growth
+                            cycle, transforming contaminated or mineral-rich soil into a renewable resource for metal
+                            recovery while minimizing ecological harm.</p>
+                        <p class="mb-4 fs-5" style="text-align:justify;">Phytomine integrates scientific analysis with
+                            intelligent data processing to monitor plant growth, metal uptake, extraction efficiency,
+                            and environmental safety. By using data-driven evaluation methods, the platform ensures
+                            accurate assessment of sustainability indicators such as soil metal reduction, safety index,
+                            and environmental impact.</p>
+                        {% comment %} <p class="mb-4 fs-5" style="text-align:justify;">The platform is designed with a
+                            modular workflow that supports cultivation analysis, metal accumulation assessment, recovery
+                            evaluation, and environmental sustainability verification. Each stage of the process is
+                            carefully monitored to maintain data integrity, traceability, and compliance with
+                            environmental safety standards.</p> {% endcomment %}
+                        {% comment %} <p class="mb-4 fs-5" style="text-align:justify;">Phytomine aims to contribute to
+                            the future of green mining by promoting responsible resource utilization, reducing
+                            environmental degradation, and supporting sustainable technological development. The project
+                            serves as a practical model for eco-conscious metal extraction, bridging the gap between
+                            environmental science and modern data analytics.</p> {% endcomment %}
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- About End -->
+
+
+
+    <!-- Back to Top -->
+    <a href="#" class="btn btn-secondary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>
+
+
+    <!-- JavaScript Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>

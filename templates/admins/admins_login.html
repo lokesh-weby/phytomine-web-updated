@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Phytomine | Admin Access</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="/static/admins/login/">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Toastify -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <style>
+        :root {
+            --primary-red: #188500;
+            --dark-bg: #0a0a0b;
+            --glass-white: rgba(255, 255, 255, 0.03);
+            --border-white: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: url("bg.jpg") no-repeat center center fixed;
+            background-size: cover;
+        }
+
+
+        @keyframes moveBackground {
+            from {
+                transform: translate(-25%, -25%) rotate(0deg);
+            }
+
+            to {
+                transform: translate(-25%, -25%) rotate(360deg);
+            }
+        }
+
+        .login-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 420px;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: rgba(15, 15, 18, 0.85);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--border-white);
+            border-radius: 24px;
+            padding: 45px 35px;
+            box-shadow:
+                0 40px 100px rgba(0, 0, 0, 0.6),
+                inset 0 0 20px rgba(235, 22, 22, 0.05);
+            text-align: center;
+            transform: translateY(0);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .login-card:hover {
+            border-color: rgba(235, 22, 22, 0.3);
+            box-shadow:
+                0 40px 120px rgba(235, 22, 22, 0.15),
+                inset 0 0 30px rgba(235, 22, 22, 0.1);
+        }
+
+        .logo-section {
+            margin-bottom: 40px;
+        }
+
+        .logo-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--primary-red), #0a901a);
+            border-radius: 18px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto 15px;
+            box-shadow: 0 10px 20px rgba(22, 235, 47, 0.4);
+            font-size: 28px;
+            color: white;
+            animation: pulseGlow 3s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(22, 235, 40, 0.7);
+            }
+
+            70% {
+                box-shadow: 0 0 0 15px rgba(235, 22, 22, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(235, 22, 22, 0);
+            }
+        }
+
+        .login-card h2 {
+            color: #fff;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .login-card p {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: #aaa;
+            font-size: 13px;
+            margin-bottom: 8px;
+            margin-left: 5px;
+            font-weight: 500;
+        }
+
+        .input-wrapper {
+            position: relative;
+        }
+
+        .input-wrapper i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        .input-wrapper input {
+            width: 100%;
+            padding: 14px 18px 14px 50px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .input-wrapper input:focus {
+            background: rgba(22, 235, 36, 0.03);
+            border-color: var(--primary-red);
+            box-shadow: 0 0 15px rgba(22, 235, 36, 0.15);
+        }
+
+        .input-wrapper input:focus+i {
+            color: var(--primary-red);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #555;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .toggle-password:hover {
+            color: #fff;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 35px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 14px;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .login-btn {
+            background: var(--primary-red);
+            color: white;
+            box-shadow: 0 10px 25px rgba(22, 235, 36, 0.3);
+        }
+
+        .login-btn:hover {
+            background: #1fff39;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(22, 235, 36, 0.4);
+        }
+
+        .login-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .back-btn {
+            background: transparent;
+            color: #bbb;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: #fff;
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Toastify Custom override */
+        .toastify {
+            border-radius: 12px;
+            font-weight: 500;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        {% for message in messages %}
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)";
+        var tag = "{{ message.tags|default:'' }}";
+
+        if (tag.indexOf("error") !== -1) {
+            bgColor = "linear-gradient(135deg, #eb1616 0%, #900a0a 100%)";
+        } else if (tag.indexOf("warning") !== -1) {
+            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)";
+        } else if (tag.indexOf("success") !== -1) {
+            bgColor = "linear-gradient(to right, #00b09b, #96c93d)";
+        }
+
+        Toastify({
+            text: '{{ message }}',
+            duration: 4000,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            style: {
+                background: bgColor,
+            }
+        }).showToast();
+        {% endfor %}
+    </script>
+
+    <div class="login-container">
+        <div class="login-card">
+            <div class="logo-section">
+                <div class="logo-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2>Admin Login</h2>
+                <p>Welcome back to Phytomine Control Panel</p>
+            </div>
+
+            <form method="post" action="/admins_login/">
+                {% csrf_token %}
+                <input type="hidden" name="role" value="admin">
+
+                <div class="input-group">
+                    <label>Administrator Username</label>
+                    <div class="input-wrapper">
+                        <input type="text" name="email" placeholder="Enter admin username" required
+                            autocomplete="username">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Secure Password</label>
+                    <div class="input-wrapper">
+                        <input type="password" name="password" id="password" placeholder="••••••••" required
+                            autocomplete="current-password">
+                        <i class="fas fa-lock"></i>
+                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn login-btn">
+                        <span>Access Dashboard</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <a href="/" class="btn back-btn">
+                        <i class="fas fa-chevron-left"></i>
+                        <span>Return to Main Site</span>
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const togglePassword = document.getElementById("togglePassword");
+        const passwordField = document.getElementById("password");
+
+        togglePassword.addEventListener("click", function () {
+            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
+            passwordField.setAttribute("type", type);
+            this.classList.toggle("fa-eye-slash");
+            this.classList.toggle("fa-eye");
+        });
+    </script>
+
+</body>
+
+</html>
