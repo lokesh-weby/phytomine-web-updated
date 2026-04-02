@@ -23,7 +23,7 @@ class registration(models.Model):
 class phytomine(models.Model):
     user = models.ForeignKey(registration, on_delete=models.CASCADE, related_name='uploads', null=True)
 
-    project_id= models.CharField(max_length=100, null=True)
+    project_id= models.CharField(max_length=100, null=True, unique=True)
     location=models.CharField(max_length=100,null=True)
     status=models.CharField(max_length=50,null=True,default="Pending")
 
@@ -129,3 +129,12 @@ class phytomine(models.Model):
 
     #Admins Report View
     admins_f_rep_view=models.BooleanField(default=False, null=True)
+    is_insights_generated=models.BooleanField(default=False, null=True)
+
+class phytomine_insights(models.Model):
+    project = models.OneToOneField(phytomine, on_delete=models.CASCADE, to_field='project_id', related_name='ai_insights')
+    insights_text = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Insights for {self.project.project_id}"

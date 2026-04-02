@@ -457,7 +457,7 @@
                                                 <th>INITIAL FERN BIOMASS (g)</th>
                                                 <th>FINAL FERN BIOMASS (g)</th>
                                                 <th>GROWTH DURATION (days)</th>
-                                                <th>SOIL REE CONCENTRATION (mg/kg)</th>
+                                                <!-- <th>SOIL REE CONCENTRATION (mg/kg)</th> -->
                                                 <!-- <th>PLANT REE CONCENTRATION (mg/kg)</th> -->
                                                 <!-- <th>HARVESTED BIOMASS (g)</th> -->
                                                 <th>EXTRACTION EFFICIENCY (%)</th>
@@ -481,7 +481,7 @@
                                                 <td>{{ i.initial_fern_biomass }}</td>
                                                 <td>{{ i.final_fern_biomass }}</td>
                                                 <td>{{ i.growth_duration }}</td>
-                                                <td>{{ i.soil_ree_conc }}</td>
+                                                <!-- <td>{{ i.soil_ree_conc }}</td> -->
                                                 <!-- <td>{{ i.plant_ree_conc }}</td> -->
                                                 <!-- <td>{{ i.harvested_biomass }}</td> -->
                                                 <td>{{ i.extraction_eff }}</td>
@@ -507,15 +507,24 @@
                                                 </td>
                                                 {% elif i.admins_f_rep_view is True and i.sus_scan is True %}
                                                 <td>
-                                                    <a href="/download_report/{{i.project_id}}/"
-                                                        style="text-decoration: none;">
-                                                        <button
-                                                            style="background: linear-gradient(135deg, #00b09b, #1e7a1e); border: none; color: white; border-radius: 25px; padding: 10px 20px; cursor: pointer; font-weight: bold; transition: 0.3s;">
-                                                            <i class="fas fa-download"
-                                                                style="margin-right:6px; vertical-align: middle;"></i>
-                                                            Report
-                                                        </button>
-                                                    </a>
+                                                    <div style="display: flex; gap: 8px; justify-content: center;">
+                                                        <a href="/download_report/{{i.project_id}}/"
+                                                            style="text-decoration: none;">
+                                                            <button
+                                                                style="background: linear-gradient(135deg, #00b09b, #1e7a1e); border: none; color: #fff; border-radius: 25px; padding: 8px 15px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem;">
+                                                                <i class="fas fa-download"
+                                                                    style="margin-right:4px; vertical-align: middle;"></i>Report
+                                                            </button>
+                                                        </a>
+                                                        <a href="/phytomine_dashboard/{{i.project_id}}/"
+                                                            class="dashboard-intel-link" style="text-decoration: none;">
+                                                            <button
+                                                                style="background: linear-gradient(135deg, #EAA636, #8C5A12); border: none; color: #111; border-radius: 25px; padding: 8px 15px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem;">
+                                                                <i class="fas fa-gauge-high"
+                                                                    style="margin-right:4px; vertical-align: middle;"></i>Dashboard
+                                                            </button>
+                                                        </a>
+                                                    </div>
                                                 </td>
                                                 {% elif i.sus_scan is False %}
                                                 <td>{{ i.status }}</td>
@@ -557,142 +566,29 @@
     <!-- Template Javascript -->
     <script src="{% static 'admins/home/js/main.js' %}"></script>
 
-    <!-- AI Loading Overlay -->
-    <div id="ai-loading-overlay" style="
-        display: none;
-        position: fixed;
-        top: 0; left: 0;
-        width: 100%; height: 100%;
-        background: rgba(0, 0, 0, 0.85);
-        z-index: 99999;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        backdrop-filter: blur(6px);
-    ">
-        <!-- Outer Ring -->
-        <div style="position: relative; width: 120px; height: 120px; margin-bottom: 32px;">
-            <div style="
-                position: absolute; inset: 0;
-                border-radius: 50%;
-                border: 4px solid transparent;
-                border-top-color: #eb1616;
-                border-right-color: #ff6b6b;
-                animation: ai-spin 1s linear infinite;
-            "></div>
-            <div style="
-                position: absolute; inset: 12px;
-                border-radius: 50%;
-                border: 4px solid transparent;
-                border-bottom-color: #EAA636;
-                border-left-color: #ffd166;
-                animation: ai-spin 1.5s linear infinite reverse;
-            "></div>
-            <div style="
-                position: absolute; inset: 28px;
-                border-radius: 50%;
-                background: radial-gradient(circle, #eb1616, #8C1212);
-                display: flex; align-items: center; justify-content: center;
-                animation: pulse-glow 1.5s ease-in-out infinite;
-            ">
-                <i class="fas fa-robot" style="color: #fff; font-size: 28px;"></i>
-            </div>
-        </div>
-
-        <!-- Title -->
-        <h3
-            style="color: #EAA636; font-family: 'Outfit', sans-serif; letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 16px rgba(234,166,54,0.8);">
-            GENERATING REPORT
-        </h3>
-
-        <!-- Dynamic status message -->
-        <p id="ai-status-msg"
-            style="color: #ccc; font-family: 'Outfit', sans-serif; font-size: 14px; max-width: 320px; text-align: center; transition: opacity 0.5s;">
-        </p>
-
-        <!-- Progress bar -->
-        <div
-            style="width: 280px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 10px; margin-top: 22px; overflow: hidden;">
-            <div id="ai-progress-bar" style="
-                height: 100%;
-                width: 0%;
-                background: linear-gradient(90deg, #eb1616, #EAA636);
-                border-radius: 10px;
-                transition: width 0.4s ease;
-            "></div>
-        </div>
-    </div>
-
-    <style>
-        @keyframes ai-spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
-
-        @keyframes pulse-glow {
-
-            0%,
-            100% {
-                box-shadow: 0 0 12px rgba(235, 22, 22, 0.5);
-            }
-
-            50% {
-                box-shadow: 0 0 28px rgba(235, 22, 22, 0.9), 0 0 50px rgba(234, 166, 54, 0.4);
-            }
-        }
-
-        .generate-btn:hover {
-            transform: translateY(-2px) scale(1.06) !important;
-            box-shadow: 0 0 18px rgba(235, 22, 22, 0.8) !important;
-        }
-    </style>
-
+    <!-- Script to disable button on click -->
     <script>
-        const aiMessages = [
-            "Compiling phytomining data...",
-            "Analysing biomass and REE metrics...",
-            "Consulting AI model (Gemini)...",
-            "Generating expert recommendations...",
-            "Formatting PDF report...",
-            "Almost done — finalising document...",
-        ];
-
-        document.querySelectorAll('.generate-report-link').forEach(link => {
+        document.querySelectorAll('.generate-report-link, .dashboard-intel-link').forEach(link => {
             link.addEventListener('click', function (e) {
-                e.preventDefault();
-                const href = this.getAttribute('href');
-
-                // Show overlay
-                const overlay = document.getElementById('ai-loading-overlay');
-                overlay.style.display = 'flex';
-
-                const msgEl = document.getElementById('ai-status-msg');
-                const bar = document.getElementById('ai-progress-bar');
-
-                let step = 0;
-                const totalSteps = aiMessages.length;
-
-                function updateStep() {
-                    if (step < totalSteps) {
-                        msgEl.style.opacity = 0;
-                        setTimeout(() => {
-                            msgEl.textContent = aiMessages[step];
-                            msgEl.style.opacity = 1;
-                            bar.style.width = ((step + 1) / totalSteps * 100) + '%';
-                            step++;
-                        }, 300);
-                    }
+                // If already loading, prevent second click
+                if (this.getAttribute('data-loading') === 'true') {
+                    e.preventDefault();
+                    return;
                 }
 
-                updateStep();
-                const interval = setInterval(updateStep, 2200);
+                this.setAttribute('data-loading', 'true');
+                const btn = this.querySelector('button');
+                if (btn) {
+                    // Visually disable
+                    btn.style.opacity = '0.6';
+                    btn.style.pointerEvents = 'none';
+                    btn.style.cursor = 'not-allowed';
 
-                // Navigate after a delay to allow animation to show
-                setTimeout(() => {
-                    clearInterval(interval);
-                    window.location.href = href;
-                }, aiMessages.length * 2200 + 500);
+                    const icon = btn.querySelector('i');
+                    if (icon) {
+                        icon.className = 'fas fa-circle-notch fa-spin';
+                    }
+                }
             });
         });
     </script>

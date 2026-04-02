@@ -10,6 +10,8 @@ import torch.nn as nn
 from torchvision import models, transforms
 from PIL import Image
 import os
+import json
+from google import genai
 
 # Create your views here.
 
@@ -61,28 +63,6 @@ def predict_soil(image_path):
 def home(request):
     return render(request,"home/home.html")
 
-# def admins_login(request):
-#     if request.method == "POST":
-#         try:
-#             email=request.POST['email']
-#             password=request.POST['password']
-#             if email=="admin@gmail.com" and password=="admin":
-#                 messages.info(request,"Admin Login Successful")
-#                 return redirect("/admins_home/")
-#             elif email !="admin@gmail.com" and password=="admin":
-#                 messages.error(request, "Incorrect email!")
-#                 return render(request,"admins/admins_login.html")
-#             elif email =="admin@gmail.com" and password!="admin":
-#                 messages.error(request, "Incorrect Password!")
-#                 return render(request,"admins/admins_login.html")
-#             elif email !="admin@gmail.com" and password!="admin":
-#                 messages.error(request, "Incorrect email and Password!")
-#                 return render(request,"admins/admins_login.html")
-#             else:
-#                 return render(request,"admins/admins_login.html")
-#         except:
-#             messages.error(request, "Incorrect Credentials!")
-#     return render(request,"admins/admins_login.html")
 def admins_login(request):
     if request.method == "POST":
         email = request.POST['email']
@@ -92,19 +72,14 @@ def admins_login(request):
         if email == "admin@gmail.com" and password == "admin" and role == "admin":
             request.session['role'] = role
             request.session['admin'] = email
-
             messages.info(request,"Admin Login Successful")
             return redirect("/admins_home/")
-
         elif email != "admin@gmail.com":
             messages.error(request, "Incorrect email!")
-
         elif password != "admin":
             messages.error(request, "Incorrect Password!")
-
         else:
             messages.error(request, "Incorrect Credentials!")
-
     return render(request,"admins/admins_login.html")
 
 import random
@@ -123,18 +98,7 @@ def accept(request,id):
 
     send_mail(
         '{0}: Login Credentials'.format(data.department),
-
-        'Hello {0},\n\n'
-        'We are glad to inform you that your **{1} module profile has been approved successfully**.\n\n'
-        'Here are your login details:\n'
-        '• Username: "{2}"\n'
-        '• Password: "{3}"\n\n'
-        'Please use these credentials to access the **{4} Portal**. Make sure to keep this information confidential and do not share it with anyone.\n\n'
-        'If you have any questions or face any issues while logging in, feel free to contact the support team.\n\n'
-        'Thank you,\n'
-        'Admin Team'
-        .format(data.name, data.department, data.email, data.password, data.department.capitalize()),
-
+        'Hello {0},\n\nWe are glad to inform you that your **{1} module profile has been approved successfully**.\n\nHere are your login details:\n• Username: "{2}"\n• Password: "{3}"\n\nPlease use these credentials to access the Portal.\n\nThank you,\nAdmin Team'.format(data.name, data.department, data.email, data.password),
         settings.EMAIL_HOST_USER,
         [data.email],
         fail_silently=False,
@@ -143,43 +107,25 @@ def accept(request,id):
     data.accept=True
     data.reject=False
     data.save()
-    messages.info(request,f"{data.rh_id} : {data.department} Approval Successful")
+    messages.info(request,f"{data.rh_id} Approval Successful")
     return redirect("/admins_home/")
 
 
 def reject(request,id):
     if request.session.get('role') != "admin":
-        messages.error(request, "Unauthorized Access")
         return redirect("/admins_login/")
-
     data = registration.objects.get(id=id)
     data.accept=False
     data.reject=True
     data.save()
-
-    subject = 'Rejection Mail'
-    plain_message = (
-    f"Hello {data.name},\n\n"
-    f"We regret to inform you that your registration has been **rejected** due to certain issues in the submitted details.\n"
-    f"Please review your information and try submitting again at a later time.\n\n"
-    f"If you need assistance or clarification, feel free to reach out to the support team.\n\n"
-    f"Thank you for your understanding."
-)
-    send_mail(subject, plain_message, settings.EMAIL_HOST_USER, [data.email], fail_silently=False)
-
-    # data.delete()
+    send_mail('Rejection Mail', f'Hello {data.name}, your registration has been rejected.', settings.EMAIL_HOST_USER, [data.email], fail_silently=False)
     messages.info(request, "Rejection Mail Sent")
     return redirect("/admins_home/")
 
-# def admins_home(request):
-#     return render (request, 'admins/admins_home.html')
 def admins_home(request):
     if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
         return redirect("/admins_login/")
-        
     return render(request, 'admins/admins_home.html')
-
 
 def admins_logout(request):
     request.session.flush()
@@ -187,69 +133,42 @@ def admins_logout(request):
     return redirect("/")
 
 def cul_approve(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
     data=registration.objects.filter(department="CULTIVATOR")
     return render(request,"admins/cul_approve.html",{'data':data})
 
 def acc_approve(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
     data=registration.objects.filter(department="ACCUMULATOR")
     return render(request,"admins/acc_approve.html",{'data':data})
 
 def ext_approve(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
     data=registration.objects.filter(department="EXTRACTOR")
     return render(request,"admins/ext_approve.html",{'data':data})
 
 def sus_approve(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
     data=registration.objects.filter(department="SUSTAINER")
     return render(request,"admins/sus_approve.html",{'data':data})
 
 def admins_req(request):
-
-    print(request.POST)
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
-
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
     if request.method == "POST":
-        initial_fern_biomass=request.POST.get("initial_fern_biomass")
-        final_fern_biomass=request.POST.get("final_fern_biomass")
-        growth_duration=request.POST.get("growth_duration") 
-        soil_ree_conc=request.POST.get("soil_ree_conc")       
-        plant_ree_conc=request.POST.get("plant_ree_conc")       
-        harvested_biomass=request.POST.get("harvested_biomass")       
-        extraction_eff=request.POST.get("extraction_eff")       
-        initial_soil_ree=request.POST.get("initial_soil_ree")
-        final_soil_ree=request.POST.get("final_soil_ree")
-        location=request.POST.get("location")
-        soil_type=request.POST.get("soil_type")
-        # Generate sequential project_id starting from 13201
-        last_project = phytomine.objects.all().order_by('id').last()
+        p = request.POST
+        last = phytomine.objects.all().order_by('id').last()
         try:
-            if last_project and last_project.project_id and str(last_project.project_id).isdigit():
-                project_id = max(int(last_project.project_id), 13200) + 1
-            else:
-                project_id = 13201
-        except (ValueError, TypeError):
-            project_id = 13201
-        phytomine(initial_fern_biomass=initial_fern_biomass, final_fern_biomass=final_fern_biomass, growth_duration=growth_duration,
-                     soil_ree_conc=soil_ree_conc,plant_ree_conc=plant_ree_conc,harvested_biomass=harvested_biomass,extraction_eff=extraction_eff,
-                     initial_soil_ree=initial_soil_ree,final_soil_ree=final_soil_ree,
-                     project_id=project_id, location=location, soil_type=soil_type).save()
+            project_id = max(int(last.project_id), 13200) + 1 if last and str(last.project_id).isdigit() else 13201
+        except: project_id = 13201
+        phytomine(initial_fern_biomass=p.get("initial_fern_biomass"), final_fern_biomass=p.get("final_fern_biomass"),
+                 growth_duration=p.get("growth_duration"), soil_ree_conc=p.get("soil_ree_conc"),
+                 plant_ree_conc=p.get("plant_ree_conc"), harvested_biomass=p.get("harvested_biomass"),
+                 extraction_eff=p.get("extraction_eff"), initial_soil_ree=p.get("initial_soil_ree"),
+                 final_soil_ree=p.get("final_soil_ree"), project_id=project_id, 
+                 location=p.get("location"), soil_type=p.get("soil_type")).save()
         messages.info(request,"Requirements Submitted Successfully")
         return redirect('/admins_req/')
-    else:
-        return render(request, "admins/admins_req.html")
+    return render(request, "admins/admins_req.html")
 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
@@ -259,292 +178,239 @@ from django.core.files.base import ContentFile
 def predict_soil_type_ajax(request):
     if request.method == "POST" and request.FILES.get('soil_image'):
         image_file = request.FILES['soil_image']
-        # Save temp file
         temp_path = default_storage.save('tmp/soil_predict_temp.jpg', ContentFile(image_file.read()))
         full_temp_path = os.path.join(settings.MEDIA_ROOT, temp_path)
-        
         try:
             soil_type, confidence = predict_soil(full_temp_path)
-            # Delete temp file
-            if os.path.exists(full_temp_path):
-                os.remove(full_temp_path)
-            
-            return JsonResponse({
-                "status": "success",
-                "soil_type": soil_type,
-                "confidence": round(confidence, 2)
-            })
+            if os.path.exists(full_temp_path): os.remove(full_temp_path)
+            return JsonResponse({"status": "success", "soil_type": soil_type, "confidence": round(confidence, 2)})
         except Exception as e:
-            if os.path.exists(full_temp_path):
-                os.remove(full_temp_path)
+            if os.path.exists(full_temp_path): os.remove(full_temp_path)
             return JsonResponse({"status": "error", "message": str(e)}, status=500)
-            
     return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
     
 def admins_status(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
     data=phytomine.objects.all()
     return render (request,"admins/admins_status.html",{'data':data})
 
 def rep_cul(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
-    data=phytomine.objects.all()
-    return render (request,"admins/rep_cul.html",{'data':data})
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    data=phytomine.objects.all(); return render (request,"admins/rep_cul.html",{'data':data})
 
 def rep_acc(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
-    data=phytomine.objects.all()
-    return render (request,"admins/rep_acc.html",{'data':data})
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    data=phytomine.objects.all(); return render (request,"admins/rep_acc.html",{'data':data})
 
 def rep_ext(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
-    data=phytomine.objects.all()
-    return render (request,"admins/rep_ext.html",{'data':data})
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    data=phytomine.objects.all(); return render (request,"admins/rep_ext.html",{'data':data})
 
 def rep_sus(request):
-    if request.session.get('role') != "admin":
-        messages.error(request,"Unauthorized Access")
-        return redirect("/admins_login/")
-    data=phytomine.objects.all()
-    return render (request,"admins/rep_sus.html",{'data':data})
-
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    data=phytomine.objects.all(); return render (request,"admins/rep_sus.html",{'data':data})
 
 def download_report(request, project_id):
-    """Serve the generated PDF with correct headers so the browser downloads it as a .pdf file."""
+    """Serve the generated PDF with technical debug transparency."""
     if request.session.get('role') != "admin":
-        messages.error(request, "Unauthorized Access")
         return redirect("/admins_login/")
+    
     try:
-        record = phytomine.objects.get(project_id=project_id)
+        # Match using project_id (CharField)
+        record = phytomine.objects.get(project_id=str(project_id))
+        
         if not record.admins_f_report:
-            messages.error(request, "Report not found.")
+            messages.error(request, f"Dossier #{project_id} has not been generated yet.")
             return redirect("/admins_status/")
-        pdf_file = record.admins_f_report
-        filename = f"PHYTOMINE_REPORT_{project_id}.pdf"
-        return FileResponse(pdf_file.open('rb'), as_attachment=True, filename=filename)
+            
+        file_handle = record.admins_f_report.open('rb')
+        response = FileResponse(file_handle, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="PHYTOMINE_REPORT_{project_id}.pdf"'
+        return response
+
     except phytomine.DoesNotExist:
-        messages.error(request, "Project not found.")
+        messages.error(request, f"Failure: Record #{project_id} not located.")
+        return redirect("/admins_status/")
+    except FileNotFoundError:
+        messages.error(request, "Physical report file missing from server storage.")
         return redirect("/admins_status/")
     except Exception as e:
-        messages.error(request, f"Download failed: {str(e)}")
+        messages.error(request, f"Technical Failure: {str(e)}")
         return redirect("/admins_status/")
 
-
 from io import BytesIO
-from django.core.files.base import ContentFile
-from django.contrib import messages
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
-from google import genai
-from google.genai import types
-import os
 
 def get_ai_suggestions(user):
-    """Call Gemini API to generate expert suggestions based on project data."""
     try:
         api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-        if not api_key:
-            return "AI suggestion unavailable: GEMINI_API_KEY not configured in environment."
-        genai_client = genai.Client(api_key=api_key)
-        prompt = f"""You are an expert phytomining scientist and environmental consultant.
-        say can I plant any other plant in this area ? and also recommend some other plants that can be planted in this area to extract REE from the soil. 
-        after extracting the REE from the soil, the soil will be safe to plant any other plant. only answer for this question. keep response short and clean.
-
-Project ID: {user.project_id}
-Location: {user.location}
-
---- FIELD DATA ---
-Initial Fern Biomass: {user.initial_fern_biomass} g
-Final Fern Biomass: {user.final_fern_biomass} g
-Growth Duration: {user.growth_duration} days
-Soil REE Concentration: {user.soil_ree_conc} mg/kg
-Plant REE Concentration: {user.plant_ree_conc} mg/kg
-Harvested Biomass: {user.harvested_biomass} g
-Extraction Efficiency: {user.extraction_eff}%
-Initial Soil REE: {user.initial_soil_ree} mg/kg
-Final Soil REE: {user.final_soil_ree} mg/kg
-Soil Type: {user.soil_type}
-
---- COMPUTED METRICS ---
-Biomass Increase: {user.biomass_increase} g
-Growth Rate: {user.growth_rate} g/day
-Growth Efficiency: {user.growth_eff}%
-Total Metal: {user.total_metal} mg
-Uptake: {user.uptake}%
-Bioaccumulation Factor (BAF): {user.baf}
-Recovered Metal: {user.recovered_metal} mg
-Extraction Loss: {user.loss} mg
-Recovery Percentage: {user.recovery}%
-Soil Metal Reduction: {user.reduction}%
-Safety Index: {user.safety_index}
-Environmental Status: {user.env_status}
-
-Provide your expert recommendations:"""
-        response = genai_client.models.generate_content(
-            model="gemini-3-flash-preview",
-            contents=prompt,
-        )
+        if not api_key: return "AI unavailable"
+        client = genai.Client(api_key=api_key)
+        prompt = f"Expert analysis for Project {user.project_id} at {user.location}. Soil {user.soil_type}. Suggest alternative plants and REE status."
+        response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
         return response.text.strip()
-    except Exception as e:
-        return f"AI suggestion generation failed: {str(e)}"
+    except: return "AI failed"
 
 def phytomine_generate_pdf(request, project_id):
     if request.session.get('role') != "admin":
         messages.error(request, "Unauthorized Access")
         return redirect("/admins_login/")
 
-    user = phytomine.objects.get(project_id=project_id)
-    title = "PHYTOMINE FINAL REPORT"
+    try:
+        user = phytomine.objects.get(project_id=project_id)
+        
+        sections = {
+            "ADMIN DATA": [
+                ["INITIAL BIOMASS (g)", str(user.initial_fern_biomass)],
+                ["FINAL BIOMASS (g)", str(user.final_fern_biomass)],
+                ["GROWTH DURATION (days)", str(user.growth_duration)],
+                ["SOIL TYPE", str(user.soil_type)],
+                ["INITIAL SOIL REE (mg/kg)", str(user.initial_soil_ree)],
+                ["FINAL SOIL REE (mg/kg)", str(user.final_soil_ree)],
+            ],
+            "CULTIVATOR ANALYTICS": [
+                ["BIOMASS INCREASE (g)", str(user.biomass_increase)],
+                ["GROWTH RATE (g/day)", str(user.growth_rate)],
+                ["GROWTH EFFICIENCY (%)", str(user.growth_eff)],
+            ],
+            "ACCUMULATOR DATA": [
+                ["TOTAL METAL UPTAKE (mg)", str(user.total_metal)],
+                ["UPTAKE PERCENTAGE (%)", str(user.uptake)],
+                ["BIOACCUMULATION FACTOR", str(user.baf)],
+            ],
+            "EXTRACTOR METRICS": [
+                ["RECOVERED METAL (mg)", str(user.recovered_metal)],
+                ["EXTRACTION LOSS (mg)", str(user.loss)],
+                ["RECOVERY EFFICIENCY (%)", str(user.recovery)],
+            ],
+            "SUSTAINER STATUS": [
+                ["SOIL REDUCTION (%)", str(user.reduction)],
+                ["SAFETY INDEX", str(user.safety_index)],
+                ["ENVIRONMENTAL STATUS", str(user.env_status)],
+            ],
+        }
 
-    client_info = [
-        ["PROJECT ID", user.project_id],
-        ["LOCATION", user.location],
-    ]
+        buffer = BytesIO()
+        doc = SimpleDocTemplate(buffer, pagesize=A4)
+        story = []
+        styles = getSampleStyleSheet()
+        
+        # Title
+        title_style = ParagraphStyle('TitleStyle', fontSize=20, leading=24, alignment=1, textColor=colors.HexColor("#eb1616"), spaceAfter=30)
+        story.append(Paragraph(f"PHYTOMINE DOSSIER: #{user.project_id}", title_style))
+        story.append(Paragraph(f"<b>Location:</b> {user.location}", styles["Normal"]))
+        story.append(Spacer(1, 25))
 
-    sections = {
-        "ADMIN:": [
-            ["INITIAL FERN BIOMASS (g)", str(user.initial_fern_biomass)],
-            ["FINAL FERN BIOMASS (g)", str(user.final_fern_biomass)],
-            ["GROWTH DURATION (days)", str(user.growth_duration)],
-            ["SOIL REE CONCENTRATION (mg/kg)", str(user.soil_ree_conc)],
-            ["PLANT REE CONCENTRATION (mg/kg)", str(user.plant_ree_conc)],
-            ["HARVESTED BIOMASS (g)", str(user.harvested_biomass)],
-            ["EXTRACTION EFFICIENCY (%)", str(user.extraction_eff)],
-            ["INITIAL SOIL REE (mg/kg)", str(user.initial_soil_ree)],
-            ["FINAL SOIL REE (mg/kg)", str(user.final_soil_ree)],
-            ["SOIL TYPE", str(user.soil_type)],
-        ],
-        "CULTIVATOR:": [
-            ["BIOMASS INCREASE (g)", str(user.biomass_increase)],
-            ["GROWTH RATE (g/day)", str(user.growth_rate)],
-            ["GROWTH EFFICIENCY (%)", str(user.growth_eff)],
-        ],
-        "ACCUMULATOR:": [
-            ["TOTAL METAL (mg)", str(user.total_metal)],
-            ["UPTAKE (%)", str(user.uptake)],
-            ["BAF", str(user.baf)],
-        ],
-        "EXTRACTOR:": [
-            ["RECOVERED METAL (mg)", str(user.recovered_metal)],
-            ["EXTRACTION LOSS (mg)", str(user.loss)],
-            ["RECOVERY PERCENTAGE (%)", str(user.recovery)],
-        ],
-        "SUSTAINER:": [
-            ["SOIL METAL REDUCTION (%)", str(user.reduction)],
-            ["SAFETY INDEX", str(user.safety_index)],
-            ["ENVIRONMENTAL STATUS", str(user.env_status)],
-        ],
-    }
+        header_color = colors.HexColor("#eb1616")
+        
+        for section_name, data in sections.items():
+            story.append(Paragraph(f"<b>{section_name}</b>", styles["Heading2"]))
+            story.append(Spacer(1, 10))
+            
+            table_data = [["Metric", "Value"]] + data
+            table = Table(table_data, colWidths=[220, 240])
+            table.setStyle(TableStyle([
+                ('BACKGROUND', (0, 0), (-1, 0), header_color),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+                ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                ('FONTSIZE', (0, 0), (-1, 0), 11),
+                ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                ('BOTTOMPADDING', (0, 0), (-1, -1), 12),
+                ('TOPPADDING', (0, 0), (-1, -1), 12),
+                ('BACKGROUND', (0, 1), (-1, -1), colors.whitesmoke),
+            ]))
+            story.append(table)
+            story.append(Spacer(1, 20))
 
-    buffer = BytesIO()
-    doc = SimpleDocTemplate(buffer, pagesize=A4)
-    story = []
+        doc.build(story)
+        pdf_data = buffer.getvalue()
+        buffer.close()
 
-    styles = getSampleStyleSheet()
+        # If data is somehow empty, raise error
+        if not pdf_data:
+            raise ValueError("Generated PDF bytes are empty.")
 
-    # 🌿 Title style
-    title_style = ParagraphStyle(
-        name="CustomTitle",
-        fontSize=18,
-        leading=22,
-        alignment=1,  # Center
-        textColor=colors.HexColor("#eb1616"),  # Deep forest blue
-        spaceAfter=20
-    )
-    title_para = Paragraph(title, title_style)
-    story.append(title_para)
+        # Save to DB - use timestamp to force new file and prevent caching
+        import time
+        timestamp = int(time.time())
+        filename = f"REPORT_{user.project_id}_{timestamp}.pdf"
+        
+        user.admins_f_report.save(filename, ContentFile(pdf_data))
+        user.admins_f_rep_view = True
+        user.save()
 
-    # ✅ Color scheme
-    header_bg = colors.HexColor("#eb1616")       # Medium Sea Green
-    header_text = colors.white                  # White for text
-    cell_bg = colors.HexColor("#F0FFF0")         # Honeydew
-    section_heading_color = colors.HexColor("#eb1616")  # Dark Green
+        messages.info(request, f"Dossier for project {user.project_id} generated successfully.")
+        return redirect(f"/phytomine_dashboard/{project_id}/")
 
-    # 🧾 Client info table
-    client_info_table = Table(client_info, colWidths=[200, 250])
-    client_info_table.setStyle(
-        TableStyle([
-            ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-            ("FONTNAME", (0, 0), (-1, -1), "Helvetica-Bold"),
-            ("FONTSIZE", (0, 0), (-1, -1), 10),
-            ("BOTTOMPADDING", (0, 0), (-1, -1), 12),
-            ("BACKGROUND", (0, 0), (-1, -1), colors.lightgrey),
-            ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
-        ])
-    )
-    story.append(client_info_table)
-    story.append(Spacer(1, 20))
+    except phytomine.DoesNotExist:
+        messages.error(request, f"Failure: Record for ID {project_id} not located.")
+        return redirect("/admins_status/")
+    except Exception as e:
+        messages.error(request, f"Technical Failure: {str(e)}")
+        return redirect("/admins_status/")
 
-    # 📊 Each section table
-    for section, data in sections.items():
-        # Force new page if needed
-        if section == "RELEASE:":
-            story.append(PageBreak())
+def get_ai_insights(user):
+    """Generate exactly 4 one-line expert points for the dashboard in JSON format."""
+    try:
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if not api_key: return json.dumps({"error": "No API Key"})
+        client = genai.Client(api_key=api_key)
+        prompt = f"""Analyze Project {user.project_id} (Soil: {user.soil_type}, Eff: {user.extraction_eff}%).
+Return exactly 4 points in JSON format:
+{{
+  "OTHER CROPS": "one short line",
+  "PROGRESSION": "one short line",
+  "DURATION": "one short line",
+  "SUGGESTED PLANTS": "one short line"
+}}"""
+        response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
+        text = response.text.strip()
+        # Extract JSON if markdown wrapped
+        if "```json" in text:
+            text = text.split("```json")[1].split("```")[0].strip()
+        elif "```" in text:
+            text = text.split("```")[1].split("```")[0].strip()
+        return text
+    except Exception as e:
+        return json.dumps({"error": str(e)})
 
-        section_title = Paragraph(
-            f"<font color='{section_heading_color}'><b>{section}</b></font>",
-            styles["Heading2"]
-        )
-        story.append(section_title)
-        story.append(Spacer(1, 6))
-
-        table_data = [["Title", "Value"]] + data
-        table = Table(table_data, colWidths=[200, 250])
-        table.setStyle(
-            TableStyle([
-                ("BACKGROUND", (0, 0), (-1, 0), header_bg),
-                ("TEXTCOLOR", (0, 0), (-1, 0), header_text),
-                ("ALIGN", (0, 0), (-1, -1), "CENTER"),
-                ("FONTNAME", (0, 0), (-1, 0), "Helvetica-Bold"),
-                ("FONTSIZE", (0, 0), (-1, -1), 10),
-                ("BOTTOMPADDING", (0, 0), (-1, 0), 12),
-                ("BACKGROUND", (0, 1), (-1, -1), cell_bg),
-                ("GRID", (0, 0), (-1, -1), 0.5, colors.black),
-            ])
-        )
-        story.append(table)
-        story.append(Spacer(1, 20))
-
-    # --- AI Suggestions Section Removed ---
-
-
-    # �🧱 Build the PDF
-    doc.build(story)
-    pdf_data = buffer.getvalue()
-    buffer.close()
-
-    user.admins_f_report.save(f"{title}_{user.project_id}.pdf", ContentFile(pdf_data))
-    user.admins_f_rep_view = True
-    user.save()
-
-    messages.info(request, f"Report for {user.project_id} Generated Successfully")
-    return redirect("/admins_status/")
+def phytomine_dashboard(request, project_id):
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    try:
+        data = phytomine.objects.get(project_id=project_id)
+        
+        # Check flag in DB first
+        if data.is_insights_generated:
+            try:
+                insight_obj = phytomine_insights.objects.get(project=data)
+                insights = json.loads(insight_obj.insights_text)
+            except (phytomine_insights.DoesNotExist, json.JSONDecodeError):
+                # Fallback if flag is true but record is missing or corrupted
+                raw_insights = get_ai_insights(data)
+                phytomine_insights.objects.update_or_create(project=data, defaults={'insights_text': raw_insights})
+                try: insights = json.loads(raw_insights)
+                except: insights = {"AI Analysis": raw_insights}
+        else:
+            # Generate for the first time
+            raw_insights = get_ai_insights(data)
+            phytomine_insights.objects.update_or_create(project=data, defaults={'insights_text': raw_insights})
+            data.is_insights_generated = True
+            data.save()
+            try: insights = json.loads(raw_insights)
+            except: insights = {"AI Analysis": raw_insights}
+        
+        return render(request, "admins/phytomine_dashboard.html", {'data': data, 'insights': insights})
+    except: return redirect("/admins_status/")
 
 def get_location_proxy(request):
-    """Bypass CORS for Nominatim API by fetching on the server side."""
-    lat = request.GET.get('lat')
-    lon = request.GET.get('lon')
-    
-    if not lat or not lon:
-        return JsonResponse({"error": "Latitude and longitude are required"}, status=400)
-
+    lat, lon = request.GET.get('lat'), request.GET.get('lon')
+    if not lat or not lon: return JsonResponse({"error": "Req coord"}, status=400)
     url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json"
-    headers = {
-        'User-Agent': 'PhytomineApp/1.0 (Contact: admin@phytomine.com)'
-    }
-
     try:
-        response = requests.get(url, headers=headers, timeout=10)
-        return JsonResponse(response.json())
-    except Exception as e:
-        return JsonResponse({"error": str(e)}, status=500)
+        r = requests.get(url, headers={'User-Agent': 'PhytomineApp/1.0'}, timeout=10)
+        return JsonResponse(r.json())
+    except: return JsonResponse({"error": "Fetch fail"}, status=500)
