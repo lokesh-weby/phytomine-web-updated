@@ -56,7 +56,11 @@ h6,
     width: 38px;
     height: 38px;
 }
-
+i {
+  font-family: "Font Awesome 6 Free" !important;
+  font-weight: 900;
+  background-color: blue;
+}
 .btn-sm-square {
     width: 32px;
     height: 32px;

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <base href="/static/admins/home/">
+    <!-- <base href="/static/admins/home/"> -->
     <meta charset="utf-8">
     <title>Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -18,25 +18,32 @@
         rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <link href="{% static 'admins/home/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'admins/home/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
 
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'admins/home/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{% static 'admins/home/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <style>
         * {
-            font-family: 'Outfit', sans-serif !important;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        i {
+            font-family: "Font Awesome 7 Free";
+            font-weight: 900;
         }
 
         .navbar-nav .nav-link,
@@ -71,7 +78,7 @@
         }
 
         Toastify({
-            text: '{{ message }}',
+            text: "{{ message|escapejs }}",
             duration: 3000,
             gravity: "top",
             position: "right",
@@ -122,6 +129,44 @@
             margin-top: 5px;
             background: rgba(255, 255, 255, 0.85);
             font-size: 14px;
+            color: #333;
+        }
+
+        .location-group {
+            display: flex;
+            gap: 0;
+            margin-top: 5px;
+        }
+
+        .location-group input {
+            border-top-right-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+            margin-top: 0 !important;
+        }
+
+        .btn-get-location {
+            background-color: #EB1616;
+            color: white;
+            border: none;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            padding: 0 15px;
+            font-size: 14px;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .btn-get-location:hover {
+            background-color: #0c1844;
+            color: white;
+        }
+
+        .btn-get-location i {
+            margin-right: 5px;
+            font-size: 0.9rem;
         }
 
         .btn-container {
@@ -167,7 +212,10 @@
                     </a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
+                        <svg width="30" height="30" viewBox="0 0 30 30">
+                            <path stroke="rgba(235, 22, 22, 1)" stroke-width="2.5" stroke-linecap="round"
+                                d="M4 7h22M4 15h22M4 23h22" />
+                        </svg>
                     </button>
                     <div class="collapse navbar-collapse py-3" id="navbarCollapse">
                         <div class="navbar-nav mx-auto border-top">
@@ -238,7 +286,7 @@
                             <a href="/admins_status/"
                                 class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative"
                                 title="Notifications">
-                                <i class="fa fa-bell"></i>
+                                <i class="fas fa-bell" style="vertical-align: middle;"></i>
                                 {% if total_notifications and total_notifications > 0 %}
                                 <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -262,7 +310,7 @@
     <!-- Carousel / Form Section -->
     <div class="container-fluid carousel-header px-0">
         <div class="carousel-item active">
-            <img src="img/carousel-1.jpg" class="img-fluid w-100" alt="Image">
+            <img src="{% static 'admins/home/img/carousel-1.jpg' %}" class="img-fluid w-100" alt="Image">
 
             <!-- SCROLL FIXED CAPTION -->
             <div class="carousel-caption d-flex justify-content-center align-items-start"
@@ -275,7 +323,12 @@
                         {% csrf_token %}
 
                         <label>Location</label>
-                        <input type="text" name="location" placeholder="Enter Location" required>
+                        <div class="location-group">
+                            <input type="text" name="location" id="locationInput" placeholder="Enter Location" required>
+                            <button type="button" class="btn-get-location" onclick="getLocation()">
+                                <i class="fas fa-map-marker-alt"></i> Get Location
+                            </button>
+                        </div>
 
                         <label>Initial Fern Biomass (g)</label>
                         <input type="number" name="initial_fern_biomass" min="20" max="150" step="1"
@@ -332,14 +385,103 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="{% static 'admins/home/lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'admins/home/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'admins/home/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'admins/home/lib/lightbox/js/lightbox.min.js' %}"></script>
 
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="{% static 'admins/home/js/main.js' %}"></script>
+
+    <script>
+        function getLocation() {
+            const btn = document.querySelector('.btn-get-location');
+            const originalContent = btn.innerHTML;
+            
+            // Show loading state
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Locating...';
+            btn.disabled = true;
+
+            if (!navigator.geolocation) {
+                Toastify({
+                    text: "Geolocation not supported by this browser",
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+                }).showToast();
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition((position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                
+                // Use backend proxy to avoid CORS issues
+                const url = `/get_location_proxy/?lat=${lat}&lon=${lon}`;
+                
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data && data.address) {
+                            const addr = data.address;
+                            // Priority: village -> town -> city -> suburb -> display_name
+                            const locationName = addr.village || addr.town || addr.city || addr.suburb || data.display_name.split(',')[0];
+                            
+                            document.getElementById('locationInput').value = locationName;
+                            
+                            Toastify({
+                                text: "📍 Location: " + locationName,
+                                duration: 3000,
+                                gravity: "top",
+                                position: "right",
+                                style: {
+                                    background: "linear-gradient(to right, #00b09b, #96c93d)"
+                                }
+                            }).showToast();
+                        } else {
+                            throw new Error("Invalid response from Proxy");
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Toastify({
+                            text: "Failed to resolve address",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+                        }).showToast();
+                    })
+                    .finally(() => {
+                        btn.innerHTML = originalContent;
+                        btn.disabled = false;
+                    });
+            }, (error) => {
+                console.error('Geolocation Error:', error);
+                let msg = "Location Access Denied";
+                if (error.code === 1) msg = "Please Enable Location Access";
+                if (error.code === 3) msg = "Location request timed out";
+                
+                Toastify({
+                    text: msg,
+                    duration: 3000,
+                    gravity: "top",
+                    position: "right",
+                    style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+                }).showToast();
+                btn.innerHTML = originalContent;
+                btn.disabled = false;
+            }, {
+                enableHighAccuracy: true,
+                timeout: 15000, // Increased to 15 seconds
+                maximumAge: 0
+            });
+        }
+    </script>
 </body>
 
 </html>

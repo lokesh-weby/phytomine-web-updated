@@ -1,14 +1,16 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <title>Phytomine | Admin Access</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="/static/admins/login/">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <!-- <base href="/static/admins/login/"> -->
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- Toastify -->
@@ -30,12 +32,17 @@
             font-family: 'Outfit', sans-serif;
         }
 
+        i {
+            font-family: "Font Awesome 7 Free";
+            font-weight: 900;
+        }
+
         body {
             height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: url("bg.jpg") no-repeat center center fixed;
+            background: url("{% static 'admins/login/bg.jpg' %}") no-repeat center center fixed;
             background-size: cover;
         }
 
@@ -267,7 +274,7 @@
         }
 
         Toastify({
-            text: '{{ message }}',
+            text: "{{ message|escapejs }}",
             duration: 4000,
             gravity: "top",
             position: "right",
@@ -308,7 +315,7 @@
                         <input type="password" name="password" id="password" placeholder="••••••••" required
                             autocomplete="current-password">
                         <i class="fas fa-lock"></i>
-                        <i class="fas fa-eye toggle-password" id="togglePassword"></i>
+                        <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
                     </div>
                 </div>
 

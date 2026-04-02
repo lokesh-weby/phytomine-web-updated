@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <base href="/static/admins/home/">
+    <!-- <base href="/static/admins/home/"> -->
     <meta charset="utf-8">
     <title>Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -18,19 +18,19 @@
         rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Libraries Stylesheet -->
-    <link href="lib/animate/animate.min.css" rel="stylesheet">
-    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
-
+    <link href="{% static 'admins/home/lib/animate/animate.min.css' %}" rel="stylesheet">
+    <link href="{% static 'admins/home/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="{% static 'admins/home/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="css/style.css" rel="stylesheet">
+    <link href="{% static 'admins/home/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
@@ -152,7 +152,12 @@
 
     <style>
         * {
-            font-family: 'Outfit', sans-serif !important;
+            font-family: 'Outfit', sans-serif;
+        }
+
+        i {
+            font-family: "Font Awesome 7 Free";
+            font-weight: 900;
         }
 
         .navbar-nav .nav-link,
@@ -187,7 +192,7 @@
         }
 
         Toastify({
-            text: '{{ message }}',
+            text: "{{ message|escapejs }}",
             duration: 3000,
             gravity: "top",
             position: "right",
@@ -332,7 +337,11 @@
                     </a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
-                        <span class="fa fa-bars text-primary"></span>
+                        <!-- Inline SVG for Toggler (100% Reliable) -->
+                        <svg width="30" height="30" viewBox="0 0 30 30" style="vertical-align: middle;">
+                            <path stroke="rgba(235, 22, 22, 1)" stroke-width="2.5" stroke-linecap="round"
+                                d="M4 7h22M4 15h22M4 23h22" />
+                        </svg>
                     </button>
                     <div class="collapse navbar-collapse py-3" id="navbarCollapse">
                         <div class="navbar-nav mx-auto border-top">
@@ -403,7 +412,7 @@
                             <a href="/admins_status/"
                                 class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative"
                                 title="Notifications">
-                                <i class="fa fa-bell"></i>
+                                <i class="fas fa-bell" style="vertical-align: middle;"></i>
                                 {% if total_notifications and total_notifications > 0 %}
                                 <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -430,7 +439,7 @@
 
             <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active">
-                    <img src="img/carousel-2.jpg" class="img-fluid" alt="Image">
+                    <img src="{% static 'admins/home/img/carousel-2.jpg' %}" class="img-fluid" alt="Image">
                     <div class="carousel-caption">
                         <div class="p-3 mx-auto animated zoomIn" style="width: 100%; max-width: none;">
 
@@ -449,8 +458,8 @@
                                                 <th>FINAL FERN BIOMASS (g)</th>
                                                 <th>GROWTH DURATION (days)</th>
                                                 <th>SOIL REE CONCENTRATION (mg/kg)</th>
-                                                <th>PLANT REE CONCENTRATION (mg/kg)</th>
-                                                <th>HARVESTED BIOMASS (g)</th>
+                                                <!-- <th>PLANT REE CONCENTRATION (mg/kg)</th> -->
+                                                <!-- <th>HARVESTED BIOMASS (g)</th> -->
                                                 <th>EXTRACTION EFFICIENCY (%)</th>
                                                 <th>INITIAL SOIL REE (mg/kg)</th>
                                                 <th>FINAL SOIL REE (mg/kg)</th>
@@ -472,8 +481,8 @@
                                                 <td>{{ i.final_fern_biomass }}</td>
                                                 <td>{{ i.growth_duration }}</td>
                                                 <td>{{ i.soil_ree_conc }}</td>
-                                                <td>{{ i.plant_ree_conc }}</td>
-                                                <td>{{ i.harvested_biomass }}</td>
+                                                <!-- <td>{{ i.plant_ree_conc }}</td> -->
+                                                <!-- <td>{{ i.harvested_biomass }}</td> -->
                                                 <td>{{ i.extraction_eff }}</td>
                                                 <td>{{ i.initial_soil_ree }}</td>
                                                 <td>{{ i.final_soil_ree }}</td>
@@ -485,20 +494,24 @@
                                                 {% if i.admins_f_rep_view is False and i.sus_scan is True %}
                                                 <td>
                                                     <a href="/phytomine_generate_pdf/{{i.project_id}}/"
-                                                        style=" text-decoration: none;">
-                                                        <button
-                                                            style="background-color: #eb1616 ; border: none; color: white; border-radius: 25px; padding: 10px 20px; cursor: pointer;">
-                                                            Generate Report
+                                                        class="generate-report-link" style="text-decoration: none;">
+                                                        <button class="generate-btn"
+                                                            style="background-color: #eb1616; border: none; color: white; border-radius: 25px; padding: 10px 20px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                                                            <i class="fas fa-file-pdf"
+                                                                style="margin-right:6px; vertical-align: middle;"></i>Generate
+                                                            Report
                                                         </button>
                                                     </a>
                                                 </td>
                                                 {% elif i.admins_f_rep_view is True and i.sus_scan is True %}
                                                 <td>
-                                                    <a href="{{i.admins_f_report.url}}" target="_blank" download
-                                                        style=" text-decoration: none;">
+                                                    <a href="/download_report/{{i.project_id}}/"
+                                                        style="text-decoration: none;">
                                                         <button
-                                                            style="background-color:green ; border:none; color: black; none; border-radius: 25px; padding: 10px 20px; cursor: pointer;">
-                                                            Download Report
+                                                            style="background: linear-gradient(135deg, #00b09b, #1e7a1e); border: none; color: white; border-radius: 25px; padding: 10px 20px; cursor: pointer; font-weight: bold; transition: 0.3s;">
+                                                            <i class="fas fa-download"
+                                                                style="margin-right:6px; vertical-align: middle;"></i>
+                                                            Report
                                                         </button>
                                                     </a>
                                                 </td>
@@ -533,14 +546,154 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="lib/wow/wow.min.js"></script>
-    <script src="lib/easing/easing.min.js"></script>
-    <script src="lib/waypoints/waypoints.min.js"></script>
-    <script src="lib/lightbox/js/lightbox.min.js"></script>
+    <script src="{% static 'admins/home/lib/wow/wow.min.js' %}"></script>
+    <script src="{% static 'admins/home/lib/easing/easing.min.js' %}"></script>
+    <script src="{% static 'admins/home/lib/waypoints/waypoints.min.js' %}"></script>
+    <script src="{% static 'admins/home/lib/lightbox/js/lightbox.min.js' %}"></script>
 
 
     <!-- Template Javascript -->
-    <script src="js/main.js"></script>
+    <script src="{% static 'admins/home/js/main.js' %}"></script>
+
+    <!-- AI Loading Overlay -->
+    <div id="ai-loading-overlay" style="
+        display: none;
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 99999;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        backdrop-filter: blur(6px);
+    ">
+        <!-- Outer Ring -->
+        <div style="position: relative; width: 120px; height: 120px; margin-bottom: 32px;">
+            <div style="
+                position: absolute; inset: 0;
+                border-radius: 50%;
+                border: 4px solid transparent;
+                border-top-color: #eb1616;
+                border-right-color: #ff6b6b;
+                animation: ai-spin 1s linear infinite;
+            "></div>
+            <div style="
+                position: absolute; inset: 12px;
+                border-radius: 50%;
+                border: 4px solid transparent;
+                border-bottom-color: #EAA636;
+                border-left-color: #ffd166;
+                animation: ai-spin 1.5s linear infinite reverse;
+            "></div>
+            <div style="
+                position: absolute; inset: 28px;
+                border-radius: 50%;
+                background: radial-gradient(circle, #eb1616, #8C1212);
+                display: flex; align-items: center; justify-content: center;
+                animation: pulse-glow 1.5s ease-in-out infinite;
+            ">
+                <i class="fas fa-robot" style="color: #fff; font-size: 28px;"></i>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <h3
+            style="color: #EAA636; font-family: 'Outfit', sans-serif; letter-spacing: 2px; margin-bottom: 10px; text-shadow: 0 0 16px rgba(234,166,54,0.8);">
+            GENERATING REPORT
+        </h3>
+
+        <!-- Dynamic status message -->
+        <p id="ai-status-msg"
+            style="color: #ccc; font-family: 'Outfit', sans-serif; font-size: 14px; max-width: 320px; text-align: center; transition: opacity 0.5s;">
+        </p>
+
+        <!-- Progress bar -->
+        <div
+            style="width: 280px; height: 6px; background: rgba(255,255,255,0.15); border-radius: 10px; margin-top: 22px; overflow: hidden;">
+            <div id="ai-progress-bar" style="
+                height: 100%;
+                width: 0%;
+                background: linear-gradient(90deg, #eb1616, #EAA636);
+                border-radius: 10px;
+                transition: width 0.4s ease;
+            "></div>
+        </div>
+    </div>
+
+    <style>
+        @keyframes ai-spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes pulse-glow {
+
+            0%,
+            100% {
+                box-shadow: 0 0 12px rgba(235, 22, 22, 0.5);
+            }
+
+            50% {
+                box-shadow: 0 0 28px rgba(235, 22, 22, 0.9), 0 0 50px rgba(234, 166, 54, 0.4);
+            }
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px) scale(1.06) !important;
+            box-shadow: 0 0 18px rgba(235, 22, 22, 0.8) !important;
+        }
+    </style>
+
+    <script>
+        const aiMessages = [
+            "Compiling phytomining data...",
+            "Analysing biomass and REE metrics...",
+            "Consulting AI model (Gemini)...",
+            "Generating expert recommendations...",
+            "Formatting PDF report...",
+            "Almost done — finalising document...",
+        ];
+
+        document.querySelectorAll('.generate-report-link').forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const href = this.getAttribute('href');
+
+                // Show overlay
+                const overlay = document.getElementById('ai-loading-overlay');
+                overlay.style.display = 'flex';
+
+                const msgEl = document.getElementById('ai-status-msg');
+                const bar = document.getElementById('ai-progress-bar');
+
+                let step = 0;
+                const totalSteps = aiMessages.length;
+
+                function updateStep() {
+                    if (step < totalSteps) {
+                        msgEl.style.opacity = 0;
+                        setTimeout(() => {
+                            msgEl.textContent = aiMessages[step];
+                            msgEl.style.opacity = 1;
+                            bar.style.width = ((step + 1) / totalSteps * 100) + '%';
+                            step++;
+                        }, 300);
+                    }
+                }
+
+                updateStep();
+                const interval = setInterval(updateStep, 2200);
+
+                // Navigate after a delay to allow animation to show
+                setTimeout(() => {
+                    clearInterval(interval);
+                    window.location.href = href;
+                }, aiMessages.length * 2200 + 500);
+            });
+        });
+    </script>
 </body>
 
 </html>

@@ -73,7 +73,7 @@
         }
 
         Toastify({
-            text: '{{ message }}',
+            text: "{{ message|escapejs }}",
             duration: 3000,
             gravity: "top",
             position: "right",
@@ -288,7 +288,11 @@
                                                     </a>
                                                 </td>
                                                 {% else %}
-                                                <td class="status-text">Check Mail</td>
+                                                <td>
+                                                    <a href="/getkey_cul/{{ i.project_id }}/">
+                                                        <button class="action-btn ">Get Key</button>
+                                                    </a>
+                                                </td>
                                                 {% endif %}
 
                                                 <form action="/decrypt_cul/{{ i.project_id }}/" method="POST">

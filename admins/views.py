@@ -1,4 +1,6 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
+from django.http import FileResponse, JsonResponse
+import requests
 from .models import *
 from django.contrib import messages
 from django.core.mail import send_mail
@@ -235,14 +237,85 @@ def rep_sus(request):
     return render (request,"admins/rep_sus.html",{'data':data})
 
 
+def download_report(request, project_id):
+    """Serve the generated PDF with correct headers so the browser downloads it as a .pdf file."""
+    if request.session.get('role') != "admin":
+        messages.error(request, "Unauthorized Access")
+        return redirect("/admins_login/")
+    try:
+        record = phytomine.objects.get(project_id=project_id)
+        if not record.admins_f_report:
+            messages.error(request, "Report not found.")
+            return redirect("/admins_status/")
+        pdf_file = record.admins_f_report
+        filename = f"PHYTOMINE_REPORT_{project_id}.pdf"
+        return FileResponse(pdf_file.open('rb'), as_attachment=True, filename=filename)
+    except phytomine.DoesNotExist:
+        messages.error(request, "Project not found.")
+        return redirect("/admins_status/")
+    except Exception as e:
+        messages.error(request, f"Download failed: {str(e)}")
+        return redirect("/admins_status/")
+
+
 from io import BytesIO
 from django.core.files.base import ContentFile
-from django.shortcuts import redirect, HttpResponse
 from django.contrib import messages
 from reportlab.lib.pagesizes import A4
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, PageBreak
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
+from google import genai
+from google.genai import types
+import os
+
+def get_ai_suggestions(user):
+    """Call Gemini API to generate expert suggestions based on project data."""
+    try:
+        api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
+        if not api_key:
+            return "AI suggestion unavailable: GEMINI_API_KEY not configured in environment."
+        genai_client = genai.Client(api_key=api_key)
+        prompt = f"""You are an expert phytomining scientist and environmental consultant.
+        say can I plant any other plant in this area ? and also recommend some other plants that can be planted in this area to extract REE from the soil. 
+        after extracting the REE from the soil, the soil will be safe to plant any other plant. only answer for this question. keep response short and clean.
+
+Project ID: {user.project_id}
+Location: {user.location}
+
+--- FIELD DATA ---
+Initial Fern Biomass: {user.initial_fern_biomass} g
+Final Fern Biomass: {user.final_fern_biomass} g
+Growth Duration: {user.growth_duration} days
+Soil REE Concentration: {user.soil_ree_conc} mg/kg
+Plant REE Concentration: {user.plant_ree_conc} mg/kg
+Harvested Biomass: {user.harvested_biomass} g
+Extraction Efficiency: {user.extraction_eff}%
+Initial Soil REE: {user.initial_soil_ree} mg/kg
+Final Soil REE: {user.final_soil_ree} mg/kg
+
+--- COMPUTED METRICS ---
+Biomass Increase: {user.biomass_increase} g
+Growth Rate: {user.growth_rate} g/day
+Growth Efficiency: {user.growth_eff}%
+Total Metal: {user.total_metal} mg
+Uptake: {user.uptake}%
+Bioaccumulation Factor (BAF): {user.baf}
+Recovered Metal: {user.recovered_metal} mg
+Extraction Loss: {user.loss} mg
+Recovery Percentage: {user.recovery}%
+Soil Metal Reduction: {user.reduction}%
+Safety Index: {user.safety_index}
+Environmental Status: {user.env_status}
+
+Provide your expert recommendations:"""
+        response = genai_client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=prompt,
+        )
+        return response.text.strip()
+    except Exception as e:
+        return f"AI suggestion generation failed: {str(e)}"
 
 def phytomine_generate_pdf(request, project_id):
     if request.session.get('role') != "admin":
@@ -360,7 +433,10 @@ def phytomine_generate_pdf(request, project_id):
         story.append(table)
         story.append(Spacer(1, 20))
 
-    # 🧱 Build the PDF
+    # --- AI Suggestions Section Removed ---
+
+
+    # �🧱 Build the PDF
     doc.build(story)
     pdf_data = buffer.getvalue()
     buffer.close()
@@ -369,9 +445,24 @@ def phytomine_generate_pdf(request, project_id):
     user.admins_f_rep_view = True
     user.save()
 
-    response = HttpResponse(content_type="application/pdf")
-    response["Content-Disposition"] = f'attachment; filename="{title}_{user.project_id}.pdf"'
-    response.write(pdf_data)
-
     messages.info(request, f"Report for {user.project_id} Generated Successfully")
     return redirect("/admins_status/")
+
+def get_location_proxy(request):
+    """Bypass CORS for Nominatim API by fetching on the server side."""
+    lat = request.GET.get('lat')
+    lon = request.GET.get('lon')
+    
+    if not lat or not lon:
+        return JsonResponse({"error": "Latitude and longitude are required"}, status=400)
+
+    url = f"https://nominatim.openstreetmap.org/reverse?lat={lat}&lon={lon}&format=json"
+    headers = {
+        'User-Agent': 'PhytomineApp/1.0 (Contact: admin@phytomine.com)'
+    }
+
+    try:
+        response = requests.get(url, headers=headers, timeout=10)
+        return JsonResponse(response.json())
+    except Exception as e:
+        return JsonResponse({"error": str(e)}, status=500)

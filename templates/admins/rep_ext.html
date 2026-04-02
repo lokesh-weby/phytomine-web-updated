@@ -173,7 +173,7 @@
     }
 
     Toastify({
-        text: '{{ message }}',
+        text: "{{ message|escapejs }}",
         duration: 3000,
         gravity: "top",
         position: "right",

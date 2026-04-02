@@ -22,6 +22,8 @@ urlpatterns = [
     path("rep_ext/",rep_ext),
     path("rep_sus/",rep_sus),
     path("phytomine_generate_pdf/<str:project_id>/",phytomine_generate_pdf),
+    path("download_report/<str:project_id>/", download_report),
+    path("get_location_proxy/", get_location_proxy),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings
