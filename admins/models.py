@@ -119,6 +119,10 @@ class phytomine(models.Model):
     acc_signed_by = models.CharField(max_length=100, null=True, blank=True)
     ext_signed_by = models.CharField(max_length=100, null=True, blank=True)
 
+    #Soil Detection
+    soil_type=models.CharField(max_length=100,null=True)
+
+
     #Report
     admins_f_report=models.FileField(upload_to="Report/",null=True,blank=True)
 

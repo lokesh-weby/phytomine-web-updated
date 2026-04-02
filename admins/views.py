@@ -5,9 +5,58 @@ from .models import *
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
-
+import torch
+import torch.nn as nn
+from torchvision import models, transforms
+from PIL import Image
+import os
 
 # Create your views here.
+
+# Define the model architecture for soil classification
+def get_soil_model():
+    # Use weights=None instead of deprecated pretrained=False
+    try:
+        model = models.resnet18(weights=None)
+    except TypeError:
+        # Compatibility with older torchvision
+        model = models.resnet18(pretrained=False)
+    
+    num_features = model.fc.in_features
+    model.fc = nn.Sequential(
+        nn.Linear(num_features, 512),
+        nn.ReLU(inplace=True),
+        nn.Dropout(0.5),
+        nn.Linear(512, 256),
+        nn.ReLU(inplace=True),
+        nn.Dropout(0.3),
+        nn.Linear(256, 4)
+    )
+    model_path = os.path.join(settings.BASE_DIR, "models", "soil_classifier_resnet18.pth")
+    if os.path.exists(model_path):
+        model.load_state_dict(torch.load(model_path, map_location='cpu'))
+    model.eval()
+    return model
+
+def predict_soil(image_path):
+    model = get_soil_model()
+    transform = transforms.Compose([
+        transforms.Resize((224, 224)),
+        transforms.ToTensor(),
+        transforms.Normalize(
+            [0.485, 0.456, 0.406],
+            [0.229, 0.224, 0.225]
+        )
+    ])
+    classes = ['Black Soil', 'Clay soil', 'Alluvial soil', 'Red soil']
+    img = Image.open(image_path).convert("RGB")
+    img = transform(img).unsqueeze(0)
+    with torch.no_grad():
+        output = model(img)
+        probs = torch.softmax(output, dim=1)
+        pred = torch.argmax(probs, dim=1)
+        confidence = probs[0][pred]
+    return classes[pred.item()], float(confidence) * 100
 
 def home(request):
     return render(request,"home/home.html")
@@ -183,6 +232,7 @@ def admins_req(request):
         initial_soil_ree=request.POST.get("initial_soil_ree")
         final_soil_ree=request.POST.get("final_soil_ree")
         location=request.POST.get("location")
+        soil_type=request.POST.get("soil_type")
         # Generate sequential project_id starting from 13201
         last_project = phytomine.objects.all().order_by('id').last()
         try:
@@ -195,11 +245,41 @@ def admins_req(request):
         phytomine(initial_fern_biomass=initial_fern_biomass, final_fern_biomass=final_fern_biomass, growth_duration=growth_duration,
                      soil_ree_conc=soil_ree_conc,plant_ree_conc=plant_ree_conc,harvested_biomass=harvested_biomass,extraction_eff=extraction_eff,
                      initial_soil_ree=initial_soil_ree,final_soil_ree=final_soil_ree,
-                     project_id=project_id, location=location).save()
+                     project_id=project_id, location=location, soil_type=soil_type).save()
         messages.info(request,"Requirements Submitted Successfully")
         return redirect('/admins_req/')
     else:
         return render(request, "admins/admins_req.html")
+
+from django.views.decorators.csrf import csrf_exempt
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
+
+@csrf_exempt
+def predict_soil_type_ajax(request):
+    if request.method == "POST" and request.FILES.get('soil_image'):
+        image_file = request.FILES['soil_image']
+        # Save temp file
+        temp_path = default_storage.save('tmp/soil_predict_temp.jpg', ContentFile(image_file.read()))
+        full_temp_path = os.path.join(settings.MEDIA_ROOT, temp_path)
+        
+        try:
+            soil_type, confidence = predict_soil(full_temp_path)
+            # Delete temp file
+            if os.path.exists(full_temp_path):
+                os.remove(full_temp_path)
+            
+            return JsonResponse({
+                "status": "success",
+                "soil_type": soil_type,
+                "confidence": round(confidence, 2)
+            })
+        except Exception as e:
+            if os.path.exists(full_temp_path):
+                os.remove(full_temp_path)
+            return JsonResponse({"status": "error", "message": str(e)}, status=500)
+            
+    return JsonResponse({"status": "error", "message": "Invalid request"}, status=400)
     
 def admins_status(request):
     if request.session.get('role') != "admin":
@@ -293,6 +373,7 @@ Harvested Biomass: {user.harvested_biomass} g
 Extraction Efficiency: {user.extraction_eff}%
 Initial Soil REE: {user.initial_soil_ree} mg/kg
 Final Soil REE: {user.final_soil_ree} mg/kg
+Soil Type: {user.soil_type}
 
 --- COMPUTED METRICS ---
 Biomass Increase: {user.biomass_increase} g
@@ -341,6 +422,7 @@ def phytomine_generate_pdf(request, project_id):
             ["EXTRACTION EFFICIENCY (%)", str(user.extraction_eff)],
             ["INITIAL SOIL REE (mg/kg)", str(user.initial_soil_ree)],
             ["FINAL SOIL REE (mg/kg)", str(user.final_soil_ree)],
+            ["SOIL TYPE", str(user.soil_type)],
         ],
         "CULTIVATOR:": [
             ["BIOMASS INCREASE (g)", str(user.biomass_increase)],

@@ -24,6 +24,7 @@ urlpatterns = [
     path("phytomine_generate_pdf/<str:project_id>/",phytomine_generate_pdf),
     path("download_report/<str:project_id>/", download_report),
     path("get_location_proxy/", get_location_proxy),
+    path("predict_soil_type_ajax/", predict_soil_type_ajax),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings
