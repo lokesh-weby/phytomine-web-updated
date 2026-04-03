@@ -354,11 +354,13 @@ def phytomine_generate_pdf(request, project_id):
         return redirect("/admins_status/")
 
 def get_ai_insights(user):
-    """Generate exactly 4 one-line expert points for the dashboard in JSON format."""
     try:
         api_key = os.environ.get("GEMINI_API_KEY") or os.environ.get("GOOGLE_API_KEY")
-        if not api_key: return json.dumps({"error": "No API Key"})
+        if not api_key:
+            return None
+
         client = genai.Client(api_key=api_key)
+
         prompt = f"""Analyze Project {user.project_id} (Soil: {user.soil_type}, Eff: {user.extraction_eff}%).
 Return exactly 4 points in JSON format:
 {{
@@ -367,45 +369,73 @@ Return exactly 4 points in JSON format:
   "DURATION": "one short line",
   "SUGGESTED PLANTS": "one short line"
 }}"""
-        response = client.models.generate_content(model="gemini-3-flash-preview", contents=prompt)
+
+        response = client.models.generate_content(
+            model="gemini-3-flash-preview",
+            contents=prompt
+        )
+
         text = response.text.strip()
-        # Extract JSON if markdown wrapped
+
+        # Clean markdown
         if "```json" in text:
             text = text.split("```json")[1].split("```")[0].strip()
         elif "```" in text:
             text = text.split("```")[1].split("```")[0].strip()
-        return text
-    except Exception as e:
-        return json.dumps({"error": str(e)})
+
+        # Validate JSON before returning
+        json.loads(text)
+
+        return text  # ✅ Only valid JSON returned
+
+    except Exception:
+        return None  # ❌ No invalid data
 
 def phytomine_dashboard(request, project_id):
-    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    if request.session.get('role') != "admin":
+        return redirect("/admins_login/")
+
     try:
         data = phytomine.objects.get(project_id=project_id)
-        
-        # Check flag in DB first
+
+        insights = None
+
+        # ✅ Try DB first
         if data.is_insights_generated:
             try:
                 insight_obj = phytomine_insights.objects.get(project=data)
                 insights = json.loads(insight_obj.insights_text)
-            except (phytomine_insights.DoesNotExist, json.JSONDecodeError):
-                # Fallback if flag is true but record is missing or corrupted
-                raw_insights = get_ai_insights(data)
-                phytomine_insights.objects.update_or_create(project=data, defaults={'insights_text': raw_insights})
-                try: insights = json.loads(raw_insights)
-                except: insights = {"AI Analysis": raw_insights}
-        else:
-            # Generate for the first time
-            raw_insights = get_ai_insights(data)
-            phytomine_insights.objects.update_or_create(project=data, defaults={'insights_text': raw_insights})
-            data.is_insights_generated = True
-            data.save()
-            try: insights = json.loads(raw_insights)
-            except: insights = {"AI Analysis": raw_insights}
-        
-        return render(request, "admins/phytomine_dashboard.html", {'data': data, 'insights': insights})
-    except: return redirect("/admins_status/")
+            except:
+                insights = None  # force retry
 
+        # If no valid insights → call AI
+        if not insights:
+            raw_insights = get_ai_insights(data)
+
+            if raw_insights:
+                # Save ONLY if success
+                phytomine_insights.objects.update_or_create(
+                    project=data,
+                    defaults={'insights_text': raw_insights}
+                )
+                data.is_insights_generated = True
+                data.save()
+
+                insights = json.loads(raw_insights)
+
+            else:
+                #  Do NOT save anything
+                insights = {
+                    "AI STATUS": "AI service is not available"
+                }
+
+        return render(request, "admins/phytomine_dashboard.html", {
+            'data': data,
+            'insights': insights
+        })
+
+    except:
+        return redirect("/admins_status/")
 def get_location_proxy(request):
     lat, lon = request.GET.get('lat'), request.GET.get('lon')
     if not lat or not lon: return JsonResponse({"error": "Req coord"}, status=400)

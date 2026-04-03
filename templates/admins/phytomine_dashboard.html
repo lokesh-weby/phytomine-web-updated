@@ -413,7 +413,21 @@
                     <hr class="mb-5" style="opacity: 0.08;">
 
                     <div class="insight-content" id="insightContent">
-                        {% if insights.items %}
+                        {% if insights.AI_STATUS %}
+                        <!--  AI FAILED -->
+                        <div class="text-center py-5">
+                            <i class="fas fa-exclamation-triangle text-danger mb-3" style="font-size: 3rem;"></i>
+                            <h4 class="fw-bold text-danger">AI Service Unavailable</h4>
+                            <p class="text-muted">{{ insights.AI_STATUS }}</p>
+
+                            <!-- Retry Button -->
+                            <button onclick="location.reload()" class="btn btn-warning mt-3 px-4">
+                                <i class="fas fa-sync-alt me-2"></i> Retry
+                            </button>
+                        </div>
+
+                        {% elif insights.items %}
+                        <!-- ✅ NORMAL AI DATA -->
                         {% for key, value in insights.items %}
                         <div class="mb-4 animate-up">
                             <h5 class="fw-bold" style="color: var(--text-dark); letter-spacing: 0.5px;">
@@ -422,8 +436,9 @@
                             <p class="ms-4 mb-0 text-muted fw-medium">{{ value }}</p>
                         </div>
                         {% endfor %}
+
                         {% else %}
-                        <p class="text-muted">{{ insights }}</p>
+                        <p class="text-muted">No insights available.</p>
                         {% endif %}
                     </div>
                 </div>
