@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <base href="/static/cul/home/">
     <meta charset="utf-8">
@@ -15,7 +16,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -30,47 +33,60 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <style>
-        * { font-family: 'Outfit', sans-serif !important; }
-        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+        * {
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .navbar-nav .nav-link,
+        .navbar-brand,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif !important;
+        }
     </style>
 
 </head>
 
 <body>
 
-<script>
-{% for message in messages %}
-    var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
-    var tag = "{{ message.tags|default:'' }}";
-    
-    if (tag.indexOf("error") !== -1) {
-        bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
-    } else if (tag.indexOf("warning") !== -1) {
-        bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
-    } else if (tag.indexOf("success") !== -1) {
-        bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
-    } else if (tag.indexOf("info") !== -1 || tag === "") {
-        bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
-    }
+    <script>
+        {% for message in messages %}
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+        var tag = "{{ message.tags|default:'' }}";
 
-    Toastify({
-        text: "{{ message|escapejs }}",
-        duration: 3000,
-        gravity: "top",
-        position: "right",
-        style: {
-            background: bgColor
+        if (tag.indexOf("error") !== -1) {
+            bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+        } else if (tag.indexOf("warning") !== -1) {
+            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+        } else if (tag.indexOf("success") !== -1) {
+            bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+        } else if (tag.indexOf("info") !== -1 || tag === "") {
+            bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
         }
-    }).showToast();
-{% endfor %}
-</script>
+
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            style: {
+                background: bgColor
+            }
+        }).showToast();
+        {% endfor %}
+    </script>
 
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
     <!-- Spinner End -->
@@ -91,7 +107,7 @@
                 <a href="/cul_rep/" class="nav-item nav-link">CANOPY</a>
                 <a href="/cul_logout/" class="nav-item nav-link">LOGOUT</a>
             </div>
-            
+
         </div>
     </nav>
     <!-- Navbar End -->
@@ -106,7 +122,8 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-lg-8">
-                                <h1 class="display-1 text-light mb-4 animated slideInDown">Growing Nature’s Path to Sustainable Mining</h1>
+                                <h1 class="display-1 text-light mb-4 animated slideInDown">Growing Nature’s Path to
+                                    Sustainable Mining</h1>
                                 <a href="/cul_home/" class="btn btn-primary rounded-pill py-3 px-5">HOME</a>
                             </div>
                         </div>
@@ -119,7 +136,8 @@
                     <div class="container">
                         <div class="row justify-content-start">
                             <div class="col-lg-8">
-                                <h1 class="display-1 text-light mb-4 animated slideInDown">Cultivate Smart. Accumulate Naturally.</h1>
+                                <h1 class="display-1 text-light mb-4 animated slideInDown">Cultivate Smart. Accumulate
+                                    Naturally.</h1>
                                 <a href="/cul_home/" class="btn btn-primary rounded-pill py-3 px-5">HOME</a>
                             </div>
                         </div>
@@ -148,10 +166,19 @@
                 <div class="col-lg-6 wow fadeInUp" data-wow-delay="0.5s">
                     <div class="h-100">
                         <h1 class="display-6 mb-4">About Us</h1>
-                        <p style="text-align:justify;">The Cultivator Module is designed to support the critical role of plant growth and management in the phytomining process. It focuses on cultivating hyperaccumulator plants under controlled conditions to ensure healthy growth and optimal metal absorption.</p>
-                        <p style="text-align:justify;">Through this module, cultivators work with validated input parameters provided by the admin, such as biomass limits, growth duration, and soil conditions. These inputs guide cultivation practices and ensure consistency with the overall phytomining strategy</p>
-                        <p style="text-align:justify;">The module enables systematic tracking of fern growth performance, including biomass development, growth rate, and efficiency. By monitoring these indicators, cultivators can ensure that plants reach the required maturity for effective metal accumulation.</p>
-                        
+                        <p style="text-align:justify;">The Cultivator Module is designed to support the critical role of
+                            plant growth and management in the phytomining process. It focuses on cultivating
+                            hyperaccumulator plants under controlled conditions to ensure healthy growth and optimal
+                            metal absorption.</p>
+                        <p style="text-align:justify;">Through this module, cultivators work with validated input
+                            parameters provided by the admin, such as biomass limits, growth duration, and soil
+                            conditions. These inputs guide cultivation practices and ensure consistency with the overall
+                            phytomining strategy</p>
+                        <p style="text-align:justify;">The module enables systematic tracking of fern growth
+                            performance, including biomass development, growth rate, and efficiency. By monitoring these
+                            indicators, cultivators can ensure that plants reach the required maturity for effective
+                            metal accumulation.</p>
+
                     </div>
                 </div>
             </div>
@@ -162,7 +189,8 @@
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->

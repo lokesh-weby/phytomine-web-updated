@@ -1,17 +1,17 @@
-
 /*** Spinner Start ***/
 #spinner {
     opacity: 0;
     visibility: hidden;
     transition: opacity .8s ease-out, visibility 0s linear .5s;
     z-index: 99999;
- }
+}
 
- #spinner.show {
-     transition: opacity .8s ease-out, visibility 0s linear .0s;
-     visibility: visible;
-     opacity: 1;
- }
+#spinner.show {
+    transition: opacity .8s ease-out, visibility 0s linear .0s;
+    visibility: visible;
+    opacity: 1;
+}
+
 /*** Spinner End ***/
 
 .back-to-top {
@@ -129,13 +129,13 @@
         border-top: none !important;
     }
 }
+
 /*** Navbar End ***/
 
 /*** Carousel Start ***/
 .carousel-item {
     position: relative;
     min-height: 100vh
-    
 }
 
 .carousel-item img {
@@ -146,7 +146,7 @@
 }
 
 .carousel-item .carousel-caption {
-    background: radial-gradient(circle, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.6) 100%);
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.6) 100%);
     border-radius: 20px;
     width: 100%;
     height: 100%;
@@ -190,6 +190,7 @@
     border-right: 15px solid var(--bs-primary);
     border-left: 15px solid var(--bs-primary);
 }
+
 /*** Carousel End ***/
 
 
@@ -230,12 +231,14 @@
 }
 
 @media (max-width: 768px) {
+
     .story .story-timeline::before,
     .story .story-timeline::after,
-    .story .story-timeline .row::after  {
+    .story .story-timeline .row::after {
         display: none;
     }
 }
+
 /*** Wedding Story End ***/
 
 /*** Wedding Date Start ***/
@@ -263,6 +266,7 @@
     position: relative;
     z-index: 9;
 }
+
 /*** Wedding Date End ***/
 
 
@@ -272,6 +276,7 @@
         display: none;
     }
 }
+
 /*** Wedding Timeline End ***/
 
 
@@ -323,12 +328,13 @@
     transition: 0.5s;
     opacity: 0;
     z-index: 2;
-    
+
 }
 
 .gallery .gallery-img:hover .search-icon {
     opacity: 1;
 }
+
 /*** Gallery End ***/
 
 
@@ -395,6 +401,7 @@
 .team .team-item:hover .team-img .team-img-bg img {
     transform: scale(1.1);
 }
+
 /*** Team End ***/
 
 
@@ -403,6 +410,7 @@
     background: linear-gradient(rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.2));
     object-fit: cover;
 }
+
 /*** Contact Us End ***/
 
 
@@ -427,12 +435,14 @@
 }
 
 @media (max-width: 992px) {
+
     .footer .text-start,
     .footer .text-center,
     .footer .text-end {
         text-align: center !important;
     }
 }
+
 /*** Footer End ***/
 
 
@@ -441,24 +451,29 @@
     border-top: 1px solid rgba(255, 255, 255, 0.08);
     background: var(--bs-dark) !important;
 }
+
 /*** copyright end ***/
-.carousel-item img, .owl-carousel-item img {
+.carousel-item img,
+.owl-carousel-item img {
     width: 100% !important;
     height: 100vh !important;
     object-fit: cover !important;
-    filter: brightness(0.75) contrast(1.1) saturate(1.1);
-    transition: filter 1s ease;
+    /* filter: brightness(0.75) contrast(1.1) saturate(1.1); */
+    /* transition: filter 1s ease; */
 }
-.carousel-item:hover img, .owl-carousel-item:hover img {
-    filter: brightness(0.85) contrast(1.15) saturate(1.2);
+
+.carousel-item:hover img,
+.owl-carousel-item:hover img {
+    /* filter: brightness(0.85) contrast(1.15) saturate(1.2); */
 }
 
 img.img-fluid:not(.carousel-item img):not(.navbar-brand img) {
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
 }
+
 img.img-fluid:not(.carousel-item img):not(.navbar-brand img):hover {
     transform: scale(1.03) translateY(-5px);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
 }

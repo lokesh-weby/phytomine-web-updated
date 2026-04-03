@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <base href="/static/acc/home/">
     <meta charset="utf-8">
@@ -15,7 +16,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -29,47 +32,59 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <style>
-        * { font-family: 'Outfit', sans-serif !important; }
-        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+        * {
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .navbar-nav .nav-link,
+        .navbar-brand,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif !important;
+        }
     </style>
 
 </head>
 
 <body>
 
-<script>
-{% for message in messages %}
-    var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
-    var tag = "{{ message.tags|default:'' }}";
-    
-    if (tag.indexOf("error") !== -1) {
-        bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
-    } else if (tag.indexOf("warning") !== -1) {
-        bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
-    } else if (tag.indexOf("success") !== -1) {
-        bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
-    } else if (tag.indexOf("info") !== -1 || tag === "") {
-        bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
-    }
+    <script>
+        {% for message in messages %}
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+        var tag = "{{ message.tags|default:'' }}";
 
-    Toastify({
-        text: "{{ message|escapejs }}",
-        duration: 3000,
-        gravity: "top",
-        position: "right",
-        style: {
-            background: bgColor
+        if (tag.indexOf("error") !== -1) {
+            bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+        } else if (tag.indexOf("warning") !== -1) {
+            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+        } else if (tag.indexOf("success") !== -1) {
+            bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+        } else if (tag.indexOf("info") !== -1 || tag === "") {
+            bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
         }
-    }).showToast();
-{% endfor %}
-</script>
+
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            style: {
+                background: bgColor
+            }
+        }).showToast();
+        {% endfor %}
+    </script>
 
 
-<style>
+    <style>
         .fixed-table-wrapper {
             max-width: 100%;
             margin: 25px auto;
@@ -183,7 +198,7 @@
                 transform: translateY(0);
             }
         }
-</style>
+    </style>
 
     <!-- Spinner Start -->
     <div id="spinner"
@@ -227,77 +242,78 @@
             <div class="row g-5 pt-5">
                 <div class="col-12 align-self-center text-center text-lg-start mb-lg-5">
                     <!-- UPDATED H2 COLOR  -->
-<h2 style="text-align:center; font-size: 30px; color: #EAA636; letter-spacing: 2px; text-shadow: 0 0 6px rgba(234,166,54,0.8), 0 0 16px rgba(234,166,54,0.6), 0 0 32px rgba(140,90,18,0.9);">
-  RESERVOIOR
-</h2>
+                    <h2
+                        style="text-align:center; font-size: 30px; color: #EAA636; letter-spacing: 2px; text-shadow: 0 0 6px rgba(234,166,54,0.8), 0 0 16px rgba(234,166,54,0.6), 0 0 32px rgba(140,90,18,0.9);">
+                        RESERVOIOR
+                    </h2>
 
-<!-- ===================== TABLE ===================== -->
+                    <!-- ===================== TABLE ===================== -->
 
-<div class="fixed-table-wrapper" style="width: 100%;">
-  <table class="fixed-table">
-    <thead>
-      <tr>
-        <th>PROJECT ID</th>
-        <th>INITIAL FERN BIOMASS (g)</th>
-        <th>FINAL FERN BIOMASS (g)</th>
-        <th>GROWTH DURATION (days)</th>
-        <th>SOIL REE CONCENTRATION (mg/kg)</th>
-        <th>PLANT REE CONCENTRATION (mg/kg)</th>
-        <th>HARVESTED BIOMASS (g)</th>
-        <th>EXTRACTION EFFICIENCY (%)</th>
-        <th>INITIAL SOIL REE (mg/kg)</th>
-        <th>FINAL SOIL REE (mg/kg)</th>
-        <th>BIOMASS INCREASE (g)</th>
-        <th>GROWTH RATE (g/day)</th>
-        <th>GROWTH EFFICIENCY (%)</th>
-        <th>TOTAL METAL (mg)</th>
-        <th>UPTAKE (%)</th>
-        <th>BAF</th>
-      </tr>
-    </thead>
+                    <div class="fixed-table-wrapper" style="width: 100%;">
+                        <table class="fixed-table">
+                            <thead>
+                                <tr>
+                                    <th>PROJECT ID</th>
+                                    <th>INITIAL FERN BIOMASS (g)</th>
+                                    <th>FINAL FERN BIOMASS (g)</th>
+                                    <th>GROWTH DURATION (days)</th>
+                                    <th>SOIL REE CONCENTRATION (mg/kg)</th>
+                                    <th>PLANT REE CONCENTRATION (mg/kg)</th>
+                                    <th>HARVESTED BIOMASS (g)</th>
+                                    <th>EXTRACTION EFFICIENCY (%)</th>
+                                    <th>INITIAL SOIL REE (mg/kg)</th>
+                                    <th>FINAL SOIL REE (mg/kg)</th>
+                                    <th>BIOMASS INCREASE (g)</th>
+                                    <th>GROWTH RATE (g/day)</th>
+                                    <th>GROWTH EFFICIENCY (%)</th>
+                                    <th>TOTAL METAL (mg)</th>
+                                    <th>UPTAKE (%)</th>
+                                    <th>BAF</th>
+                                </tr>
+                            </thead>
 
-    <tbody>
-      {% if data %}
-        {% for i in data %}
-        <tr>
-          {% if i.acc_decrypt is True %}
-            <td>{{ i.project_id }}</td>
-            {% if i.cul_scan is True %}
-            <td>{{ i.initial_fern_biomass }}</td>
-            <td>{{ i.final_fern_biomass }}</td>
-            <td>{{ i.growth_duration }}</td>
-            <td>{{ i.soil_ree_conc }}</td>
-            <td>{{ i.plant_ree_conc }}</td>
-            <td>{{ i.harvested_biomass }}</td>
-            <td>{{ i.extraction_eff }}</td>
-            <td>{{ i.initial_soil_ree }}</td>
-            <td>{{ i.final_soil_ree }}</td>
-            <td>{{ i.biomass_increase }}</td>
-            <td>{{ i.growth_rate }}</td>
-            <td>{{ i.growth_eff }}</td>
-            <td>{{ i.total_metal }}</td>
-            <td>{{ i.uptake }}</td>
-            <td>{{ i.baf }}</td>
-            {% else %}
-                <td colspan="23">Data Not Analyzed</td>
-            {% endif %}
-            
-        </tr>
-        {% else %}
-            <td colspan="23">Data Not Decrypted</td>
-          {% endif %}
-        {% endfor %}
-        
-      {% else %}
-        <tr>
-          <td colspan="23">NO DATA AVAILABLE</td>
-        </tr>
-      {% endif %}
-    </tbody>
-  </table>
-</div>
+                            <tbody>
+                                {% if data %}
+                                {% for i in data %}
+                                <tr>
+                                    {% if i.acc_decrypt is True %}
+                                    <td>{{ i.project_id }}</td>
+                                    {% if i.cul_scan is True %}
+                                    <td>{{ i.initial_fern_biomass }}</td>
+                                    <td>{{ i.final_fern_biomass }}</td>
+                                    <td>{{ i.growth_duration }}</td>
+                                    <td>{{ i.soil_ree_conc }}</td>
+                                    <td>{{ i.plant_ree_conc }}</td>
+                                    <td>{{ i.harvested_biomass }}</td>
+                                    <td>{{ i.extraction_eff }}</td>
+                                    <td>{{ i.initial_soil_ree }}</td>
+                                    <td>{{ i.final_soil_ree }}</td>
+                                    <td>{{ i.biomass_increase }}</td>
+                                    <td>{{ i.growth_rate }}</td>
+                                    <td>{{ i.growth_eff }}</td>
+                                    <td>{{ i.total_metal }}</td>
+                                    <td>{{ i.uptake }}</td>
+                                    <td>{{ i.baf }}</td>
+                                    {% else %}
+                                    <td colspan="23">Data Not Analyzed</td>
+                                    {% endif %}
+
+                                </tr>
+                                {% else %}
+                                <td colspan="23">Data Not Decrypted</td>
+                                {% endif %}
+                                {% endfor %}
+
+                                {% else %}
+                                <tr>
+                                    <td colspan="23">NO DATA AVAILABLE</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                
+
             </div>
         </div>
     </div>

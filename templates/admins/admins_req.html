@@ -96,7 +96,7 @@
             border-radius: 15px;
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
             padding: 40px;
-            width: 100%;
+            width: max-content;
             /* Increased */
             margin: auto;
             /* Centering */
@@ -142,6 +142,38 @@
             border-top-right-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
             margin-top: 0 !important;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .full-width {
+            grid-column: span 2;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255, 255, 255, 0.85);
+        }
+
+        /* Keep your existing location-group styling */
+        .location-group {
+            display: flex;
+        }
+
+        select {
+            border-radius: 8px 0px 0px 8px !important;
         }
 
         .btn-get-location {
@@ -316,78 +348,95 @@
             <div class="carousel-caption d-flex justify-content-center align-items-start"
                 style="position:relative; height:100vh; overflow-y:auto; padding-top:120px;">
 
-                <div class="form-container" style="width: 30%; margin-bottom:40px;">
+                <div class="form-container">
                     <h2>PROVISION</h2>
 
                     <form action="/admins_req/" method="POST">
                         {% csrf_token %}
 
-                        <label>Location</label>
-                        <div class="location-group">
-                            <input type="text" name="location" id="locationInput" placeholder="Enter Location" required>
-                            <button type="button" class="btn-get-location" onclick="getLocation()">
-                                <i class="fas fa-map-marker-alt"></i> Get Location
-                            </button>
+                        <div class="form-grid">
+
+                            <!-- Location -->
+                            <div class="form-group full-width">
+                                <label>Location</label>
+                                <div class="location-group">
+                                    <input type="text" name="location" id="locationInput" placeholder="Enter Location"
+                                        required>
+                                    <button type="button" class="btn-get-location" onclick="getLocation()">
+                                        <i class="fas fa-map-marker-alt"></i> Get Location
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Soil Type -->
+                            <div class="form-group">
+                                <label>Soil Type Selection</label>
+                                <div class="location-group">
+                                    <select name="soil_type" id="soilTypeSelect" required>
+                                        <option value="" disabled selected>Select Soil Type</option>
+                                        <option value="Black Soil">Black Soil</option>
+                                        <option value="Clay soil">Clay soil</option>
+                                        <option value="Alluvial soil">Alluvial soil</option>
+                                        <option value="Red soil">Red soil</option>
+                                    </select>
+
+                                    <input type="file" id="soilImageInput" style="display: none;" accept="image/*"
+                                        onchange="predictSoilType()">
+
+                                    <button type="button" id="btnPredict" class="btn-get-location"
+                                        onclick="document.getElementById('soilImageInput').click()">
+                                        <i class="fas fa-camera"></i> Predict
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Two column fields -->
+                            <div class="form-group">
+                                <label>Initial Fern Biomass (g)</label>
+                                <input type="number" name="initial_fern_biomass" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Final Fern Biomass (g)</label>
+                                <input type="number" name="final_fern_biomass" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Growth Duration (days)</label>
+                                <input type="number" name="growth_duration" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Soil REE Concentration (mg/kg)</label>
+                                <input type="number" name="soil_ree_conc" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Plant REE Concentration (mg/kg)</label>
+                                <input type="number" name="plant_ree_conc" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Harvested Biomass (g)</label>
+                                <input type="number" name="harvested_biomass" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Extraction Efficiency (%)</label>
+                                <input type="number" name="extraction_eff" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Initial Soil REE (mg/kg)</label>
+                                <input type="number" name="initial_soil_ree" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Final Soil REE (mg/kg)</label>
+                                <input type="number" name="final_soil_ree" required>
+                            </div>
+
                         </div>
-
-                        <label>Soil Type Selection</label>
-                        <div class="location-group">
-                            <select name="soil_type" id="soilTypeSelect"
-                                style="width: 100%; padding: 10px; border-radius: 8px 0 0 8px; border:none; background: rgba(255, 255, 255, 0.85); font-size: 14px; color: #333;"
-                                required>
-                                <option value="" disabled selected>Select Soil Type</option>
-                                <option value="Black Soil">Black Soil</option>
-                                <option value="Clay soil">Clay soil</option>
-                                <option value="Alluvial soil">Alluvial soil</option>
-                                <option value="Red soil">Red soil</option>
-                            </select>
-                            <input type="file" id="soilImageInput" style="display: none;" accept="image/*"
-                                onchange="predictSoilType()">
-                            <button type="button" id="btnPredict" class="btn-get-location"
-                                onclick="document.getElementById('soilImageInput').click()">
-                                <i class="fas fa-camera"></i> Predict
-                            </button>
-                        </div>
-                        <!-- <div id="predictionInfo"
-                            style="font-size: 0.8rem; color: #adff2f; text-align: left; margin-top: 5px; display: none;">
-                            Prediction Confidence: <span id="confidenceVal">0</span>%
-                        </div> -->
-
-                        <label>Initial Fern Biomass (g)</label>
-                        <input type="number" name="initial_fern_biomass" min="20" max="150" step="1"
-                            placeholder="Enter value between 20 - 150" required>
-
-                        <label>Final Fern Biomass (g)</label>
-                        <input type="number" name="final_fern_biomass" min="50" max="500" step="1"
-                            placeholder="Enter value between 50 - 500" required>
-
-                        <label>Growth Duration (days)</label>
-                        <input type="number" name="growth_duration" min="30" max="180" step="1"
-                            placeholder="Enter value between 30 - 180" required>
-
-                        <label>Soil REE Concentration (mg/kg)</label>
-                        <input type="number" name="soil_ree_conc" min="50" max="5000" step="10"
-                            placeholder="Enter value between 50 - 5000" required>
-
-                        <label>Plant REE Concentration (mg/kg)</label>
-                        <input type="number" name="plant_ree_conc" min="10" max="3000" step="10"
-                            placeholder="Enter value between 10 - 3000" required>
-
-                        <label>Harvested Biomass (g)</label>
-                        <input type="number" name="harvested_biomass" min="50" max="500" step="1"
-                            placeholder="Enter value between 50 - 500" required>
-
-                        <label>Extraction Efficiency (%)</label>
-                        <input type="number" name="extraction_eff" min="40" max="95" step="1"
-                            placeholder="Enter value between 40 - 95" required>
-
-                        <label>Initial Soil REE (mg/kg)</label>
-                        <input type="number" name="initial_soil_ree" min="100" max="5000" step="10"
-                            placeholder="Enter value between 100 - 5000" required>
-
-                        <label>Final Soil REE (mg/kg)</label>
-                        <input type="number" name="final_soil_ree" min="10" max="3000" step="10"
-                            placeholder="Enter value between 10 - 3000" required>
 
                         <div class="btn-container">
                             <button type="submit" class="btn btn-submit">Submit</button>
@@ -430,7 +479,7 @@
                 Toastify({
                     text: "Geolocation not supported by this browser",
                     duration: 3000,
-                    gravity: "top",
+                    gravity: "bottom",
                     position: "right",
                     style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
                 }).showToast();
@@ -457,9 +506,9 @@
                             document.getElementById('locationInput').value = locationName;
 
                             Toastify({
-                                text: "📍 Location: " + locationName,
+                                text: " Location: " + locationName,
                                 duration: 3000,
-                                gravity: "top",
+                                gravity: "bottom",
                                 position: "right",
                                 style: {
                                     background: "linear-gradient(to right, #00b09b, #96c93d)"
@@ -474,7 +523,7 @@
                         Toastify({
                             text: "Failed to resolve address",
                             duration: 3000,
-                            gravity: "top",
+                            gravity: "bottom",
                             position: "right",
                             style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
                         }).showToast();
@@ -492,7 +541,7 @@
                 Toastify({
                     text: msg,
                     duration: 3000,
-                    gravity: "top",
+                    gravity: "bottom",
                     position: "right",
                     style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
                 }).showToast();
@@ -536,9 +585,9 @@
                             if (confidenceVal) confidenceVal.innerText = data.confidence;
 
                             Toastify({
-                                text: "✅ Soil Predicted: " + data.soil_type,
+                                text: " Soil Predicted: " + data.soil_type,
                                 duration: 3000,
-                                gravity: "top",
+                                gravity: "bottom",
                                 position: "right",
                                 style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
                             }).showToast();
@@ -549,9 +598,9 @@
                     .catch(error => {
                         console.error('Error:', error);
                         Toastify({
-                            text: "⚠️ Classification Error: " + error.message,
+                            text: "Classification Error: " + error.message,
                             duration: 3000,
-                            gravity: "top",
+                            gravity: "bottom",
                             position: "right",
                             style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
                         }).showToast();

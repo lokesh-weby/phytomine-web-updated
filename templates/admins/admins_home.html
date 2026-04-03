@@ -86,7 +86,7 @@
         Toastify({
             text: "{{ message|escapejs }}",
             duration: 3000,
-            gravity: "top",
+            gravity: "bottom",
             position: "right",
             style: {
                 background: bgColor
@@ -138,8 +138,8 @@
                                         style="display:flex; justify-content:space-between; align-items:center;">
                                         CULTIVATOR
                                         {% if pending_cul and pending_cul > 0 %}
-                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{
-                                            pending_cul }}</span>
+                                        <span class="badge rounded-pill bg-danger"
+                                            style="font-size: 0.65rem;">{{pending_cul }}</span>
                                         {% endif %}
                                     </a>
                                     <a class="dropdown-item" href="/acc_approve/"

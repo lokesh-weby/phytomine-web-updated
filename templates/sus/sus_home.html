@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 {% load static %}
+
 <head>
     <base href="/static/sus/home/">
     <meta charset="utf-8">
@@ -15,7 +16,9 @@
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">  
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
@@ -29,16 +32,32 @@
 
     <!-- Template Stylesheet -->
     <link href="css/style.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-<style>
-.carousel-caption { left: 5% !important; right: 5% !important; width: 90% !important; }
-</style>
+    <style>
+        .carousel-caption {
+            left: 5% !important;
+            right: 5% !important;
+            width: 90% !important;
+        }
+    </style>
 
     <style>
-        * { font-family: 'Outfit', sans-serif !important; }
-        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+        * {
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .navbar-nav .nav-link,
+        .navbar-brand,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif !important;
+        }
     </style>
 
 </head>
@@ -47,34 +66,35 @@
 
 
     <script>
-{% for message in messages %}
-    var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
-    var tag = "{{ message.tags|default:'' }}";
-    
-    if (tag.indexOf("error") !== -1) {
-        bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
-    } else if (tag.indexOf("warning") !== -1) {
-        bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
-    } else if (tag.indexOf("success") !== -1) {
-        bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
-    } else if (tag.indexOf("info") !== -1 || tag === "") {
-        bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
-    }
+        {% for message in messages %}
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+        var tag = "{{ message.tags|default:'' }}";
 
-    Toastify({
-        text: "{{ message|escapejs }}",
-        duration: 3000,
-        gravity: "top",
-        position: "right",
-        style: {
-            background: bgColor
+        if (tag.indexOf("error") !== -1) {
+            bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+        } else if (tag.indexOf("warning") !== -1) {
+            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+        } else if (tag.indexOf("success") !== -1) {
+            bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+        } else if (tag.indexOf("info") !== -1 || tag === "") {
+            bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
         }
-    }).showToast();
-{% endfor %}
-</script>
+
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            style: {
+                background: bgColor
+            }
+        }).showToast();
+        {% endfor %}
+    </script>
 
     <!-- Spinner Start -->
-    <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+    <div id="spinner"
+        class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-border text-primary" role="status" style="width: 3rem; height: 3rem;"></div>
     </div>
     <!-- Spinner End -->
@@ -87,7 +107,7 @@
                 <a href="/sus_home/" style="margin-left:42%;">
                     <h2 class="text-white fw-bold m-0">SUSTAINER</h2>
                 </a>
-                
+
             </div>
         </div>
     </div>
@@ -101,7 +121,8 @@
                 <a href="index.html" class="navbar-brand d-lg-none">
                     <h1 class="fw-bold m-0">GrowMark</h1>
                 </a>
-                <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                <button type="button" class="navbar-toggler me-0" data-bs-toggle="collapse"
+                    data-bs-target="#navbarCollapse">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -131,8 +152,10 @@
                         <div class="container">
                             <div class="row justify-content-start">
                                 <div class="col-lg-7 text-start">
-                                    <h1 class="display-1 text-white mb-4 animated slideInRight">Sustaining the Land Beyond Extraction.</h1>
-                                    <a href="/sus_home/" class="btn btn-primary rounded-pill py-3 px-5 animated slideInRight">HOME</a>
+                                    <h1 class="display-1 text-white mb-4 animated slideInRight">Sustaining the Land
+                                        Beyond Extraction.</h1>
+                                    <a href="/sus_home/"
+                                        class="btn btn-primary rounded-pill py-3 px-5 animated slideInRight">HOME</a>
                                 </div>
                             </div>
                         </div>
@@ -144,21 +167,21 @@
                         <div class="container">
                             <div class="row justify-content-end">
                                 <div class="col-lg-7 text-end">
-                                    <h1 class="display-1 text-white mb-5 animated slideInLeft">Ensuring Balance After Biomining.</h1>
-                                    <a href="/sus_home/" class="btn btn-primary rounded-pill py-3 px-5 animated slideInLeft">HOME</a>
+                                    <h1 class="display-1 text-white mb-5 animated slideInLeft">Ensuring Balance After
+                                        Biomining.</h1>
+                                    <a href="/sus_home/"
+                                        class="btn btn-primary rounded-pill py-3 px-5 animated slideInLeft">HOME</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel"
-                data-bs-slide="prev">
+            <button class="carousel-control-prev" type="button" data-bs-target="#header-carousel" data-bs-slide="prev">
                 <span class="carousel-control-prev-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Previous</span>
             </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#header-carousel"
-                data-bs-slide="next">
+            <button class="carousel-control-next" type="button" data-bs-target="#header-carousel" data-bs-slide="next">
                 <span class="carousel-control-next-icon" aria-hidden="true"></span>
                 <span class="visually-hidden">Next</span>
             </button>
@@ -167,7 +190,7 @@
     <!-- Carousel End -->
 
 
-  
+
 
 
     <!-- About Start -->
@@ -176,31 +199,41 @@
             <div class="row g-0">
                 <div class="col-lg-6">
                     <div class="h-100 d-flex align-items-center justify-content-center" style="min-height: 300px;">
-                        
+
                     </div>
                 </div>
                 <div class="col-lg-6 pt-lg-5 wow fadeIn" data-wow-delay="0.5s">
                     <div class="bg-white rounded-top p-5 mt-lg-5">
                         <h1 class="display-6 mb-4">About Us</h1>
-                        <p class="mb-4" style="text-align:justify;">The Sustainer Module is designed to ensure environmental stability and long-term ecosystem health after the phytomining and extraction processes. It focuses on maintaining soil quality, land usability, and ecological balance.</p>
-                        <p class="mb-4" style="text-align:justify;">This module evaluates post-extraction parameters such as soil nutrient levels, residual metal presence, and land recovery indicators. These assessments help determine whether the site is suitable for continued cultivation or natural restoration.</p>
-                        <p class="mb-4" style="text-align:justify;">Using monitored sustainability metrics, the Sustainer Module supports informed decision-making for soil rejuvenation and resource reuse. It ensures that phytomining activities do not compromise future agricultural or ecological potential.</p>
-                        
-                           
-                        </div>
+                        <p class="mb-4" style="text-align:justify;">The Sustainer Module is designed to ensure
+                            environmental stability and long-term ecosystem health after the phytomining and extraction
+                            processes. It focuses on maintaining soil quality, land usability, and ecological balance.
+                        </p>
+                        <p class="mb-4" style="text-align:justify;">This module evaluates post-extraction parameters
+                            such as soil nutrient levels, residual metal presence, and land recovery indicators. These
+                            assessments help determine whether the site is suitable for continued cultivation or natural
+                            restoration.</p>
+                        <p class="mb-4" style="text-align:justify;">Using monitored sustainability metrics, the
+                            Sustainer Module supports informed decision-making for soil rejuvenation and resource reuse.
+                            It ensures that phytomining activities do not compromise future agricultural or ecological
+                            potential.</p>
+
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
+    </div>
     <!-- About End -->
 
 
-   
+
 
 
     <!-- Back to Top -->
-    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i class="bi bi-arrow-up"></i></a>
+    <a href="#" class="btn btn-lg btn-primary btn-lg-square rounded-circle back-to-top"><i
+            class="bi bi-arrow-up"></i></a>
 
 
     <!-- JavaScript Libraries -->

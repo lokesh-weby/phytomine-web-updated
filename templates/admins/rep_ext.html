@@ -2,37 +2,39 @@
 {% load static %}
 <html lang="en">
 
-    <head>
-        <base href="/static/admins/home/">
-        <meta charset="utf-8">
-        <title>Admin</title>
-        <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="keywords">
-        <meta content="" name="description">
+<head>
+    <base href="/static/admins/home/">
+    <meta charset="utf-8">
+    <title>Admin</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
 
-        <!-- Google Web Fonts -->
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> 
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
 
-        <!-- Icon Font Stylesheet -->
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Icon Font Stylesheet -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-        <!-- Libraries Stylesheet -->
-        <link href="lib/animate/animate.min.css" rel="stylesheet">
-        <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
 
 
-        <!-- Customized Bootstrap Stylesheet -->
-        <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-        <!-- Template Stylesheet -->
-        <link href="css/style.css" rel="stylesheet">
-            <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-<style>
+    <style>
         .fixed-table-wrapper {
             max-width: 100%;
             margin: 25px auto;
@@ -146,42 +148,54 @@
                 transform: translateY(0);
             }
         }
-</style>
+    </style>
 
     <style>
-        * { font-family: 'Outfit', sans-serif !important; }
-        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+        * {
+            font-family: 'Outfit', sans-serif !important;
+        }
+
+        .navbar-nav .nav-link,
+        .navbar-brand,
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: 'Outfit', sans-serif !important;
+        }
     </style>
 
 </head>
 
-    <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
+<body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
 
     <script>
-	{% for message in messages %}
-    var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
-    var tag = "{{ message.tags|default:'' }}";
-    
-    if (tag.indexOf("error") !== -1) {
-        bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
-    } else if (tag.indexOf("warning") !== -1) {
-        bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
-    } else if (tag.indexOf("success") !== -1) {
-        bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
-    } else if (tag.indexOf("info") !== -1 || tag === "") {
-        bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
-    }
+        {% for message in messages %}
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+        var tag = "{{ message.tags|default:'' }}";
 
-    Toastify({
-        text: "{{ message|escapejs }}",
-        duration: 3000,
-        gravity: "top",
-        position: "right",
-        style: {
-            background: bgColor
+        if (tag.indexOf("error") !== -1) {
+            bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
+        } else if (tag.indexOf("warning") !== -1) {
+            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
+        } else if (tag.indexOf("success") !== -1) {
+            bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
+        } else if (tag.indexOf("info") !== -1 || tag === "") {
+            bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
         }
-    }).showToast();
-{% endfor %}
+
+        Toastify({
+            text: "{{ message|escapejs }}",
+            duration: 3000,
+            gravity: "bottom",
+            position: "right",
+            style: {
+                background: bgColor
+            }
+        }).showToast();
+        {% endfor %}
     </script>
 
     <style>
@@ -298,192 +312,215 @@
                 transform: translateY(0);
             }
         }
-</style>
+    </style>
 
-        <!-- Spinner Start -->
-        <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
-            <div class="spinner-grow text-primary" role="status"></div>
-        </div>
-        <!-- Spinner End -->
+    <!-- Spinner Start -->
+    <div id="spinner"
+        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+        <div class="spinner-grow text-primary" role="status"></div>
+    </div>
+    <!-- Spinner End -->
 
 
-        <!-- Navbar start -->
-        <div class="container-fluid sticky-top px-0">
-            <div class="container-fluid">
-                <div class="container px-0">
-                    <nav class="navbar navbar-light navbar-expand-xl" id="navBar">
-                        <a href="/admins_home/" class="navbar-brand">
-                            <h4 class="text-primary display-6 fw-bold mb-0">ADMIN</h4>
-                        </a>
-                        <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
-                            <span class="fa fa-bars text-primary"></span>
-                        </button>
-                        <div class="collapse navbar-collapse py-3" id="navbarCollapse">
-                            <div class="navbar-nav mx-auto border-top">
-                                <a href="/admins_home/" class="nav-item nav-link ">HOME</a>
-                                <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle position-relative" href="#" id="auditDropdown"
-                               role="button" data-bs-toggle="dropdown">
-                                AUDIT
-                                {% if pending_users_count and pending_users_count > 0 %}
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem; padding: 0.3em 0.4em; transform: translate(-30%, 10%) !important;">
-                                    {{ pending_users_count }}
-                                </span>
-                                {% endif %}
-                            </a>
-                            <div class="dropdown-menu m-0">
-                                <a class="dropdown-item" href="/cul_approve/" style="display:flex; justify-content:space-between; align-items:center;">
-                                    CULTIVATOR
-                                    {% if pending_cul and pending_cul > 0 %}
-                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{ pending_cul }}</span>
-                                    {% endif %}
-                                </a>
-                                <a class="dropdown-item" href="/acc_approve/" style="display:flex; justify-content:space-between; align-items:center;">
-                                    ACCUMULATOR
-                                    {% if pending_acc and pending_acc > 0 %}
-                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{ pending_acc }}</span>
-                                    {% endif %}
-                                </a>
-                                <a class="dropdown-item" href="/ext_approve/" style="display:flex; justify-content:space-between; align-items:center;">
-                                    EXTRACTOR
-                                    {% if pending_ext and pending_ext > 0 %}
-                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{ pending_ext }}</span>
-                                    {% endif %}
-                                </a>
-                                <a class="dropdown-item" href="/sus_approve/" style="display:flex; justify-content:space-between; align-items:center;">
-                                    SUSTAINER
-                                    {% if pending_sus and pending_sus > 0 %}
-                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{ pending_sus }}</span>
-                                    {% endif %}
-                                </a>
-                            </div>
-                        </div>
-                                <a href="/admins_req/" class="nav-item nav-link">PROVISION</a>
-                                <a href="/admins_status/" class="nav-item nav-link">TELEMETRY</a>
-                                <div class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle active" href="#" id="dossierDropdown"
-                               role="button" data-bs-toggle="dropdown">
-                                DOSSIER
-                            </a>
-                            <div class="dropdown-menu m-0">
-                                <a class="dropdown-item" href="/rep_cul/">CULTIVATOR</a>
-                                <a class="dropdown-item" href="/rep_acc/">ACCUMULATOR</a>
-                                <a class="dropdown-item active" href="/rep_ext/">EXTRACTOR</a>
-                                <a class="dropdown-item" href="/rep_sus/">SUSTAINER</a>
-                            </div>
-                        </div>
-                            </div>
-                            <div class="d-flex align-items-center flex-nowrap pt-xl-0">
-                                <a href="/admins_status/" class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative" title="Notifications">
-                                    <i class="fa fa-bell"></i>
-                                    {% if total_notifications and total_notifications > 0 %}
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.7rem; padding: 0.35em 0.5em; transform: translate(-30%, -30%) !important;">
-                                        {{ total_notifications }}
+    <!-- Navbar start -->
+    <div class="container-fluid sticky-top px-0">
+        <div class="container-fluid">
+            <div class="container px-0">
+                <nav class="navbar navbar-light navbar-expand-xl" id="navBar">
+                    <a href="/admins_home/" class="navbar-brand">
+                        <h4 class="text-primary display-6 fw-bold mb-0">ADMIN</h4>
+                    </a>
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#navbarCollapse">
+                        <span class="fa fa-bars text-primary"></span>
+                    </button>
+                    <div class="collapse navbar-collapse py-3" id="navbarCollapse">
+                        <div class="navbar-nav mx-auto border-top">
+                            <a href="/admins_home/" class="nav-item nav-link ">HOME</a>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle position-relative" href="#" id="auditDropdown"
+                                    role="button" data-bs-toggle="dropdown">
+                                    AUDIT
+                                    {% if pending_users_count and pending_users_count > 0 %}
+                                    <span
+                                        class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                        style="font-size: 0.6rem; padding: 0.3em 0.4em; transform: translate(-30%, 10%) !important;">
+                                        {{ pending_users_count }}
                                     </span>
                                     {% endif %}
                                 </a>
-                                <a href="/admins_logout/" class="btn btn-primary btn-primary-outline-0 py-2 px-4 ms-4">Logout</a>
+                                <div class="dropdown-menu m-0">
+                                    <a class="dropdown-item" href="/cul_approve/"
+                                        style="display:flex; justify-content:space-between; align-items:center;">
+                                        CULTIVATOR
+                                        {% if pending_cul and pending_cul > 0 %}
+                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{
+                                            pending_cul }}</span>
+                                        {% endif %}
+                                    </a>
+                                    <a class="dropdown-item" href="/acc_approve/"
+                                        style="display:flex; justify-content:space-between; align-items:center;">
+                                        ACCUMULATOR
+                                        {% if pending_acc and pending_acc > 0 %}
+                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{
+                                            pending_acc }}</span>
+                                        {% endif %}
+                                    </a>
+                                    <a class="dropdown-item" href="/ext_approve/"
+                                        style="display:flex; justify-content:space-between; align-items:center;">
+                                        EXTRACTOR
+                                        {% if pending_ext and pending_ext > 0 %}
+                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{
+                                            pending_ext }}</span>
+                                        {% endif %}
+                                    </a>
+                                    <a class="dropdown-item" href="/sus_approve/"
+                                        style="display:flex; justify-content:space-between; align-items:center;">
+                                        SUSTAINER
+                                        {% if pending_sus and pending_sus > 0 %}
+                                        <span class="badge rounded-pill bg-danger" style="font-size: 0.65rem;">{{
+                                            pending_sus }}</span>
+                                        {% endif %}
+                                    </a>
+                                </div>
+                            </div>
+                            <a href="/admins_req/" class="nav-item nav-link">PROVISION</a>
+                            <a href="/admins_status/" class="nav-item nav-link">TELEMETRY</a>
+                            <div class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle active" href="#" id="dossierDropdown" role="button"
+                                    data-bs-toggle="dropdown">
+                                    DOSSIER
+                                </a>
+                                <div class="dropdown-menu m-0">
+                                    <a class="dropdown-item" href="/rep_cul/">CULTIVATOR</a>
+                                    <a class="dropdown-item" href="/rep_acc/">ACCUMULATOR</a>
+                                    <a class="dropdown-item active" href="/rep_ext/">EXTRACTOR</a>
+                                    <a class="dropdown-item" href="/rep_sus/">SUSTAINER</a>
+                                </div>
                             </div>
                         </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-        <!-- Navbar End -->
-
-
-
-        <!-- Carousel Start -->
-        <div class="container-fluid carousel-header px-0">
-            <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
-                
-                <div class="carousel-inner" role="listbox">
-                    <div class="carousel-item active">
-                        <img src="img/carousel-1.jpg" class="img-fluid" alt="Image">
-                        <div class="carousel-caption">
-                            <div class="p-3 mx-auto animated zoomIn" style="width: 100%; max-width: none;">
-                                
-                                <h2 style="text-align:center; font-size: 30px; color: #EAA636; letter-spacing: 2px; text-shadow: 0 0 6px rgba(234,166,54,0.8), 0 0 16px rgba(234,166,54,0.6), 0 0 32px rgba(140,90,18,0.9);">EXTRACTOR REPORT</h2>
-
-                        <div class="fixed-table-wrapper" style="width: 100%;">
-                            <div class="table-responsive">
-                                <table class="fixed-table">
-                                    <thead>
-                                        <tr>
-                                            <th>PROJECT ID</th>
-                                            <th>INITIAL FERN BIOMASS (g)</th>
-                                            <th>FINAL FERN BIOMASS (g)</th>
-                                            <th>GROWTH DURATION (days)</th>
-                                            <th>SOIL REE CONCENTRATION (mg/kg)</th>
-                                            <th>PLANT REE CONCENTRATION (mg/kg)</th>
-                                            <th>HARVESTED BIOMASS (g)</th>
-                                            <th>EXTRACTION EFFICIENCY (%)</th>
-                                            <th>INITIAL SOIL REE (mg/kg)</th>
-                                            <th>FINAL SOIL REE (mg/kg)</th>
-                                            <th>BIOMASS INCREASE (g)</th>
-                                            <th>GROWTH RATE (g/day)</th>
-                                            <th>GROWTH EFFICIENCY (%)</th>
-                                            <th>TOTAL METAL (mg)</th>
-                                            <th>UPTAKE (%)</th>
-                                            <th>BAF</th>
-                                            <th>RECOVERED METAL (mg)</th>
-                                            <th>EXTRACTION LOSS (mg)</th>
-                                            <th>RECOVERY PERCENTAGE (%)</th>
-                                            
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {% if data %}
-                                        {% for i in data %}
-                                        {% if i.ext_scan is True %}
-                                        <tr>
-                                            <td>{{ i.project_id }}</td>
-                                            <td>{{ i.initial_fern_biomass }}</td>
-                                            <td>{{ i.final_fern_biomass }}</td>
-                                            <td>{{ i.growth_duration }}</td>
-                                            <td>{{ i.soil_ree_conc }}</td>
-                                            <td>{{ i.plant_ree_conc }}</td>
-                                            <td>{{ i.harvested_biomass }}</td>
-                                            <td>{{ i.extraction_eff }}</td>
-                                            <td>{{ i.initial_soil_ree }}</td>
-                                            <td>{{ i.final_soil_ree }}</td>
-                                            <td>{{ i.biomass_increase }}</td>
-                                            <td>{{ i.growth_rate }}</td>
-                                            <td>{{ i.growth_eff }}</td>
-                                            <td>{{ i.total_metal }}</td>
-                                            <td>{{ i.uptake }}</td>
-                                            <td>{{ i.baf }}</td>
-                                            <td>{{ i.recovered_metal }}</td>
-                                            <td>{{ i.loss }}</td>
-                                            <td>{{ i.recovery }}</td>
-                                            
-                                        </tr>
-                                        {% else %}
-                                        <tr><td colspan="37">DATA NOT ANALYZED</td></tr>
-                                        {% endif %}
-                                        {% endfor %}
-                                        {% else %}
-                                        <tr><td colspan="27">NO DATA</td></tr>
-                                        {% endif %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                            </div>
-                            
+                        <div class="d-flex align-items-center flex-nowrap pt-xl-0">
+                            <a href="/admins_status/"
+                                class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative"
+                                title="Notifications">
+                                <i class="fa fa-bell"></i>
+                                {% if total_notifications and total_notifications > 0 %}
+                                <span
+                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+                                    style="font-size: 0.7rem; padding: 0.35em 0.5em; transform: translate(-30%, -30%) !important;">
+                                    {{ total_notifications }}
+                                </span>
+                                {% endif %}
+                            </a>
+                            <a href="/admins_logout/"
+                                class="btn btn-primary btn-primary-outline-0 py-2 px-4 ms-4">Logout</a>
                         </div>
                     </div>
-                    
-                    
-                </div>
-                
+                </nav>
             </div>
         </div>
-        <!-- Carousel End -->
- 
+    </div>
+    <!-- Navbar End -->
 
-        
+
+
+    <!-- Carousel Start -->
+    <div class="container-fluid carousel-header px-0">
+        <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
+
+            <div class="carousel-inner" role="listbox">
+                <div class="carousel-item active">
+                    <img src="img/carousel-1.jpg" class="img-fluid" alt="Image">
+                    <div class="carousel-caption">
+                        <div class="p-3 mx-auto animated zoomIn" style="width: 100%; max-width: none;">
+
+                            <h2
+                                style="text-align:center; font-size: 30px; color: #EAA636; letter-spacing: 2px; text-shadow: 0 0 6px rgba(234,166,54,0.8), 0 0 16px rgba(234,166,54,0.6), 0 0 32px rgba(140,90,18,0.9);">
+                                EXTRACTOR REPORT</h2>
+
+                            <div class="fixed-table-wrapper" style="width: 100%;">
+                                <div class="table-responsive">
+                                    <table class="fixed-table">
+                                        <thead>
+                                            <tr>
+                                                <th>PROJECT ID</th>
+                                                <th>INITIAL FERN BIOMASS (g)</th>
+                                                <th>FINAL FERN BIOMASS (g)</th>
+                                                <th>GROWTH DURATION (days)</th>
+                                                <th>SOIL REE CONCENTRATION (mg/kg)</th>
+                                                <th>PLANT REE CONCENTRATION (mg/kg)</th>
+                                                <th>HARVESTED BIOMASS (g)</th>
+                                                <th>EXTRACTION EFFICIENCY (%)</th>
+                                                <th>INITIAL SOIL REE (mg/kg)</th>
+                                                <th>FINAL SOIL REE (mg/kg)</th>
+                                                <th>BIOMASS INCREASE (g)</th>
+                                                <th>GROWTH RATE (g/day)</th>
+                                                <th>GROWTH EFFICIENCY (%)</th>
+                                                <th>TOTAL METAL (mg)</th>
+                                                <th>UPTAKE (%)</th>
+                                                <th>BAF</th>
+                                                <th>RECOVERED METAL (mg)</th>
+                                                <th>EXTRACTION LOSS (mg)</th>
+                                                <th>RECOVERY PERCENTAGE (%)</th>
+
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {% if data %}
+                                            {% for i in data %}
+                                            {% if i.ext_scan is True %}
+                                            <tr>
+                                                <td>{{ i.project_id }}</td>
+                                                <td>{{ i.initial_fern_biomass }}</td>
+                                                <td>{{ i.final_fern_biomass }}</td>
+                                                <td>{{ i.growth_duration }}</td>
+                                                <td>{{ i.soil_ree_conc }}</td>
+                                                <td>{{ i.plant_ree_conc }}</td>
+                                                <td>{{ i.harvested_biomass }}</td>
+                                                <td>{{ i.extraction_eff }}</td>
+                                                <td>{{ i.initial_soil_ree }}</td>
+                                                <td>{{ i.final_soil_ree }}</td>
+                                                <td>{{ i.biomass_increase }}</td>
+                                                <td>{{ i.growth_rate }}</td>
+                                                <td>{{ i.growth_eff }}</td>
+                                                <td>{{ i.total_metal }}</td>
+                                                <td>{{ i.uptake }}</td>
+                                                <td>{{ i.baf }}</td>
+                                                <td>{{ i.recovered_metal }}</td>
+                                                <td>{{ i.loss }}</td>
+                                                <td>{{ i.recovery }}</td>
+
+                                            </tr>
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="37">DATA NOT ANALYZED</td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="27">NO DATA</td>
+                                            </tr>
+                                            {% endif %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+    </div>
+    <!-- Carousel End -->
+
+
+
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -491,10 +528,10 @@
     <script src="lib/easing/easing.min.js"></script>
     <script src="lib/waypoints/waypoints.min.js"></script>
     <script src="lib/lightbox/js/lightbox.min.js"></script>
-    
+
 
     <!-- Template Javascript -->
     <script src="js/main.js"></script>
-    </body>
+</body>
 
 </html>
