@@ -56,11 +56,13 @@ h6,
     width: 38px;
     height: 38px;
 }
+
 i {
-  font-family: "Font Awesome 6 Free" !important;
-  font-weight: 900;
-  background-color: blue;
+    font-family: "Font Awesome 6 Free" !important;
+    font-weight: 900;
+    background-color: blue;
 }
+
 .btn-sm-square {
     width: 32px;
     height: 32px;
@@ -121,7 +123,7 @@ i {
         background: var(--primary);
     }
 
-    .navbar .navbar-nav .nav-link  {
+    .navbar .navbar-nav .nav-link {
         margin-right: 0;
         padding: 10px 0;
     }
@@ -152,7 +154,7 @@ i {
     margin-top: -75px;
     background: url(../img/bg-hero.jpg) center center no-repeat;
     background-size: cover;
-    min-height: 790px;
+    min-height: 100vh;
 }
 
 .hero-header .breadcrumb-item+.breadcrumb-item::before {
@@ -296,11 +298,11 @@ i {
 .case-item img {
     transition: .5s;
 }
-  
+
 .case-item:hover img {
     transform: scale(1.2);
 }
-  
+
 .case-overlay {
     position: absolute;
     padding: 30px;
@@ -345,7 +347,7 @@ i {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255,255,255,.5);
+    color: rgba(255, 255, 255, .5);
     border: 1px solid rgba(256, 256, 256, .1);
     border-radius: 40px;
     transition: .3s;
@@ -360,7 +362,7 @@ i {
     margin-bottom: 10px;
     padding: 0;
     text-align: left;
-    color: rgba(255,255,255,.5);
+    color: rgba(255, 255, 255, .5);
     font-weight: normal;
     transition: .3s;
 }
@@ -389,7 +391,7 @@ i {
 }
 
 .footer .copyright a {
-    color: rgba(255,255,255,.5);
+    color: rgba(255, 255, 255, .5);
 }
 
 .footer .copyright a:hover {
@@ -407,12 +409,14 @@ i {
     padding-right: 0;
     border-right: none;
 }
+
 img.img-fluid:not(.carousel-item img):not(.navbar-brand img) {
     border-radius: 16px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
     transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.5s ease;
 }
+
 img.img-fluid:not(.carousel-item img):not(.navbar-brand img):hover {
     transform: scale(1.03) translateY(-5px);
-    box-shadow: 0 20px 45px rgba(0,0,0,0.45);
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.45);
 }

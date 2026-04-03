@@ -248,13 +248,6 @@
             color: #fff;
             border-color: rgba(255, 255, 255, 0.2);
         }
-
-        /* Toastify Custom override */
-        .toastify {
-            border-radius: 12px;
-            font-weight: 500;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
     </style>
 </head>
 
@@ -276,7 +269,7 @@
         Toastify({
             text: "{{ message|escapejs }}",
             duration: 4000,
-            gravity: " bottom",
+            gravity: "bottom",
             position: "right",
             stopOnFocus: true,
             style: {
@@ -315,7 +308,12 @@
                         <input type="password" name="password" id="password" placeholder="••••••••" required
                             autocomplete="current-password">
                         <i class="fas fa-lock"></i>
-                        <i class="fas fa-eye-slash toggle-password" id="togglePassword"></i>
+                    </div>
+
+                    <!-- Show Password Checkbox -->
+                    <div style="margin-top:8px; display:flex; align-items:center; gap:6px; font-size:14px;">
+                        <input type="checkbox" id="showPassword">
+                        <label for="showPassword">Show Password</label>
                     </div>
                 </div>
 
@@ -334,14 +332,9 @@
     </div>
 
     <script>
-        const togglePassword = document.getElementById("togglePassword");
-        const passwordField = document.getElementById("password");
-
-        togglePassword.addEventListener("click", function () {
-            const type = passwordField.getAttribute("type") === "password" ? "text" : "password";
-            passwordField.setAttribute("type", type);
-            this.classList.toggle("fa-eye-slash");
-            this.classList.toggle("fa-eye");
+        document.getElementById("showPassword").addEventListener("change", function () {
+            const pwd = document.getElementById("password");
+            pwd.type = this.checked ? "text" : "password";
         });
     </script>
 
