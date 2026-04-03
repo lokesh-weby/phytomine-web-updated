@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <!-- <base href="/static/admins/home/"> -->
+    <base href="/static/admins/home/">
     <meta charset="utf-8">
     <title>Admin</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -18,75 +18,141 @@
         rel="stylesheet">
 
     <!-- Icon Font Stylesheet -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
-        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
     <!-- Libraries Stylesheet -->
-    <link href="{% static 'admins/home/lib/animate/animate.min.css' %}" rel="stylesheet">
-    <link href="{% static 'admins/home/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
 
     <!-- Customized Bootstrap Stylesheet -->
-    <link href="{% static 'admins/home/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Template Stylesheet -->
-    <link href="{% static 'admins/home/css/style.css' %}" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <style>
-        
-.fixed-table-wrapper {
-    max-width: 100%;
-    margin: 25px auto;
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
+        .fixed-table-wrapper {
+            max-width: 100%;
+            margin: 25px auto;
+            padding: 18px;
+            background: linear-gradient(145deg, rgba(234, 166, 54, 0.12), rgba(140, 90, 18, 0.18));
+            border-radius: 16px;
+            box-shadow:
+                0 0 20px rgba(234, 166, 54, 0.45),
+                inset 0 0 25px rgba(140, 90, 18, 0.5);
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+            animation: glowFade 1.2s ease;
+        }
 
-.fixed-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-}
+        .fixed-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            font-size: 14px;
+        }
 
-.fixed-table thead th {
-    background: #f5f5f5;
-    color: #333;
-    padding: 12px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
-}
+        /* HEADER */
+        .fixed-table thead th {
+            background: linear-gradient(135deg, #EAA636, #8C5A12);
+            padding: 15px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            color: #111;
+            box-shadow: 0 0 15px rgba(234, 166, 54, 0.8);
+            text-align: center;
+        }
 
-.fixed-table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    background: #ffffff;
-}
+        /* BODY */
+        .fixed-table tbody td {
+            padding: 13px;
+            text-align: center;
+            background: rgba(234, 166, 54, 0.22);
+            border-bottom: 1px solid rgba(234, 166, 54, 0.4);
+        }
 
-.fixed-table tbody tr:nth-child(even) td {
-    background: #fafafa;
-}
+        /* STRIPE */
+        .fixed-table tbody tr:nth-child(even) td {
+            background: rgba(140, 90, 18, 0.30);
+        }
 
-.fixed-table tbody tr:hover {
-    background: #f1f7ff;
-}
+        /* HOVER */
+        .fixed-table tbody tr {
+            transition: 0.35s ease;
+        }
 
+        .fixed-table tbody tr:hover {
+            background: rgba(234, 166, 54, 0.55);
+            transform: scale(1.01);
+            box-shadow: 0 0 18px rgba(234, 166, 54, 0.9);
+        }
+
+        /* BUTTON */
+        .action-btn {
+            background: linear-gradient(135deg, #EAA636, #8C5A12);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.35s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px) scale(1.08);
+            box-shadow: 0 0 18px rgba(234, 166, 54, 1);
+        }
+
+        /* INPUT */
+        .small-input {
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 2px solid #EAA636;
+            width: auto;
+        }
+
+        .small-input:focus {
+            outline: none;
+            box-shadow: 0 0 12px rgba(234, 166, 54, 0.9);
+        }
+
+        /* STATUS TEXT */
+        .status-text {
+            color: #EAA636;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(234, 166, 54, 0.9);
+        }
+
+        .decrypted {
+            color: #0aff9d;
+            font-weight: bold;
+            text-shadow: 0 0 12px rgba(10, 255, 157, 0.9);
+        }
+
+        /* ANIMATION */
+        @keyframes glowFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
     <style>
         * {
-            font-family: 'Outfit', sans-serif;
-        }
-
-        i {
-            font-family: "Font Awesome 7 Free";
-            font-weight: 900;
+            font-family: 'Outfit', sans-serif !important;
         }
 
         .navbar-nav .nav-link,
@@ -133,48 +199,118 @@
     </script>
 
     <style>
-        
-.fixed-table-wrapper {
-    max-width: 100%;
-    margin: 25px auto;
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
+        .fixed-table-wrapper {
+            max-width: 100%;
+            margin: 25px auto;
+            padding: 18px;
+            background: linear-gradient(145deg, rgba(234, 166, 54, 0.12), rgba(140, 90, 18, 0.18));
+            border-radius: 16px;
+            box-shadow:
+                0 0 20px rgba(234, 166, 54, 0.45),
+                inset 0 0 25px rgba(140, 90, 18, 0.5);
+            overflow-x: auto;
+            backdrop-filter: blur(10px);
+            animation: glowFade 1.2s ease;
+        }
 
-.fixed-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-}
+        .fixed-table {
+            width: 100%;
+            border-collapse: collapse;
+            color: #fff;
+            font-size: 14px;
+        }
 
-.fixed-table thead th {
-    background: #f5f5f5;
-    color: #333;
-    padding: 12px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
-}
+        /* HEADER */
+        .fixed-table thead th {
+            background: linear-gradient(135deg, #EAA636, #8C5A12);
+            padding: 15px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            position: sticky;
+            top: 0;
+            color: #111;
+            box-shadow: 0 0 15px rgba(234, 166, 54, 0.8);
+            text-align: center;
+        }
 
-.fixed-table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    background: #ffffff;
-}
+        /* BODY */
+        .fixed-table tbody td {
+            padding: 13px;
+            text-align: center;
+            background: rgba(234, 166, 54, 0.22);
+            border-bottom: 1px solid rgba(234, 166, 54, 0.4);
+        }
 
-.fixed-table tbody tr:nth-child(even) td {
-    background: #fafafa;
-}
+        /* STRIPE */
+        .fixed-table tbody tr:nth-child(even) td {
+            background: rgba(140, 90, 18, 0.30);
+        }
 
-.fixed-table tbody tr:hover {
-    background: #f1f7ff;
-}
+        /* HOVER */
+        .fixed-table tbody tr {
+            transition: 0.35s ease;
+        }
 
+        .fixed-table tbody tr:hover {
+            background: rgba(234, 166, 54, 0.55);
+            box-shadow: 0 0 18px rgba(234, 166, 54, 0.9);
+        }
+
+        /* BUTTON */
+        .action-btn {
+            background: linear-gradient(135deg, #EAA636, #8C5A12);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 30px;
+            color: #111;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.35s;
+        }
+
+        .action-btn:hover {
+            transform: translateY(-2px) scale(1.08);
+            box-shadow: 0 0 18px rgba(234, 166, 54, 1);
+        }
+
+        /* INPUT */
+        .small-input {
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 2px solid #EAA636;
+            width: auto;
+        }
+
+        .small-input:focus {
+            outline: none;
+            box-shadow: 0 0 12px rgba(234, 166, 54, 0.9);
+        }
+
+        /* STATUS TEXT */
+        .status-text {
+            color: #EAA636;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(234, 166, 54, 0.9);
+        }
+
+        .decrypted {
+            color: #0aff9d;
+            font-weight: bold;
+            text-shadow: 0 0 12px rgba(10, 255, 157, 0.9);
+        }
+
+        /* ANIMATION */
+        @keyframes glowFade {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
     </style>
 
     <!-- Spinner Start -->
@@ -195,11 +331,7 @@
                     </a>
                     <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarCollapse">
-                        <!-- Inline SVG for Toggler (100% Reliable) -->
-                        <svg width="30" height="30" viewBox="0 0 30 30" style="vertical-align: middle;">
-                            <path stroke="rgba(235, 22, 22, 1)" stroke-width="2.5" stroke-linecap="round"
-                                d="M4 7h22M4 15h22M4 23h22" />
-                        </svg>
+                        <span class="fa fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse py-3" id="navbarCollapse">
                         <div class="navbar-nav mx-auto border-top">
@@ -252,9 +384,9 @@
                                 </div>
                             </div>
                             <a href="/admins_req/" class="nav-item nav-link">PROVISION</a>
-                            <a href="/admins_status/" class="nav-item nav-link active">TELEMETRY</a>
+                            <a href="/admins_status/" class="nav-item nav-link">TELEMETRY</a>
                             <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="dossierDropdown" role="button"
+                                <a class="nav-link dropdown-toggle active" href="#" id="dossierDropdown" role="button"
                                     data-bs-toggle="dropdown">
                                     DOSSIER
                                 </a>
@@ -262,7 +394,7 @@
                                     <a class="dropdown-item" href="/rep_cul/">CULTIVATOR</a>
                                     <a class="dropdown-item" href="/rep_acc/">ACCUMULATOR</a>
                                     <a class="dropdown-item" href="/rep_ext/">EXTRACTOR</a>
-                                    <a class="dropdown-item" href="/rep_sus/">SUSTAINER</a>
+                                    <a class="dropdown-item active" href="/rep_sus/">SUSTAINER</a>
                                 </div>
                             </div>
                         </div>
@@ -270,7 +402,7 @@
                             <a href="/admins_status/"
                                 class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative"
                                 title="Notifications">
-                                <i class="fas fa-bell" style="vertical-align: middle;"></i>
+                                <i class="fa fa-bell"></i>
                                 {% if total_notifications and total_notifications > 0 %}
                                 <span
                                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
@@ -297,13 +429,13 @@
 
             <div class="carousel-inner" role="listbox">
                 <div class="carousel-item active">
-                    <img src="{% static 'admins/home/img/carousel-2.jpg' %}" class="img-fluid" alt="Image">
+                    <img src="img/carousel-1.jpg" class="img-fluid" alt="Image">
                     <div class="carousel-caption">
                         <div class="p-3 mx-auto animated zoomIn" style="width: 100%; max-width: none;">
 
                             <h2
                                 style="text-align:center; font-size: 30px; color: #EAA636; letter-spacing: 2px; text-shadow: 0 0 6px rgba(234,166,54,0.8), 0 0 16px rgba(234,166,54,0.6), 0 0 32px rgba(140,90,18,0.9);">
-                                STATUS</h2>
+                                SUSTAINER REPORT</h2>
 
                             <div class="fixed-table-wrapper" style="width: 100%;">
                                 <div class="table-responsive">
@@ -311,83 +443,65 @@
                                         <thead>
                                             <tr>
                                                 <th>PROJECT ID</th>
-                                                <th>LOCATION</th>
                                                 <th>INITIAL FERN BIOMASS (g)</th>
                                                 <th>FINAL FERN BIOMASS (g)</th>
                                                 <th>GROWTH DURATION (days)</th>
-                                                <!-- <th>SOIL REE CONCENTRATION (mg/kg)</th> -->
-                                                <!-- <th>PLANT REE CONCENTRATION (mg/kg)</th> -->
-                                                <!-- <th>HARVESTED BIOMASS (g)</th> -->
+                                                <th>SOIL REE CONCENTRATION (mg/kg)</th>
+                                                <th>PLANT REE CONCENTRATION (mg/kg)</th>
+                                                <th>HARVESTED BIOMASS (g)</th>
                                                 <th>EXTRACTION EFFICIENCY (%)</th>
                                                 <th>INITIAL SOIL REE (mg/kg)</th>
                                                 <th>FINAL SOIL REE (mg/kg)</th>
-                                                <th>SOIL TYPE</th>
-                                                <th>CUL SIGNED</th>
-                                                <th>ACC SIGNED</th>
-                                                <th>EXTR SIGNED</th>
-                                                <th>SUS SIGNED</th>
-                                                <th>STATUS</th>
+                                                <th>BIOMASS INCREASE (g)</th>
+                                                <th>GROWTH RATE (g/day)</th>
+                                                <th>GROWTH EFFICIENCY (%)</th>
+                                                <th>TOTAL METAL (mg)</th>
+                                                <th>UPTAKE (%)</th>
+                                                <th>BAF</th>
+                                                <th>RECOVERED METAL (mg)</th>
+                                                <th>EXTRACTION LOSS (mg)</th>
+                                                <th>RECOVERY PERCENTAGE (%)</th>
+                                                <th>SOIL METAL REDUCTION (%)</th>
+                                                <th>SAFETY INDEX </th>
+                                                <th>ENVIRONMENTAL STATUS </th>
+
                                             </tr>
                                         </thead>
 
                                         <tbody>
                                             {% if data %}
                                             {% for i in data %}
+                                            {% if i.sus_scan is True %}
                                             <tr>
                                                 <td>{{ i.project_id }}</td>
-                                                <td>{{ i.location|default:"-" }}</td>
                                                 <td>{{ i.initial_fern_biomass }}</td>
                                                 <td>{{ i.final_fern_biomass }}</td>
                                                 <td>{{ i.growth_duration }}</td>
-                                                <!-- <td>{{ i.soil_ree_conc }}</td> -->
-                                                <!-- <td>{{ i.plant_ree_conc }}</td> -->
-                                                <!-- <td>{{ i.harvested_biomass }}</td> -->
+                                                <td>{{ i.soil_ree_conc }}</td>
+                                                <td>{{ i.plant_ree_conc }}</td>
+                                                <td>{{ i.harvested_biomass }}</td>
                                                 <td>{{ i.extraction_eff }}</td>
                                                 <td>{{ i.initial_soil_ree }}</td>
                                                 <td>{{ i.final_soil_ree }}</td>
-                                                <td>{{ i.soil_type|default:"-" }}</td>
-                                                <td>{{ i.cul_signed_by|default:"-" }}</td>
-                                                <td>{{ i.acc_signed_by|default:"-" }}</td>
-                                                <td>{{ i.ext_signed_by|default:"-" }}</td>
-                                                <td>{{ i.sus_signed_by|default:"-" }}</td>
+                                                <td>{{ i.biomass_increase }}</td>
+                                                <td>{{ i.growth_rate }}</td>
+                                                <td>{{ i.growth_eff }}</td>
+                                                <td>{{ i.total_metal }}</td>
+                                                <td>{{ i.uptake }}</td>
+                                                <td>{{ i.baf }}</td>
+                                                <td>{{ i.recovered_metal }}</td>
+                                                <td>{{ i.loss }}</td>
+                                                <td>{{ i.recovery }}</td>
+                                                <td>{{ i.reduction }}</td>
+                                                <td>{{ i.safety_index }}</td>
+                                                <td>{{ i.env_status }}</td>
 
-                                                {% if i.admins_f_rep_view is False and i.sus_scan is True %}
-                                                <td>
-                                                    <a href="/phytomine_generate_pdf/{{i.project_id}}/"
-                                                        class="generate-report-link" style="text-decoration: none;">
-                                                        <button class="generate-btn"
-                                                            style="background-color: #eb1616; border: none; color: white; border-radius: 25px; padding: 10px 20px; cursor: pointer; font-weight: bold; transition: 0.3s;">
-                                                            <i class="fas fa-file-pdf"
-                                                                style="margin-right:6px; vertical-align: middle;"></i>Generate
-                                                            Report
-                                                        </button>
-                                                    </a>
-                                                </td>
-                                                {% elif i.admins_f_rep_view is True and i.sus_scan is True %}
-                                                <td>
-                                                    <div style="display: flex; gap: 8px; justify-content: center;">
-                                                        <a href="/download_report/{{i.project_id}}/"
-                                                            style="text-decoration: none;">
-                                                            <button
-                                                                style="background: linear-gradient(135deg, #00b09b, #1e7a1e); border: none; color: #fff; border-radius: 25px; padding: 8px 15px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem;">
-                                                                <i class="fas fa-download"
-                                                                    style="margin-right:4px; vertical-align: middle;"></i>Report
-                                                            </button>
-                                                        </a>
-                                                        <a href="/phytomine_dashboard/{{i.project_id}}/"
-                                                            class="dashboard-intel-link" style="text-decoration: none;">
-                                                            <button
-                                                                style="background: linear-gradient(135deg, #EAA636, #8C5A12); border: none; color: #111; border-radius: 25px; padding: 8px 15px; cursor: pointer; font-weight: bold; transition: 0.3s; font-size: 0.8rem;">
-                                                                <i class="fas fa-gauge-high"
-                                                                    style="margin-right:4px; vertical-align: middle;"></i>Dashboard
-                                                            </button>
-                                                        </a>
-                                                    </div>
-                                                </td>
-                                                {% elif i.sus_scan is False %}
-                                                <td>{{ i.status }}</td>
-                                                {% endif %}
                                             </tr>
+                                            {% else %}
+                                            <tr>
+                                                <td colspan="37">DATA NOT ANALYZED</td>
+                                            </tr>
+                                            {% endif %}
                                             {% endfor %}
                                             {% else %}
                                             <tr>
@@ -415,43 +529,14 @@
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'admins/home/lib/wow/wow.min.js' %}"></script>
-    <script src="{% static 'admins/home/lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'admins/home/lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{% static 'admins/home/lib/lightbox/js/lightbox.min.js' %}"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
 
 
     <!-- Template Javascript -->
-    <script src="{% static 'admins/home/js/main.js' %}"></script>
-
-    <!-- Script to disable button on click -->
-    <script>
-        window.addEventListener("pageshow", function () {
-            document.querySelectorAll('.generate-report-link, .dashboard-intel-link').forEach(link => {
-
-                // Reset loading state
-                link.removeAttribute('data-loading');
-
-                const btn = link.querySelector('button');
-                if (btn) {
-                    btn.style.opacity = '';
-                    btn.style.pointerEvents = '';
-                    btn.style.cursor = '';
-
-                    const icon = btn.querySelector('i');
-
-                    // Restore original icons
-                    if (icon) {
-                        if (link.classList.contains('generate-report-link')) {
-                            icon.className = 'fas fa-file-pdf';
-                        } else if (link.classList.contains('dashboard-intel-link')) {
-                            icon.className = 'fas fa-gauge-high';
-                        }
-                    }
-                }
-            });
-        });
-    </script>
+    <script src="js/main.js"></script>
 </body>
 
 </html>
