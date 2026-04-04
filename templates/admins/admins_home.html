@@ -34,13 +34,6 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
-    <style>
-        .carousel-caption {
-            left: 5% !important;
-            right: 5% !important;
-            width: 90% !important;
-        }
-    </style>
 
     <style>
         * {
@@ -67,7 +60,7 @@
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
-
+    {% include "admins/chat_bot.html" %}
     <script>
         {% for message in messages %}
         var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
@@ -303,13 +296,6 @@
         </div>
     </div>
     <!-- About End -->
-
-
-
-    <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top">
-        <i class="fas fa-arrow-up text-white"></i>
-    </a>
 
 
     <!-- JavaScript Libraries -->

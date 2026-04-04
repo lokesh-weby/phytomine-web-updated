@@ -444,3 +444,76 @@ def get_location_proxy(request):
         r = requests.get(url, headers={'User-Agent': 'PhytomineApp/1.0'}, timeout=10)
         return JsonResponse(r.json())
     except: return JsonResponse({"error": "Fetch fail"}, status=500)
+
+def chatbot(request):
+    """Chatbot endpoint that responds to slash commands."""
+    user_input = request.GET.get("message", "").strip()
+
+    if user_input == "/recent logins":
+        data = registration.objects.filter(login=True).order_by("-id")[:10]
+        results = [
+            {
+                "name": r.name,
+                "email": r.email,
+                "mobile_no": r.mobile_no,
+                "department": r.department,
+                "login": r.login,
+            }
+            for r in data
+        ]
+        return JsonResponse(results, safe=False)
+    
+    elif user_input.startswith("/progress"):
+        try:
+            project_id = user_input.split()[1]
+        except IndexError:
+            return JsonResponse({"error": "Usage: /progress <project_id>"}, status=400)
+
+        try:
+            proj = phytomine.objects.get(project_id=project_id)
+
+            # Count how many modules are completed
+            completed = sum([
+                1 if proj.cul_scan else 0,
+                1 if proj.acc_scan else 0,
+                1 if proj.ext_scan else 0,
+                1 if proj.sus_scan else 0,
+            ])
+
+            # Map to percentage
+            overall_progress = f"{completed * 25}%"
+
+            result = {
+                "project_id": proj.project_id,
+                "cul_progress": "Done" if proj.cul_scan else "Pending",
+                "acc_progress": "Done" if proj.acc_scan else "Pending",
+                "ext_progress": "Done" if proj.ext_scan else "Pending",
+                "sus_progress": "Done" if proj.sus_scan else "Pending",
+                "overall_progress": overall_progress,
+            }
+            return JsonResponse(result, safe=False)
+        except phytomine.DoesNotExist:
+            return JsonResponse({"error": f"Project {project_id} not found"}, status=404)
+
+
+    elif user_input == "/rejection history":
+        data = registration.objects.filter(reject=True)
+        results = [
+            {"name": r.name, "email": r.email, "department": r.department}
+            for r in data
+        ]
+        return JsonResponse(results, safe=False)
+
+    elif user_input == "/users and their department":
+        data = registration.objects.filter(accept=True)
+        results = [
+            {"name": r.name, "email": r.email, "department": r.department, "accept": r.accept}
+            for r in data
+        ]
+        return JsonResponse(results, safe=False)
+
+    else:
+        return JsonResponse({
+            "error": "Invalid command. Use /recent logins, /progress <id>, /rejection history, /users and their department"
+        }, status=400)
+    
