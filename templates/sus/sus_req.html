@@ -36,48 +36,46 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <style>
-        
-.fixed-table-wrapper {
-    max-width: 100%;
-    margin: 25px auto;
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
+        .fixed-table-wrapper {
+            max-width: 100%;
+            margin: 25px auto;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
 
-.fixed-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-}
+        .fixed-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            color: #333;
+        }
 
-.fixed-table thead th {
-    background: #f5f5f5;
-    color: #333;
-    padding: 12px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
-}
+        .fixed-table thead th {
+            background: #f5f5f5;
+            color: #333;
+            padding: 12px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ddd;
+            text-align: center;
+        }
 
-.fixed-table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    background: #ffffff;
-}
+        .fixed-table tbody td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+            background: #ffffff;
+        }
 
-.fixed-table tbody tr:nth-child(even) td {
-    background: #fafafa;
-}
+        .fixed-table tbody tr:nth-child(even) td {
+            background: #fafafa;
+        }
 
-.fixed-table tbody tr:hover {
-    background: #f1f7ff;
-}
-
+        .fixed-table tbody tr:hover {
+            background: #f1f7ff;
+        }
     </style>
 
     <style>
@@ -130,48 +128,46 @@
     </script>
 
     <style>
-        
-.fixed-table-wrapper {
-    max-width: 100%;
-    margin: 25px auto;
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
+        .fixed-table-wrapper {
+            max-width: 100%;
+            margin: 25px auto;
+            padding: 15px;
+            background: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow-x: auto;
+        }
 
-.fixed-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-}
+        .fixed-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            color: #333;
+        }
 
-.fixed-table thead th {
-    background: #f5f5f5;
-    color: #333;
-    padding: 12px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
-}
+        .fixed-table thead th {
+            background: #f5f5f5;
+            color: #333;
+            padding: 12px;
+            text-transform: uppercase;
+            border-bottom: 2px solid #ddd;
+            text-align: center;
+        }
 
-.fixed-table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    background: #ffffff;
-}
+        .fixed-table tbody td {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+            background: #ffffff;
+        }
 
-.fixed-table tbody tr:nth-child(even) td {
-    background: #fafafa;
-}
+        .fixed-table tbody tr:nth-child(even) td {
+            background: #fafafa;
+        }
 
-.fixed-table tbody tr:hover {
-    background: #f1f7ff;
-}
-
+        .fixed-table tbody tr:hover {
+            background: #f1f7ff;
+        }
     </style>
 
     <!-- Spinner Start -->
@@ -233,10 +229,10 @@
                 <div class="carousel-item active">
                     <img class="w-100" src="img/carousel-2.jpg" alt="Image">
                     <div class="carousel-caption">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="row justify-content-start">
                                 <div class="col-12 text-start">
-                                    <h2 style="width: 100%;">
+                                    <h2 style="width: 100%; color: white;">
                                         BASELINE
                                     </h2>
 
@@ -256,13 +252,13 @@
                                                     <th>PLANT REE CONCENTRATION (mg/kg)</th>
                                                     <th>HARVESTED BIOMASS (g)</th>
                                                     <th>EXTRACTION EFFICIENCY (%)</th>
-                                                    <th>INITIAL SOIL REE (mg/kg)</th>
-                                                    <th>FINAL SOIL REE (mg/kg)</th>
+                                                    <!-- <th>INITIAL SOIL REE (mg/kg)</th> -->
+                                                    <!-- <th>FINAL SOIL REE (mg/kg)</th> -->
                                                     <th>BIOMASS INCREASE (g)</th>
-                                                    <th>GROWTH RATE (g/day)</th>
+                                                    <!-- <th>GROWTH RATE (g/day)</th> -->
                                                     <th>GROWTH EFFICIENCY (%)</th>
                                                     <th>TOTAL METAL (mg)</th>
-                                                    <th>UPTAKE (%)</th>
+                                                    <!-- <th>UPTAKE (%)</th> -->
                                                     <th>BAF</th>
                                                     <th>RECOVERED METAL (mg)</th>
                                                     <th>EXTRACTION LOSS (mg)</th>
@@ -310,11 +306,11 @@
                                                     <td>{{ "*****"|slice:":6" }}</td>
                                                     <td>{{ "*****"|slice:":6" }}</td>
                                                     <td>{{ "*****"|slice:":6" }}</td>
+                                                    <!-- <td>{{ "*****"|slice:":6" }}</td> -->
+                                                    <!-- <td>{{ "*****"|slice:":6" }}</td> -->
                                                     <td>{{ "*****"|slice:":6" }}</td>
                                                     <td>{{ "*****"|slice:":6" }}</td>
-                                                    <td>{{ "*****"|slice:":6" }}</td>
-                                                    <td>{{ "*****"|slice:":6" }}</td>
-                                                    <td>{{ "*****"|slice:":6" }}</td>
+                                                    <!-- <td>{{ "*****"|slice:":6" }}</td> -->
                                                     <td>{{ "*****"|slice:":6" }}</td>
                                                     <td>{{ "*****"|slice:":6" }}</td>
                                                     <td>{{ "*****"|slice:":6" }}</td>
@@ -332,14 +328,14 @@
                                                     <td>{{ i.soil_ree_conc }}</td>
                                                     <td>{{ i.plant_ree_conc }}</td>
                                                     <td>{{ i.harvested_biomass }}</td>
-                                                    <td>{{ i.extraction_eff }}</td>
-                                                    <td>{{ i.initial_soil_ree }}</td>
+                                                    <!-- <td>{{ i.extraction_eff }}</td> -->
+                                                    <!-- <td>{{ i.initial_soil_ree }}</td> -->
                                                     <td>{{ i.final_soil_ree }}</td>
                                                     <td>{{ i.biomass_increase }}</td>
-                                                    <td>{{ i.growth_rate }}</td>
+                                                    <!-- <td>{{ i.growth_rate }}</td> -->
                                                     <td>{{ i.growth_eff }}</td>
                                                     <td>{{ i.total_metal }}</td>
-                                                    <td>{{ i.uptake }}</td>
+                                                    <!-- <td>{{ i.uptake }}</td> -->
                                                     <td>{{ i.baf }}</td>
                                                     <td>{{ i.recovered_metal }}</td>
                                                     <td>{{ i.loss }}</td>
