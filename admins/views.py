@@ -455,8 +455,10 @@ def chatbot(request):
     if not user_input:
         return JsonResponse({"error": "No message provided"}, status=400)
 
-    # Recent Logins
-    if "/recent logins" in user_input or "recent logins" in user_input:
+    import re
+
+    # 1. Recent Logins Handler
+    if "recent logins" in user_input:
         data = registration.objects.filter(login=True).order_by("-id")[:10]
         if not data: return JsonResponse({"message": "No recent logins found."})
         table = "| Name | Email | Dept | Status |\n| :--- | :--- | :--- | :--- |\n"
@@ -464,14 +466,47 @@ def chatbot(request):
             table += f"| {r.name} | {r.email} | {r.department} | Active |\n"
         return JsonResponse({"message": f"### Recent Logins\n{table}"})
 
-    # Progress Check
-    elif "/progress" in user_input or "progress" in user_input:
-        import re
-        match = re.search(r'\d{5}', user_input)
+    # 2. Get Report Handler (Dynamic Selection)
+    if user_input == "report":
+        projects = phytomine.objects.all().order_by('-id')
+        ids = [p.project_id for p in projects]
+        return JsonResponse({
+            "message": "Please select the **Project ID** to generate the PDF dossier:",
+            "options": ids,
+            "type": "report"
+        })
+
+    # 3. Specific Report ID Handler (e.g., "report 13205")
+    if "report" in user_input:
+        match = re.search(r'\d+', user_input)
         if match:
-            project_id = match.group()
+            p_id = match.group()
             try:
-                proj = phytomine.objects.get(project_id=project_id)
+                proj = phytomine.objects.get(project_id=p_id)
+                link = f"/download_report/{p_id}/"
+                return JsonResponse({
+                    "message": f"### Dossier Link for #{p_id}\n\n[📥 Download PDF Report]({link})"
+                })
+            except phytomine.DoesNotExist:
+                return JsonResponse({"message": f"❌ Project ID #{p_id} not found."})
+
+    # 4. Project Progress Handler (Dynamic Selection)
+    if user_input == "progress":
+        projects = phytomine.objects.all().order_by('-id')
+        ids = [p.project_id for p in projects]
+        return JsonResponse({
+            "message": "Select a **Project ID** to view real-time lifecycle status:",
+            "options": ids,
+            "type": "progress"
+        })
+
+    # 5. Specific Progress ID Handler (e.g., "progress 13205")
+    if "progress" in user_input:
+        match = re.search(r'\d+', user_input)
+        if match:
+            p_id = match.group()
+            try:
+                proj = phytomine.objects.get(project_id=p_id)
                 status_table = f"""
 | Module | Status |
 | :--- | :--- |
@@ -480,29 +515,21 @@ def chatbot(request):
 | **Extractor** | {'✅ Done' if proj.ext_scan else '⏳ Pending'} |
 | **Sustainer** | {'✅ Done' if proj.sus_scan else '⏳ Pending'} |
 """
-                return JsonResponse({"message": f"### Progress for Project {project_id}\n{status_table}"})
+                return JsonResponse({"message": f"### Progress for Project {p_id}\n{status_table}"})
             except phytomine.DoesNotExist:
-                return JsonResponse({"message": f"Project {project_id} not found."})
-        
-        # If no ID provided, return options for buttons
-        all_ids = list(phytomine.objects.all().values_list('project_id', flat=True))
-        return JsonResponse({
-            "message": "Select a Project ID to check **Progress**:",
-            "options": all_ids,
-            "type": "/progress"
-        })
+                return JsonResponse({"message": f"❌ No progress data for #{p_id}."})
 
-    # Users and Departments
-    elif "users and their department" in user_input or "/users" in user_input:
+    # 6. User Directory Handler
+    if "users" in user_input or "personnel" in user_input or "user" == user_input:
         data = registration.objects.filter(accept=True)
         if not data: return JsonResponse({"message": "No approved users found."})
         table = "| Name | Department | Email |\n| :--- | :--- | :--- |\n"
         for r in data:
             table += f"| {r.name} | {r.department} | {r.email} |\n"
-        return JsonResponse({"message": f"### User Directory\n{table}"})
+        return JsonResponse({"message": f"### Active Personnel Directory\n{table}"})
 
-    # Rejection History
-    elif "rejection history" in user_input:
+    # 7. Rejection History Handler
+    if "rejection history" in user_input:
         data = registration.objects.filter(reject=True)
         if not data: return JsonResponse({"message": "No rejections found."})
         table = "| Name | Department | Email |\n| :--- | :--- | :--- |\n"
@@ -510,12 +537,11 @@ def chatbot(request):
             table += f"| {r.name} | {r.department} | {r.email} |\n"
         return JsonResponse({"message": f"### Rejection History\n{table}"})
 
-    # NEW FEATURE: Pending Approvals Alert
-    elif "approvals" in user_input or "/approvals" in user_input:
+    # 8. Pending Approvals Alert Handler
+    if "approvals" in user_input:
         pending = registration.objects.filter(accept=False, reject=False)
         if not pending: return JsonResponse({"message": "All caught up! No pending approvals."})
         
-        # Group by department for a nice summary
         summary = {}
         for r in pending:
             summary[r.department] = summary.get(r.department, 0) + 1
@@ -526,32 +552,7 @@ def chatbot(request):
         msg += "\nGo to the respective 'Approve' sections to take action."
         return JsonResponse({"message": msg})
 
-    # NEW FEATURE: Quick Report Access
-    elif "report" in user_input or "/report" in user_input:
-        import re
-        match = re.search(r'\d{5}', user_input)
-        if match:
-            project_id = match.group()
-            try:
-                proj = phytomine.objects.get(project_id=project_id)
-                if proj.admins_f_report:
-                    report_url = f"/download_report/{project_id}/"
-                    return JsonResponse({"message": f"### Report Ready\n\nDossier for Project **#{project_id}** is available.\n\n[📥 Download PDF Report]({report_url})"})
-                else:
-                    return JsonResponse({"message": f"Report for #{project_id} has not been generated yet. Go to Status > Generate Report."})
-            except phytomine.DoesNotExist:
-                return JsonResponse({"message": f"Project {project_id} not found."})
-        
-        # If no ID provided, return options for buttons
-        all_ids = list(phytomine.objects.all().values_list('project_id', flat=True))
-        return JsonResponse({
-            "message": "Select a Project ID to fetch **Report**:",
-            "options": all_ids,
-            "type": "/report"
-        })
-
-    else:
-        return JsonResponse({
-            "message": "I only understand specific commands. Try using the buttons below!"
-        })
-    
+    # Default Help
+    return JsonResponse({
+        "message": "Unrecognized command. Try clicking one of the **Quick Action Tabs** above or type a command like `approvals`, `report [ID]`, or `progress [ID]`."
+    })

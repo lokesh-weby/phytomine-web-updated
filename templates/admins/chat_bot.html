@@ -27,16 +27,16 @@
 
         <!-- Static Command Tabs -->
         <div id="chatbot-tabs">
-            <button onclick="sendStaticCommand('/approvals')">Pending Approvals</button>
-            <button onclick="sendStaticCommand('/report')">Get Report</button>
-            <button onclick="sendStaticCommand('/progress')">Project Progress</button>
-            <button onclick="sendStaticCommand('/recent logins')">Recent Logins</button>
-            <button onclick="sendStaticCommand('/users')">Users</button>
+            <button onclick="sendStaticCommand('approvals')">Pending Approvals</button>
+            <button onclick="sendStaticCommand('report')">Get Report</button>
+            <button onclick="sendStaticCommand('progress')">Project Progress</button>
+            <button onclick="sendStaticCommand('recent logins')">Recent Logins</button>
+            <button onclick="sendStaticCommand('users')">Users List</button>
         </div>
 
         <div id="chatbot-input-container">
             <div class="input-wrapper">
-                <input type="text" id="chatbot-message" placeholder="Type a command..." autocomplete="off"
+                <input type="text" id="chatbot-message" placeholder="Type a command (e.g. 'progress')..." autocomplete="off"
                     onkeyup="handleKeyUp(event)">
                 <button id="send-btn" onclick="sendChatbotMessage()">
                     <i class="fas fa-paper-plane"></i>
