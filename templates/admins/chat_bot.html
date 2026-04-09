@@ -1,335 +1,386 @@
 {% load static %}
+<!-- Phytomine Assistant Widget -->
 <div id="chatbot-widget">
-    <!-- Rounded logo when minimized -->
-    <div id="chatbot-logo" onclick="toggleChatbot()" title="Assistant">
-        <!-- <img src="{% static 'admins/home/img/bride.jpg' %}" class="img-fluid" alt=""> -->
+    <!-- Floating Button -->
+    <div id="chatbot-logo" onclick="toggleChatbot()" title="Open Assistant">
+        <div class="logo-inner"></div>
     </div>
 
-    <!-- Full chat window -->
-    <div id="chatbot-body" style="display:none;">
+    <!-- Chat Window -->
+    <div id="chatbot-body" class="glass-effect" style="display:none;">
         <div id="chatbot-header">
-            <h4 style="color: white;">Chatbot</h4>
-            <div onclick="toggleChatbot()" style="padding: 5px;">✖</div>
-
-
+            <div class="header-info">
+                <div class="status-dot"></div>
+                <h4>Phytomine Assistant</h4>
+            </div>
+            <div class="header-actions">
+                <button onclick="clearChat()" title="Reset"><i class="fas fa-undo"></i></button>
+                <button onclick="toggleChatbot()" title="Close"><i class="fas fa-times"></i></button>
+            </div>
         </div>
-        <div id="chatbot-box"></div>
-        <div id="chatbot-input">
-            <input type="text" id="chatbot-message" placeholder="Type / for commands" onkeyup="showSuggestions(event)">
-            <button onclick="sendChatbotMessage()">Send</button>
+
+        <div id="chatbot-box">
+            <div class="message-bot">
+                <span>Hello! I am your Phytomine Assistant. Select a quick action below or type a command.</span>
+            </div>
         </div>
-        <div id="chatbot-suggestions"
-            style="display:none; background:#f9f9f9; color: black; border-top:1px solid #ddd; padding:5px; font-size:13px;">
+
+        <!-- Static Command Tabs -->
+        <div id="chatbot-tabs">
+            <button onclick="sendStaticCommand('/approvals')">Pending Approvals</button>
+            <button onclick="sendStaticCommand('/report')">Get Report</button>
+            <button onclick="sendStaticCommand('/progress')">Project Progress</button>
+            <button onclick="sendStaticCommand('/recent logins')">Recent Logins</button>
+            <button onclick="sendStaticCommand('/users')">Users</button>
+        </div>
+
+        <div id="chatbot-input-container">
+            <div class="input-wrapper">
+                <input type="text" id="chatbot-message" placeholder="Type a command..." autocomplete="off"
+                    onkeyup="handleKeyUp(event)">
+                <button id="send-btn" onclick="sendChatbotMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- Dependencies -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
 <style>
+    :root {
+        --primary-green: #27ae60;
+        --dark-bg: rgba(30, 30, 30, 0.9);
+        --accent-glow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    }
+
     #chatbot-widget {
         position: fixed;
-        bottom: 50px;
-        right: 90px;
-        font-family: Arial, sans-serif;
-        z-index: 9999;
+        bottom: 30px;
+        right: 30px;
+        z-index: 10000;
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
     }
 
-    .chatbot-input button {
-        font-size: 1.25rem;
-    }
-
-    .message-bot table {
-        border-collapse: collapse;
-        width: auto;
-        /* shrink to fit content */
-        max-width: 90%;
-        /* don’t overflow bubble */
-        margin: 5px 0;
-        font-size: 13px;
-        text-align: center;
-        background: #fdfdfd;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .message-bot th {
-        background: #007bff;
-        color: white;
-        padding: 6px 10px;
-        font-weight: bold;
-    }
-
-    .message-bot td {
-        padding: 6px 10px;
-        border: 1px solid #ddd;
-    }
-
-    .message-bot tr:nth-child(even) {
-        background: #f9f9f9;
-        /* striped rows */
-    }
-
-
-    /* Rounded logo button */
+    /* Floating Button */
     #chatbot-logo {
-        width: 80px;
-        height: 80px;
-        background: rgb(240, 240, 240);
+        width: 60px;
+        height: 60px;
+        background: var(--primary-green);
         border-radius: 50%;
+        cursor: pointer;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         display: flex;
         align-items: center;
         justify-content: center;
-        cursor: pointer;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #chatbot-logo:hover {
+        transform: scale(1.1);
+    }
+
+    .logo-inner {
+        width: 100%;
+        height: 100%;
         background-image: url("{% static 'admins/home/img/Ai Robot Vector Art.gif' %}");
-        background-size: contain;
+        background-size: 70%;
         background-position: center;
         background-repeat: no-repeat;
-        animation: float 3s ease-in-out infinite;
     }
 
-    @keyframes float {
-        0% {
-            transform: translateY(0);
-        }
-
-        50% {
-            transform: translateY(-15px);
-        }
-
-        100% {
-            transform: translateY(0);
-        }
+    /* Chat Window */
+    .glass-effect {
+        background: var(--dark-bg);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        box-shadow: var(--accent-glow);
     }
 
-
-    /* Chat window */
     #chatbot-body {
-        width: 500px;
-        background: #fff;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        width: max-content;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
     }
 
     #chatbot-header {
-        background: green;
-        color: white;
-        padding: 10px;
-        border-radius: 8px 8px 0 0;
-        cursor: pointer;
+        padding: 12px 15px;
+        background: rgba(255, 255, 255, 0.05);
         display: flex;
         justify-content: space-between;
         align-items: center;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    #chatbot-box {
-        height: 250px;
-        overflow-y: auto;
-        padding: 10px;
-        font-size: 14px;
-    }
-
-    #chatbot-input {
+    .header-info {
         display: flex;
-        border-top: 1px solid #ddd;
+        align-items: center;
+        gap: 8px;
     }
 
-    #chatbot-input input {
-        flex: 1;
-        border: none;
-        padding: 8px;
-    }
-
-    #chatbot-input button {
-        background: green;
+    .header-info h4 {
+        margin: 0;
         color: white;
+        font-weight: 500;
+        font-size: 1rem;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--primary-green);
+        border-radius: 50%;
+    }
+
+    .header-actions button {
+        background: none;
         border: none;
-        padding: 8px 12px;
+        color: #888;
         cursor: pointer;
+        padding: 5px;
+    }
+
+    .header-actions button:hover {
+        color: white;
+    }
+
+    /* Chat Box */
+    #chatbot-box {
+        flex: 1;
+        overflow-y: auto;
+        padding: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .message-user,
+    .message-bot {
+        max-width: 80%;
+        padding: 8px 12px;
+        border-radius: 12px;
+        font-size: 0.9rem;
+        line-height: 1.4;
     }
 
     .message-user {
-        display: flex;
-        justify-content: flex-end;
-        margin: 10px 0;
-    }
-
-    .message-user span {
-        background-color: #dcf8c6;
-        color: black;
-        /* WhatsApp user bubble color */
-        padding: 8px 12px;
-        border-radius: 15px 15px 0 15px;
-        max-width: 70%;
-        word-wrap: break-word;
-        font-size: 14px;
+        align-self: flex-end;
+        background: var(--primary-green);
+        color: white;
+        border-bottom-right-radius: 2px;
     }
 
     .message-bot {
+        align-self: flex-start;
+        background: rgba(255, 255, 255, 0.08);
+        color: #ddd;
+        border-bottom-left-radius: 2px;
+    }
+
+    .message-bot table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 8px 0;
+        font-size: 0.8rem;
+    }
+
+    .message-bot th,
+    .message-bot td {
+        padding: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .message-bot th {
+        background: rgba(39, 174, 96, 0.2);
+    }
+
+    /* Command Tabs */
+    #chatbot-tabs {
+        padding: 10px;
         display: flex;
-        justify-content: flex-start;
-        margin: 10px 0;
+        gap: 8px;
+        overflow-x: auto;
+        background: rgba(0, 0, 0, 0.1);
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .message-bot span {
-        background-color: #ffffff;
-        color: black;
-        /* WhatsApp bot bubble color */
-        border: 1px solid #ddd;
-        padding: 8px 12px;
-        border-radius: 15px 15px 15px 0;
-        max-width: 70%;
-        word-wrap: break-word;
-        font-size: 14px;
+    #chatbot-tabs::-webkit-scrollbar {
+        height: 0;
     }
 
-
-    .suggestion {
+    #chatbot-tabs button {
+        white-space: nowrap;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #bbb;
+        padding: 4px 12px;
+        border-radius: 15px;
+        font-size: 0.8rem;
         cursor: pointer;
-        padding: 3px;
-        font-size: 1.25rem;
+        transition: all 0.2s;
     }
 
-    .suggestion:hover {
-        background: #eee;
+    #chatbot-tabs button:hover {
+        background: var(--primary-green);
+        color: white;
+        border-color: var(--primary-green);
+    }
+
+    /* Input Area */
+    #chatbot-input-container {
+        padding: 12px 15px;
+    }
+
+    .input-wrapper {
+        display: flex;
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 4px 12px;
+        align-items: center;
+    }
+
+    #chatbot-message {
+        flex: 1;
+        background: none;
+        border: none;
+        color: white;
+        padding: 8px 0;
+        outline: none;
+        font-size: 0.9rem;
+    }
+
+    #send-btn {
+        background: none;
+        border: none;
+        color: var(--primary-green);
+        cursor: pointer;
+        padding: 5px;
+    }
+
+    h3 {
+        color: white;
     }
 </style>
 
 <script>
-    const commands = [
-        "/recent logins",
-        "/progress <project_id>",
-        "/rejection history",
-        "/users and their department"
-    ];
+    const box = document.getElementById("chatbot-box");
+    const input = document.getElementById("chatbot-message");
+    const body = document.getElementById("chatbot-body");
+    const logo = document.getElementById("chatbot-logo");
 
     function toggleChatbot() {
-        const body = document.getElementById("chatbot-body");
-        const logo = document.getElementById("chatbot-logo");
         if (body.style.display === "none") {
-            body.style.display = "block";
+            body.style.display = "flex";
             logo.style.display = "none";
+            input.focus();
         } else {
             body.style.display = "none";
             logo.style.display = "flex";
         }
     }
 
+    function clearChat() {
+        box.innerHTML = `<div class="message-bot"><span>Assistant reset. Ready for commands.</span></div>`;
+    }
 
+    function handleKeyUp(event) { if (event.key === "Enter") sendChatbotMessage(); }
 
-    function sendChatbotMessage() {
+    function sendStaticCommand(cmd) {
+        input.value = cmd;
+        sendChatbotMessage();
+    }
 
-
-        const input = document.getElementById("chatbot-message");
+    async function sendChatbotMessage() {
         const message = input.value.trim();
         if (!message) return;
 
-        const box = document.getElementById("chatbot-box");
-        box.innerHTML += `<div class="message-user">
-    <span>${message}</span>
-</div>`;
-
-
-        fetch(`/chat/?message=${encodeURIComponent(message)}`)
-            .then(res => res.json()).then(data => {
-                let formatted;
-
-                // Handle /progress response with table design
-                if (data.overall_progress) {
-                    formatted = `
-            <b>Project ${data.project_id}</b><br>
-            <table style="border-collapse:collapse; width:100%; font-size:13px; text-align:center; margin: 15px 0;">
-              <tr style="background:#007bff; color:white;">
-                <th>Module</th><th>Status</th>
-              </tr>
-              <tr><td>Cultivator</td><td style="color:${data.cul_progress === 'Done' ? 'green' : 'red'}">${data.cul_progress}</td></tr>
-              <tr><td>Accumulator</td><td style="color:${data.acc_progress === 'Done' ? 'green' : 'red'}">${data.acc_progress}</td></tr>
-              <tr><td>Extractor</td><td style="color:${data.ext_progress === 'Done' ? 'green' : 'red'}">${data.ext_progress}</td></tr>
-              <tr><td>Sustainer</td><td style="color:${data.sus_progress === 'Done' ? 'green' : 'red'}">${data.sus_progress}</td></tr>
-            </table>
-            <b>Overall Progress: ${data.overall_progress}</b>
-        `;
-                }
-                // Handle array responses (/recent logins, /rejection history, /users and their department)
-                else if (Array.isArray(data)) {
-                    if (data.length > 0 && data[0].name && data[0].department) {
-                        formatted = `
-                <table style="border-collapse:collapse; width:100%; font-size:13px; text-align:center;">
-                  <tr style="background:#007bff; color:white;">
-                    <th>Name</th><th>Department</th>
-                  </tr>
-                  ${data.map(item => `
-                    <tr>
-                      <td>${item.name}</td>
-                      <td>${item.department}</td>
-                    </tr>`).join("")}
-                </table>
-            `;
-                    } else {
-                        formatted = data.map(item => Object.values(item).join(" | ")).join("<br>");
-                    }
-                }
-                // Handle single object responses
-                else if (typeof data === "object") {
-                    formatted = `
-            <table style="border-collapse:collapse; width:100%; font-size:13px; text-align:center;">
-              ${Object.entries(data).map(([k, v]) => `${v}`).join("")}
-            </table>
-        `;
-                }
-                // Fallback
-                else {
-                    formatted = data;
-                }
-
-                box.innerHTML += `<div class="message-bot outside">
-    <span>${formatted || "No Recent Logins"}</span>
-</div>`;
-                box.scrollTop = box.scrollHeight;
-
-
-            }).catch(err => {
-                box.innerHTML += `<div class="message-bot inside ">
-    <span>${err}</span>
-</div>`;
-
-                box.scrollTop = box.scrollHeight;
-
-
-            });
-
+        appendMessage('user', message);
         input.value = "";
-        document.getElementById("chatbot-suggestions").style.display = "none";
-    }
 
-    function showSuggestions(event) {
-        const input = event.target.value;
-        const suggestionsBox = document.getElementById("chatbot-suggestions");
+        try {
+            const response = await fetch(`/chat/?message=${encodeURIComponent(message)}`);
+            const data = await response.json();
 
-        if (input.startsWith("/")) {
-            const filtered = commands.filter(cmd => cmd.startsWith(input));
-            if (filtered.length > 0) {
-                suggestionsBox.innerHTML = filtered.map(cmd => `<div class="suggestion" onclick="selectSuggestion('${cmd}')">${cmd}</div>`).join("");
-                suggestionsBox.style.display = "block";
-            } else {
-                suggestionsBox.style.display = "none";
+            if (data.message) {
+                appendMessage('bot', data.message, data.options, data.type);
             }
-        } else {
-            suggestionsBox.style.display = "none";
+        } catch (err) {
+            appendMessage('bot', "Connection error.");
         }
     }
 
-    function selectSuggestion(cmd) {
-        document.getElementById("chatbot-message").value = cmd;
-        document.getElementById("chatbot-suggestions").style.display = "none";
-    }
+    function appendMessage(sender, text, options = null, type = null) {
+        const msgContainer = document.createElement("div");
+        msgContainer.style.display = "flex";
+        msgContainer.style.flexDirection = "column";
+        msgContainer.style.gap = "8px";
+        msgContainer.style.alignSelf = sender === 'user' ? 'flex-end' : 'flex-start';
+        msgContainer.style.maxWidth = "80%";
 
-    document.getElementById("chatbot-message").addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-            event.preventDefault();   // prevent newline
-            sendChatbotMessage();     // call your send function
+        const msgDiv = document.createElement("div");
+        msgDiv.className = sender === 'user' ? 'message-user' : 'message-bot';
+        msgDiv.style.maxWidth = "100%"; // override default if needed
+        msgDiv.innerHTML = `<span>${sender === 'bot' ? marked.parse(text) : text}</span>`;
+        msgContainer.appendChild(msgDiv);
+
+        if (options && options.length > 0) {
+            const optDiv = document.createElement("div");
+            optDiv.className = "message-options";
+            options.forEach(opt => {
+                const btn = document.createElement("button");
+                btn.innerText = opt;
+                btn.onclick = () => sendStaticCommand(`${type} ${opt}`);
+                optDiv.appendChild(btn);
+            });
+            msgContainer.appendChild(optDiv);
         }
-    });
 
-
+        box.appendChild(msgContainer);
+        box.scrollTop = box.scrollHeight;
+    }
 </script>
+
+<style>
+    .message-options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 4px;
+    }
+
+    .message-options button {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid var(--primary-green);
+        color: var(--primary-green);
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .message-options button:hover {
+        background: var(--primary-green);
+        color: white;
+    }
+</style>

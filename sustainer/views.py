@@ -41,10 +41,11 @@ def sus_validate_login(request):
                 data.logout = False
                 data.save()
 
-                # Store all three safely
+                # Store all safely
                 request.session['user_id'] = data.id
                 request.session['email'] = data.email
                 request.session['department'] = data.department
+                request.session['name'] = data.name
 
                 messages.info(request, "SUSTAINER Login Successful")     
                 return redirect("/sus_home/")

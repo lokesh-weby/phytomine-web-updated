@@ -287,7 +287,10 @@
     <div class="dashboard-container">
         <!-- Header -->
         <div class="expert-header animate-up" style="animation-delay: 0.1s;">
-            <div class="project-badge">Dossier Analysis #{{ data.project_id }}</div>
+        <div class="text-end mb-2">
+            <span class="text-muted fw-bold">Welcome, <span style="color: #eb1616;">{{ request.session.name|default:"User" }}</span></span>
+        </div>
+        <div class="project-badge">Dossier Analysis #{{ data.project_id }}</div>
             <h1>Phytomine Expert Insights</h1>
             <p class=" fw-large"> Location:
                 <strong>{{data.location}}</strong>
