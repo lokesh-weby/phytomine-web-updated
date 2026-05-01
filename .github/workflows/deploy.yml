@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Deploy to EC2
-        uses: appleboy/ssh-action@master
+        uses: appleboy/ssh-action@v1.0.3
 
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -19,10 +19,12 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
 
           script: |
-            cd phytomine-web-updated
+            set -e
 
-            git pull origin main
+            cd ~/phytomine-web-updated
 
-            docker compose down
+            git fetch origin main
+            git reset --hard origin/main
+            git clean -fd
 
             docker compose up -d --build
