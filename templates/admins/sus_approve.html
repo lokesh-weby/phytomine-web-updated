@@ -292,12 +292,20 @@
                                                 <td><a href="/reject/{{ i.id }}" class="action-btn">REJECT</a></td>
 
                                                 {% elif i.accept and not i.reject %}
-                                                <td class="accepted">ACCEPTED</td>
-                                                <td>NO ACTION</td>
+                                                <td><span class="badge bg-success rounded-pill px-3 py-2" style="letter-spacing: 1px;">ACCEPTED</span></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1" style="font-weight: bold; letter-spacing: 1px;" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}">
+                                                        REMOVE
+                                                    </button>
+                                                </td>
 
                                                 {% elif not i.accept and i.reject %}
-                                                <td>NO ACTION</td>
-                                                <td class="rejected">REJECTED</td>
+                                                <td>
+                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1" style="font-weight: bold; letter-spacing: 1px;" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}">
+                                                        REMOVE
+                                                    </button>
+                                                </td>
+                                                <td><span class="badge bg-danger rounded-pill px-3 py-2" style="letter-spacing: 1px;">REJECTED</span></td>
                                                 {% endif %}
                                             </tr>
                                             {% endfor %}
@@ -335,6 +343,34 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'admins/home/js/main.js' %}"></script>
+
+    <!-- Modals -->
+    {% if data %}
+    {% for i in data %}
+                                            <!-- Delete Modal -->
+                                            <div class="modal fade" id="deleteModal{{ i.id }}" tabindex="-1" aria-hidden="true">
+                                              <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content" style="border-radius: 12px; border: 1px solid #ff4d4d; box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2);">
+                                                  <div class="modal-header" style="background-color: #ffe6e6; border-bottom: 1px solid #ffcccc; border-radius: 12px 12px 0 0;">
+                                                    <h5 class="modal-title" style="color: #d9534f; font-weight: bold;"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                  </div>
+                                                  <div class="modal-body text-start" style="padding: 25px;">
+                                                    <p style="color: #555; font-size: 15px;">This action <strong>cannot</strong> be undone. This will permanently delete the user <strong style="color: #333;">{{ i.name }}</strong> ({{ i.email }}).</p>
+                                                    <p style="color: #555; font-size: 15px;">Please type <strong style="user-select: none;">{{ i.name }}</strong> to confirm.</p>
+                                                    <input type="text" class="form-control" onkeyup="if(this.value === '{{ i.name }}') { document.getElementById('deleteBtn{{ i.id }}').classList.remove('disabled'); } else { document.getElementById('deleteBtn{{ i.id }}').classList.add('disabled'); }" style="border: 2px solid #ddd; border-radius: 8px; padding: 10px; color: #000 !important;">
+                                                  </div>
+                                                  <div class="modal-footer" style="border-top: 1px solid #eee; background-color: #f9f9f9; border-radius: 0 0 12px 12px;">
+                                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                                                    <a href="/remove_user/{{ i.id }}/" class="btn btn-danger disabled rounded-pill px-4" id="deleteBtn{{ i.id }}" style="font-weight: bold;">I understand, delete user</a>
+                                                  </div>
+                                                </div>
+                                              </div>
+                                            </div>
+                                            <!-- End Modal -->
+    {% endfor %}
+    {% endif %}
+
 </body>
 
 </html>

@@ -123,6 +123,20 @@ def reject(request,id):
     messages.info(request, "Rejection Mail Sent")
     return redirect("/admins_home/")
 
+def remove_user(request, id):
+    if request.session.get('role') != "admin":
+        return redirect("/admins_login/")
+    data = registration.objects.get(id=id)
+    dept = data.department
+    data.delete()
+    messages.info(request, f"{data.name} has been removed successfully.")
+    
+    if dept == "CULTIVATOR": return redirect("/cul_approve/")
+    elif dept == "ACCUMULATOR": return redirect("/acc_approve/")
+    elif dept == "EXTRACTOR": return redirect("/ext_approve/")
+    elif dept == "SUSTAINER": return redirect("/sus_approve/")
+    return redirect("/admins_home/")
+
 def admins_home(request):
     if request.session.get('role') != "admin":
         return redirect("/admins_login/")

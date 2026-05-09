@@ -16,6 +16,7 @@ urlpatterns = [
     path("sus_approve/",sus_approve),
     path("accept/<int:id>/",accept),
     path("reject/<int:id>/",reject),
+    path("remove_user/<int:id>/",remove_user),
     path("admins_req/",admins_req),
     path("admins_status/",admins_status),
     path("rep_cul/",rep_cul),
