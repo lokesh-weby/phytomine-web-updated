@@ -112,8 +112,9 @@
     <div class="container-fluid sticky-top px-0">
         <nav class="navbar navbar-expand-lg navbar-dark bg-light py-3 px-4">
             <a href="/" class="navbar-brand p-0">
-                <h1 class="text-secondary display-6 mb-0 d-flex align-items-baseline">PHYTOMINE <span
-                        class="ms-2" style="font-size: 0.9rem; font-weight: 400; opacity: 0.4; letter-spacing: 1px; user-select: none;">v1.0</span></h1>
+                <h1 class="text-secondary display-6 mb-0 d-flex align-items-baseline">PHYTOMINE <span class="ms-2"
+                        style="font-size: 0.9rem; font-weight: 400; opacity: 0.4; letter-spacing: 1px; user-select: none;">v1.1</span>
+                </h1>
                 <!-- <img src="img/logo.png" alt="Logo"> -->
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -150,7 +151,8 @@
                         {% if request.session.name %}
                         <h1 class="text-white mb-3 fadeInUp animate__animated" data-animation="fadeInUp"
                             data-delay="1.1s" style="animation-delay: 1.1s; font-size: 3rem; font-weight: 800;">Welcome,
-                            <span style="color: #eb1616;">{{ request.session.name }}</span></h1>
+                            <span style="color: #eb1616;">{{ request.session.name }}</span>
+                        </h1>
                         {% endif %}
                         <h1 class="display-1 text-capitalize text-white mb-4 fadeInUp animate__animated"
                             data-animation="fadeInUp" data-delay="1.3s" style="animation-delay: 1.3s;">Mining the
