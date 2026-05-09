@@ -245,21 +245,21 @@
                                                 <tr>
                                                     {% if i.ext_decrypt is True %}
                                                     <td>{{ i.project_id }}</td>
-                                                    <td>{{ i.initial_fern_biomass }}</td>
-                                                    <td>{{ i.final_fern_biomass }}</td>
-                                                    <td>{{ i.growth_duration }}</td>
-                                                    <td>{{ i.soil_ree_conc }}</td>
-                                                    <td>{{ i.plant_ree_conc }}</td>
-                                                    <td>{{ i.harvested_biomass }}</td>
-                                                    <td>{{ i.extraction_eff }}</td>
-                                                    <td>{{ i.initial_soil_ree }}</td>
-                                                    <td>{{ i.final_soil_ree }}</td>
-                                                    <td>{{ i.biomass_increase }}</td>
-                                                    <td>{{ i.growth_rate }}</td>
-                                                    <td>{{ i.growth_eff }}</td>
-                                                    <td>{{ i.total_metal }}</td>
-                                                    <td>{{ i.uptake }}</td>
-                                                    <td>{{ i.baf }}</td>
+                                                    <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.final_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.plant_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.harvested_biomass|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.extraction_eff|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.final_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.biomass_increase|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.growth_rate|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.growth_eff|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.total_metal|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.uptake|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.baf|default_if_none:"No Data Available" }}</td>
                                                     <form action="/ext_ana_process/{{ i.project_id }}/" method="POST">
                                                         {% csrf_token %}
                                                         {% if i.ext_scan is False %}

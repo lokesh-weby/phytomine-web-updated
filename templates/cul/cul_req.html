@@ -205,6 +205,12 @@
                                         <tbody>
                                             {% if data %}
                                             {% for i in data %}
+                                            {% if i.initial_fern_biomass is None %}
+                                            <tr>
+                                                <td>{{ i.project_id }}</td>
+                                                <td colspan="13" style="text-align: center; font-weight: bold; color: gray; letter-spacing: 2px;">DATA NOT PROCESSED</td>
+                                            </tr>
+                                            {% else %}
                                             <tr>
                                                 {% if i.cul_decrypt is False %}
                                                 <td>{{ i.project_id }}</td>
@@ -251,19 +257,20 @@
                                                 {% else %}
                                                 <td>{{ i.project_id }}</td>
                                                 <td colspan="3" class="decrypted">Decrypted</td>
-                                                <td>{{ i.initial_fern_biomass }}</td>
-                                                <td>{{ i.final_fern_biomass }}</td>
-                                                <td>{{ i.growth_duration }}</td>
-                                                <td>{{ i.soil_ree_conc }}</td>
-                                                <td>{{ i.plant_ree_conc }}</td>
-                                                <td>{{ i.harvested_biomass }}</td>
-                                                <td>{{ i.extraction_eff }}</td>
-                                                <td>{{ i.initial_soil_ree }}</td>
-                                                <td>{{ i.final_soil_ree }}</td>
-                                                <td>{{ i.cul_signed_by|default:"-" }}</td>
+                                                <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.plant_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.harvested_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.extraction_eff|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.cul_signed_by|default_if_none:"No Data Available" }}</td>
 
                                                 {% endif %}
                                             </tr>
+                                            {% endif %}
                                             {% endfor %}
                                             {% else %}
                                             <tr>

@@ -332,21 +332,21 @@
                                             {% for i in data %}
                                             <tr>
                                                 <td>{{ i.project_id }}</td>
-                                                <td>{{ i.location|default:"-" }}</td>
-                                                <td>{{ i.initial_fern_biomass }}</td>
-                                                <td>{{ i.final_fern_biomass }}</td>
-                                                <td>{{ i.growth_duration }}</td>
-                                                <!-- <td>{{ i.soil_ree_conc }}</td> -->
-                                                <!-- <td>{{ i.plant_ree_conc }}</td> -->
-                                                <!-- <td>{{ i.harvested_biomass }}</td> -->
-                                                <td>{{ i.extraction_eff }}</td>
-                                                <td>{{ i.initial_soil_ree }}</td>
-                                                <td>{{ i.final_soil_ree }}</td>
-                                                <td>{{ i.soil_type|default:"-" }}</td>
-                                                <td>{{ i.cul_signed_by|default:"-" }}</td>
-                                                <td>{{ i.acc_signed_by|default:"-" }}</td>
-                                                <td>{{ i.ext_signed_by|default:"-" }}</td>
-                                                <td>{{ i.sus_signed_by|default:"-" }}</td>
+                                                <td>{{ i.location|default:"No Data Available" }}</td>
+                                                <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
+                                                <!-- <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td> -->
+                                                <!-- <td>{{ i.plant_ree_conc|default_if_none:"No Data Available" }}</td> -->
+                                                <!-- <td>{{ i.harvested_biomass|default_if_none:"No Data Available" }}</td> -->
+                                                <td>{{ i.extraction_eff|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.soil_type|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.cul_signed_by|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.acc_signed_by|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.ext_signed_by|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.sus_signed_by|default_if_none:"No Data Available" }}</td>
 
                                                 {% if i.admins_f_rep_view is False and i.sus_scan is True %}
                                                 <td>
