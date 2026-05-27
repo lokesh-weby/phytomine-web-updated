@@ -35,6 +35,7 @@
     <link href="{% static 'admins/home/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 
     <style>
         * {
@@ -93,63 +94,71 @@
 
     <style>
         .form-container {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
-            padding: 40px;
-            width: max-content;
-            /* Increased */
-            margin: auto;
-            /* Centering */
-            color: white;
+            background-color: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(6, 78, 59, 0.15);
+            padding: 20px;
+            width: stretch;
+            margin: 0px 15%;
+            color: #1e293b;
             text-align: center;
         }
 
         .form-container h2 {
-            margin-bottom: 25px;
-            font-size: 28px;
-            color: white;
-            text-shadow: 1px 1px 2px #000;
+            margin-bottom: 30px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #064e3b;
+            letter-spacing: 1px;
+            text-shadow: none;
         }
 
         label {
             display: block;
-            margin: 10px 0px;
-            font-weight: bold;
-            color: #fff;
+            margin: 12px 0 8px;
+            font-weight: 600;
+            color: #14532d;
             text-align: left;
-            font-size: 1rem;
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
         }
 
-        input[type="number"],
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 8px;
-            margin-top: 5px;
-            background: rgba(255, 255, 255, 0.85);
+        .form-group input,
+        .form-group select {
+            padding: 12px 16px;
+            border-radius: 10px;
+            border: 1px solid rgba(6, 78, 59, 0.15);
+            background: rgba(255, 255, 255, 0.95);
+            color: #064e3b !important;
             font-size: 14px;
-            color: #333;
+            transition: all 0.3s ease;
+            width: 100%;
         }
 
-        .location-group {
-            display: flex;
-            gap: 0;
-            margin-top: 5px;
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #10b981;
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
         }
 
-        .location-group input {
-            border-top-right-radius: 0 !important;
-            border-bottom-right-radius: 0 !important;
-            margin-top: 0 !important;
+        .form-group select option {
+            background: #ffffff;
+            color: #0f172a;
+        }
+
+        input::placeholder {
+            color: #94a3b8 !important;
         }
 
         .form-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            gap: 20px;
         }
 
         .form-group {
@@ -157,35 +166,19 @@
             flex-direction: column;
         }
 
-        .full-width {
-            grid-column: span 2;
-        }
-
-        .form-group input,
-        .form-group select {
-            padding: 10px;
-            border-radius: 8px;
-            border: none;
-            background: rgba(255, 255, 255, 0.85);
-        }
-
-        /* Keep your existing location-group styling */
         .location-group {
             display: flex;
         }
 
-        select {
-            border-radius: 8px 0px 0px 8px !important;
-        }
-
         .btn-get-location {
-            background-color: #EB1616;
+            background: linear-gradient(to right, #15803d, #22c55e);
             color: white;
             border: none;
-            border-top-right-radius: 8px;
-            border-bottom-right-radius: 8px;
-            padding: 0 15px;
+            border-radius: 10px;
+            margin-left: 10px;
+            padding: 0 20px;
             font-size: 14px;
+            font-weight: 600;
             transition: 0.3s;
             display: flex;
             align-items: center;
@@ -194,46 +187,82 @@
         }
 
         .btn-get-location:hover {
-            background-color: #0c1844;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
             color: white;
         }
 
         .btn-get-location i {
-            margin-right: 5px;
+            margin-right: 8px;
             font-size: 0.9rem;
         }
 
         .btn-container {
-            margin-top: 20px;
+            margin-top: 30px;
+            display: flex;
+            gap: 15px;
         }
 
         .btn-submit {
-            background-color: #EB1616;
-            color: #000;
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+            background: linear-gradient(to right, #059669, #10b981);
+            color: white;
+            border-radius: 10px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            border: none;
+            padding: 14px;
+            transition: all 0.3s ease;
+            flex: 1;
         }
 
         .btn-submit:hover {
-            background-color: #0c1844;
-            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+            color: white;
         }
 
         .btn-back {
-            background-color: #555;
-            color: white;
-            width: 100%;
-            padding: 10px;
+            background: rgba(6, 78, 59, 0.05);
+            color: #14532d;
+            border-radius: 10px;
+            border: 1px solid rgba(6, 78, 59, 0.15);
+            padding: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            flex: 1;
+        }
+
+        .btn-back:hover {
+            background: rgba(6, 78, 59, 0.1);
+            color: #064e3b;
+        }
+
+        .measurement-col {
+            background: rgba(209, 250, 229, 0.5);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(6, 78, 59, 0.05);
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .measurement-col:hover {
+            background: rgba(209, 250, 229, 0.8);
+            transform: translateY(-5px);
+        }
+
+        .measurement-col h4 {
+            color: #047857;
+            margin-bottom: 20px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            text-align: left;
+            border-bottom: 2px solid rgba(16, 185, 129, 0.3);
+            padding-bottom: 10px;
         }
     </style>
 
-    <!-- Spinner Start -->
-    <div id="spinner"
-        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
-        <div class="spinner-grow text-primary" role="status"></div>
-    </div>
-    <!-- Spinner End -->
+    <!-- Spinner Removed -->
 
 
     <!-- Navbar start -->
@@ -302,6 +331,7 @@
                                 </div>
                             </div>
                             <a href="/admins_req/" class="nav-item nav-link active">PROVISION</a>
+                            <a href="/phase_two/" class="nav-item nav-link">PHASE TWO</a>
                             <a href="/admins_status/" class="nav-item nav-link">TELEMETRY</a>
                             <div class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="dossierDropdown" role="button"
@@ -342,16 +372,64 @@
 
 
     <!-- Carousel / Form Section -->
-    <div class="container-fluid carousel-header px-0">
-        <div class="carousel-item active">
-            <img src="{% static 'admins/home/img/carousel-1.jpg' %}" class="img-fluid w-100" alt="Image">
+    <div class="container-fluid carousel-header px-0" style="overflow: visible;">
+        <div class="carousel-item active" style="overflow: visible;">
+            <img src="{% static 'admins/home/img/carousel-1.jpg' %}" class="img-fluid w-100" alt="Image"
+                style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; object-fit: cover; z-index: -1;">
 
             <!-- SCROLL FIXED CAPTION -->
             <div class="carousel-caption d-flex justify-content-center align-items-start"
-                style="position:relative; height:100vh; overflow-y:auto; padding-top:120px;">
+                style="position:relative; height:auto; overflow:visible; padding-top:120px; padding-bottom: 80px; left: 0; right: 0;">
 
                 <div class="form-container">
                     <h2>PROVISION</h2>
+
+                    <div class="d-flex justify-content-center gap-3 mb-3">
+                        <button type="button" class="btn btn-outline-success fw-bold" id="btnScanQR"
+                            onclick="toggleScanner()" style="border-radius: 10px; padding: 10px 20px;">
+                            <i class="fas fa-qrcode me-2"></i> Scan QR Code
+                        </button>
+                        {% if latest_qr %}
+                        <button type="button" class="btn btn-success fw-bold" data-bs-toggle="modal"
+                            data-bs-target="#qrModal"
+                            style="background: linear-gradient(to right, #059669, #10b981); border: none; border-radius: 10px; padding: 10px 20px;">
+                            <i class="fas fa-eye me-2"></i> View / Download QR
+                        </button>
+                        {% endif %}
+                    </div>
+
+                    <div id="reader-container"
+                        style="display: none; background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 20px;">
+                        <div id="reader" width="100%"></div>
+                        <button type="button" class="btn btn-danger btn-sm mt-2 w-100" onclick="toggleScanner()">Close
+                            Scanner</button>
+                    </div>
+
+                    {% if latest_qr %}
+                    <!-- Modal for QR -->
+                    <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content" style="border-radius: 15px; background: rgba(255,255,255,0.95);">
+                                <div class="modal-header border-0">
+                                    <h5 class="modal-title fw-bold" style="color: #064e3b;">Project QR Code</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body text-center">
+                                    <p>Project Tracking ID: <strong>{{ latest_tracking_id }}</strong></p>
+                                    <img src="{{ latest_qr }}" alt="QR Code" class="img-fluid my-2"
+                                        style="max-width: 250px; border: 4px solid #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                </div>
+                                <div class="modal-footer border-0 justify-content-center">
+                                    <a href="{{ latest_qr }}" download="Project_{{ latest_tracking_id }}_QR.png"
+                                        class="btn btn-success"
+                                        style="background: linear-gradient(to right, #059669, #10b981); border: none;">Download
+                                        PNG</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
 
                     <form action="/admins_req/" method="POST">
                         {% csrf_token %}
@@ -359,14 +437,14 @@
                         <div class="form-grid">
 
                             <!-- Location -->
-                            <div class="form-group full-width">
+                            <div class="form-group">
                                 <label>Location</label>
                                 <div class="location-group">
                                     <input type="text" name="location" id="locationInput" placeholder="Enter Location"
                                         required>
-                                    <button type="button" class="btn-get-location" onclick="getLocation()">
+                                    <!-- <button type="button" class="btn-get-location" onclick="getLocation()">
                                         <i class="fas fa-map-marker-alt"></i> Get Location
-                                    </button>
+                                    </button> -->
                                 </div>
                             </div>
 
@@ -385,63 +463,53 @@
                                     <input type="file" id="soilImageInput" style="display: none;" accept="image/*"
                                         onchange="predictSoilType()">
 
-                                    <button type="button" id="btnPredict" class="btn-get-location"
+                                    <!-- <button type="button" id="btnPredict" class="btn-get-location"
                                         onclick="document.getElementById('soilImageInput').click()">
                                         <i class="fas fa-camera"></i> Predict
-                                    </button>
+                                    </button> -->
                                 </div>
-                            </div>
-
-                            <!-- Two column fields -->
-                            <div class="form-group">
-                                <label>Initial Fern Biomass (g)</label>
-                                <input type="number" name="initial_fern_biomass" min="20" max="150" placeholder="Enter value between 20 - 150" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Final Fern Biomass (g)</label>
-                                <input type="number" name="final_fern_biomass" min="50" max="500" placeholder="Enter value between 50 - 500" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Growth Duration (days)</label>
-                                <input type="number" name="growth_duration" min="30" max="180" placeholder="Enter value between 30 - 180" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Soil REE Concentration (mg/kg)</label>
-                                <input type="number" name="soil_ree_conc" min="50" max="5000" placeholder="Enter value between 50 - 5000" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Plant REE Concentration (mg/kg)</label>
-                                <input type="number" name="plant_ree_conc" min="10" max="3000" placeholder="Enter value between 10 - 3000" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Harvested Biomass (g)</label>
-                                <input type="number" name="harvested_biomass" min="50" max="500" placeholder="Enter value between 50 - 500" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Extraction Efficiency (%)</label>
-                                <input type="number" name="extraction_eff" min="40" max="95" placeholder="Enter value between 40 - 95" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Initial Soil REE (mg/kg)</label>
-                                <input type="number" name="initial_soil_ree" min="100" max="5000" placeholder="Enter value between 100 - 5000" required>
-                            </div>
-
-                            <div class="form-group">
-                                <label>Final Soil REE (mg/kg)</label>
-                                <input type="number" name="final_soil_ree" min="10" max="3000" placeholder="Enter value between 10 - 3000" required>
                             </div>
 
                         </div>
 
+                        <div class="form-grid" style="margin-top: 20px;">
+                            <!-- Field Measurement Column -->
+                            <div class="measurement-col">
+                                <h4>Field Measurement</h4>
+
+                                <div class="form-group">
+                                    <label>Initial Plant Weight (g)</label>
+                                    <input type="number" name="initial_fern_biomass" min="20" max="150"
+                                        placeholder="Enter value between 20 - 150" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Growth Duration (days)</label>
+                                    <input type="number" name="growth_duration" min="30" max="180"
+                                        placeholder="Enter value between 30 - 180" required>
+                                </div>
+                            </div>
+
+                            <!-- Lab Measurement Column -->
+                            <div class="measurement-col">
+                                <h4>Lab Measurement</h4>
+
+                                <div class="form-group">
+                                    <label>Initial Soil REE (mg/kg)</label>
+                                    <input type="number" name="initial_soil_ree" min="100" max="5000"
+                                        placeholder="Enter value between 100 - 5000" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Soil REE Concentration (mg/kg)</label>
+                                    <input type="number" name="soil_ree_conc" min="50" max="5000"
+                                        placeholder="Enter value between 50 - 5000" required>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="btn-container">
-                            <button type="submit" class="btn btn-submit">Submit</button>
+                            <button type="submit" class="btn btn-submit">Save & Go to Phase 2</button>
                             <button type="button" class="btn btn-back" onclick="window.location.href='/admins_home/'">
                                 Back
                             </button>
@@ -614,6 +682,75 @@
                         }
                     });
             }
+        }
+
+        // QR Scanner Logic
+        let html5QrcodeScanner = null;
+
+        function toggleScanner() {
+            const container = document.getElementById('reader-container');
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                if (!html5QrcodeScanner) {
+                    html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 250, height: 250 } }, false);
+                }
+                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            } else {
+                container.style.display = 'none';
+                if (html5QrcodeScanner) {
+                    html5QrcodeScanner.clear();
+                }
+            }
+        }
+
+        function onScanSuccess(decodedText, decodedResult) {
+            // decodedText should be the project_id
+            const projectId = decodedText;
+            html5QrcodeScanner.clear();
+            document.getElementById('reader-container').style.display = 'none';
+
+            Toastify({
+                text: "QR Scanned! Fetching data for Project: " + projectId,
+                duration: 2000, gravity: "bottom", position: "right",
+                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+            }).showToast();
+
+            fetch(`/api/get_project/${projectId}/`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        document.querySelector('input[name="location"]').value = data.location;
+                        document.querySelector('select[name="soil_type"]').value = data.soil_type;
+                        document.querySelector('input[name="initial_fern_biomass"]').value = data.initial_fern_biomass;
+                        document.querySelector('input[name="growth_duration"]').value = data.growth_duration;
+                        document.querySelector('input[name="initial_soil_ree"]').value = data.initial_soil_ree;
+                        document.querySelector('input[name="soil_ree_conc"]').value = data.soil_ree_conc;
+
+                        Toastify({
+                            text: "Form populated with project data!",
+                            duration: 3000, gravity: "bottom", position: "right",
+                            style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+                        }).showToast();
+                    } else {
+                        Toastify({
+                            text: "Error: " + data.message,
+                            duration: 3000, gravity: "bottom", position: "right",
+                            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+                        }).showToast();
+                    }
+                })
+                .catch(err => {
+                    console.error("Fetch error:", err);
+                    Toastify({
+                        text: "Error fetching project data",
+                        duration: 3000, gravity: "bottom", position: "right",
+                        style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+                    }).showToast();
+                });
+        }
+
+        function onScanFailure(error) {
+            // handle scan failure, usually better to ignore and keep scanning
         }
     </script>
 </body>

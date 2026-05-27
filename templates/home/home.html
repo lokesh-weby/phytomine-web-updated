@@ -148,12 +148,7 @@
                     <img src="{% static 'home/img/nickel_extraction.png' %}" class="img-fluid w-100"
                         alt="First slide" />
                     <div class="carousel-caption">
-                        {% if request.session.name %}
-                        <h1 class="text-white mb-3 fadeInUp animate__animated" data-animation="fadeInUp"
-                            data-delay="1.1s" style="animation-delay: 1.1s; font-size: 3rem; font-weight: 800;">Welcome,
-                            <span style="color: #eb1616;">{{ request.session.name }}</span>
-                        </h1>
-                        {% endif %}
+                        
                         <h1 class="display-1 text-capitalize text-white mb-4 fadeInUp animate__animated"
                             data-animation="fadeInUp" data-delay="1.3s" style="animation-delay: 1.3s;">Mining the
                             Future, Naturally.</h1>

@@ -1,4 +1,5 @@
 from django.db import models
+import uuid
 
 # Create your models here.
 
@@ -24,6 +25,8 @@ class phytomine(models.Model):
     user = models.ForeignKey(registration, on_delete=models.CASCADE, related_name='uploads', null=True)
 
     project_id= models.CharField(max_length=100, null=True, unique=True)
+    tracking_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    qr_code = models.ImageField(upload_to='qr/', null=True, blank=True)
     location=models.CharField(max_length=100,null=True)
     status=models.CharField(max_length=50,null=True,default="Pending")
 

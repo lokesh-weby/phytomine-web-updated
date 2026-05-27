@@ -4,189 +4,106 @@
 
 <head>
     <meta charset="utf-8">
-    <title>Admin</title>
+    <title>Admin — Accumulator Audit</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-    <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-    <!-- Icon Font Stylesheet -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
-
-    <!-- Libraries Stylesheet -->
     <link href="{% static 'admins/home/lib/animate/animate.min.css' %}" rel="stylesheet">
     <link href="{% static 'admins/home/lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
-
-
-    <!-- Customized Bootstrap Stylesheet -->
     <link href="{% static 'admins/home/css/bootstrap.min.css' %}" rel="stylesheet">
-
-    <!-- Template Stylesheet -->
     <link href="{% static 'admins/home/css/style.css' %}" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
     <style>
-        
-.fixed-table-wrapper {
-    max-width: 100%;
-    margin: 25px auto;
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
-
-.fixed-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-}
-
-.fixed-table thead th {
-    background: #f5f5f5;
-    color: #333;
-    padding: 12px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
-}
-
-.fixed-table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    background: #ffffff;
-}
-
-.fixed-table tbody tr:nth-child(even) td {
-    background: #fafafa;
-}
-
-.fixed-table tbody tr:hover {
-    background: #f1f7ff;
-}
-
+        * { font-family: 'Outfit', sans-serif; }
+        i { font-family: "Font Awesome 7 Free"; font-weight: 900; }
+        .navbar-nav .nav-link, .navbar-brand, h1, h2, h3, h4, h5, h6 { font-family: 'Outfit', sans-serif !important; }
+        body { background: #f4f6fb; min-height: 100vh; }
+        .page-hero { background: linear-gradient(135deg, #ffffff 0%, #ecfdf5 100%); border-bottom: 1px solid #d1fae5; padding: 36px 0 28px; position: relative; overflow: hidden; }
+        .page-hero::before { content: ''; position: absolute; top: -60px; left: -60px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%); pointer-events: none; }
+        .page-hero::after { content: ''; position: absolute; bottom: -80px; right: -40px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(234,166,54,0.07) 0%, transparent 70%); pointer-events: none; }
+        .page-hero h1 { font-size: 2rem; font-weight: 700; background: linear-gradient(90deg, #059669, #10b981); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: 2px; margin: 0; }
+        .page-hero p { color: #6b7280; font-size: 0.88rem; margin: 6px 0 0; letter-spacing: 1px; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(16,185,129,0.08); border: 1px solid rgba(16,185,129,0.3); color: #059669; font-size: 0.75rem; font-weight: 600; letter-spacing: 1.5px; padding: 4px 12px; border-radius: 100px; text-transform: uppercase; margin-bottom: 10px; }
+        .audit-card { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 18px; box-shadow: 0 4px 24px rgba(16,185,129,0.07); overflow: hidden; margin: 32px 0 48px; }
+        .audit-card-header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 20px 24px; border-bottom: 1px solid #f1f5f9; background: #f9fffe; }
+        .audit-card-title { color: #1e293b; font-size: 1rem; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; }
+        .audit-card-title i { color: #10b981; }
+        .search-box { position: relative; }
+        .search-box input { background: #f8fafc; border: 1.5px solid #e2e8f0; color: #334155; border-radius: 10px; padding: 8px 14px 8px 36px; font-size: 0.85rem; width: 220px; transition: all 0.25s; }
+        .search-box input:focus { outline: none; border-color: #10b981; background: #fff; box-shadow: 0 0 0 3px rgba(16,185,129,0.12); }
+        .search-box input::placeholder { color: #94a3b8; }
+        .search-box .search-icon { position: absolute; left: 11px; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.8rem; }
+        .audit-table { width: 100%; border-collapse: collapse; }
+        .audit-table thead th { background: #f8fafc; color: #64748b; font-size: 0.7rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; padding: 14px 16px; text-align: center; border-bottom: 1.5px solid #e2e8f0; }
+        .audit-table tbody td { padding: 14px 16px; color: #374151; font-size: 0.88rem; text-align: center; border-bottom: 1px solid #f1f5f9; transition: background 0.15s; }
+        .audit-table tbody tr:hover td { background: #f0fdf4; }
+        .audit-table tbody tr:last-child td { border-bottom: none; }
+        .id-badge { display: inline-block; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 8px; padding: 2px 10px; font-size: 0.78rem; font-weight: 700; font-family: 'Inter', monospace; }
+        .user-cell { display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #059669, #10b981); display: flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 700; color: #fff; flex-shrink: 0; }
+        .user-name { font-weight: 600; color: #1e293b; }
+        .status-accepted { display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; border-radius: 100px; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+        .status-rejected { display: inline-flex; align-items: center; gap: 5px; background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; border-radius: 100px; padding: 4px 14px; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; }
+        .btn-accept { display: inline-flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #059669, #10b981); color: #fff; border: none; border-radius: 8px; padding: 6px 14px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 6px rgba(16,185,129,0.25); }
+        .btn-accept:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(16,185,129,0.35); color: #fff; }
+        .btn-reject { display: inline-flex; align-items: center; gap: 5px; background: linear-gradient(135deg, #dc2626, #ef4444); color: #fff; border: none; border-radius: 8px; padding: 6px 14px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; box-shadow: 0 2px 6px rgba(239,68,68,0.25); }
+        .btn-reject:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(239,68,68,0.35); color: #fff; }
+        .btn-edit { display: inline-flex; align-items: center; gap: 5px; background: #ecfdf5; color: #059669; border: 1.5px solid #a7f3d0; border-radius: 8px; padding: 5px 13px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-edit:hover { background: #d1fae5; color: #065f46; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(16,185,129,0.15); }
+        .btn-remove { display: inline-flex; align-items: center; gap: 5px; background: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; border-radius: 8px; padding: 5px 13px; font-size: 0.78rem; font-weight: 600; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-remove:hover { background: #fee2e2; transform: translateY(-1px); box-shadow: 0 2px 8px rgba(239,68,68,0.15); }
+        .actions-cell { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; }
+        .empty-state { text-align: center; padding: 64px 20px; color: #94a3b8; }
+        .empty-state i { font-size: 2.5rem; margin-bottom: 12px; display: block; color: #cbd5e1; }
+        .empty-state p { font-size: 0.9rem; margin: 0; }
+        .modal-light .modal-content { background: #ffffff; border: 1px solid #e5e7eb; border-radius: 16px; color: #1e293b; box-shadow: 0 20px 60px rgba(0,0,0,0.12); }
+        .modal-light .modal-header { border-bottom: 1px solid #f1f5f9; padding: 20px 24px; background: #f9fffe; border-radius: 16px 16px 0 0; }
+        .modal-light .modal-footer { border-top: 1px solid #f1f5f9; padding: 16px 24px; background: #f9fffe; border-radius: 0 0 16px 16px; }
+        .modal-light .modal-body { padding: 24px; }
+        .modal-light label { color: #475569; font-size: 0.82rem; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 6px; display: block; }
+        .modal-light .form-control { background: #f8fafc; border: 1.5px solid #e2e8f0; color: #1e293b; border-radius: 10px; padding: 10px 14px; font-size: 0.88rem; transition: all 0.25s; }
+        .modal-light .form-control:focus { outline: none; border-color: #10b981; background: #fff; box-shadow: 0 0 0 3px rgba(16,185,129,0.12); color: #1e293b; }
+        .modal-light .form-control::placeholder { color: #94a3b8; }
+        .modal-title-delete { color: #dc2626; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .modal-title-edit { color: #059669; font-size: 1rem; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+        .delete-warning { background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; padding: 14px; font-size: 0.85rem; color: #6b7280; margin-bottom: 16px; }
+        .table-scroll { overflow-x: auto; }
+        ::-webkit-scrollbar { height: 4px; width: 4px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
     </style>
-
-    <style>
-        * {
-            font-family: 'Outfit', sans-serif;
-        }
-
-        i {
-            font-family: "Font Awesome 7 Free";
-            font-weight: 900;
-        }
-
-        .navbar-nav .nav-link,
-        .navbar-brand,
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        h6 {
-            font-family: 'Outfit', sans-serif !important;
-        }
-    </style>
-
 </head>
 
 <body data-bs-spy="scroll" data-bs-target="#navBar" id="weddingHome">
 
     <script>
         {% for message in messages %}
-        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Default Info
+        var bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)";
         var tag = "{{ message.tags|default:'' }}";
-
-        if (tag.indexOf("error") !== -1) {
-            bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; // Deep Red/Orange for Error
-        } else if (tag.indexOf("warning") !== -1) {
-            bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; // Orange/Yellow for Warning
-        } else if (tag.indexOf("success") !== -1) {
-            bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; // Green for Success
-        } else if (tag.indexOf("info") !== -1 || tag === "") {
-            bgColor = "linear-gradient(to right, #2193b0, #6dd5ed)"; // Blue for Info
-        }
-
-        Toastify({
-            text: "{{ message|escapejs }}",
-            duration: 3000,
-            gravity: "bottom",
-            position: "right",
-            style: {
-                background: bgColor
-            }
-        }).showToast();
+        if (tag.indexOf("error") !== -1) { bgColor = "linear-gradient(to right, #ff5f6d, #ffc371)"; }
+        else if (tag.indexOf("warning") !== -1) { bgColor = "linear-gradient(to right, #f2994a, #f2c94c)"; }
+        else if (tag.indexOf("success") !== -1) { bgColor = "linear-gradient(to right, #00b09b, #96c93d)"; }
+        Toastify({ text: "{{ message|escapejs }}", duration: 3000, gravity: "bottom", position: "right", style: { background: bgColor } }).showToast();
         {% endfor %}
     </script>
 
-    <style>
-        
-.fixed-table-wrapper {
-    max-width: 100%;
-    margin: 25px auto;
-    padding: 15px;
-    background: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    overflow-x: auto;
-}
-
-.fixed-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 14px;
-    color: #333;
-}
-
-.fixed-table thead th {
-    background: #f5f5f5;
-    color: #333;
-    padding: 12px;
-    text-transform: uppercase;
-    border-bottom: 2px solid #ddd;
-    text-align: center;
-}
-
-.fixed-table tbody td {
-    padding: 10px;
-    border-bottom: 1px solid #eee;
-    text-align: center;
-    background: #ffffff;
-}
-
-.fixed-table tbody tr:nth-child(even) td {
-    background: #fafafa;
-}
-
-.fixed-table tbody tr:hover {
-    background: #f1f7ff;
-}
-
-    </style>
-
     <!-- Spinner Start -->
-    <div id="spinner"
-        class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50  d-flex align-items-center justify-content-center">
+    <div id="spinner" class="show w-100 vh-100 bg-white position-fixed translate-middle top-50 start-50 d-flex align-items-center justify-content-center">
         <div class="spinner-grow text-primary" role="status"></div>
     </div>
-    <!-- Spinner End -->
 
-
-    <!-- Navbar start -->
+    <!-- Navbar -->
     <div class="container-fluid sticky-top px-0">
         <div class="container-fluid">
             <div class="container px-0">
@@ -194,18 +111,14 @@
                     <a href="/admins_home/" class="navbar-brand">
                         <h4 class="text-primary display-6 fw-bold mb-0">ADMIN</h4>
                     </a>
-                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse"
-                        data-bs-target="#navbarCollapse">
+                    <button class="navbar-toggler py-2 px-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                         <span class="fas fa-bars text-primary"></span>
                     </button>
                     <div class="collapse navbar-collapse py-3" id="navbarCollapse">
                         <div class="navbar-nav mx-auto border-top">
-                            <a href="/admins_home/" class="nav-item nav-link ">HOME</a>
+                            <a href="/admins_home/" class="nav-item nav-link">HOME</a>
                             <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle active" href="#" id="auditDropdown" role="button"
-                                    data-bs-toggle="dropdown">
-                                    AUDIT
-                                </a>
+                                <a class="nav-link dropdown-toggle active" href="#" id="auditDropdown" role="button" data-bs-toggle="dropdown">AUDIT</a>
                                 <div class="dropdown-menu m-0">
                                     <a class="dropdown-item" href="/cul_approve/">CULTIVATOR</a>
                                     <a class="dropdown-item active" href="/acc_approve/">ACCUMULATOR</a>
@@ -216,10 +129,7 @@
                             <a href="/admins_req/" class="nav-item nav-link">PROVISION</a>
                             <a href="/admins_status/" class="nav-item nav-link">TELEMETRY</a>
                             <div class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="dossierDropdown" role="button"
-                                    data-bs-toggle="dropdown">
-                                    DOSSIER
-                                </a>
+                                <a class="nav-link dropdown-toggle" href="#" id="dossierDropdown" role="button" data-bs-toggle="dropdown">DOSSIER</a>
                                 <div class="dropdown-menu m-0">
                                     <a class="dropdown-item" href="/rep_cul/">CULTIVATOR</a>
                                     <a class="dropdown-item" href="/rep_acc/">ACCUMULATOR</a>
@@ -229,152 +139,156 @@
                             </div>
                         </div>
                         <div class="d-flex align-items-center flex-nowrap pt-xl-0">
-                            <a href="/admins_status/"
-                                class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative"
-                                title="Notifications">
+                            <a href="/admins_status/" class="btn btn-primary btn-primary-outline-0 py-2 px-3 ms-4 position-relative" title="Notifications">
                                 <i class="fas fa-bell"></i>
                                 {% if total_notifications and total_notifications > 0 %}
-                                <span
-                                    class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
-                                    style="font-size: 0.7rem; padding: 0.35em 0.5em; transform: translate(-30%, -30%) !important;">
-                                    {{ total_notifications }}
-                                </span>
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size:0.7rem;padding:0.35em 0.5em;transform:translate(-30%,-30%) !important;">{{ total_notifications }}</span>
                                 {% endif %}
                             </a>
-                            <a href="/admins_logout/"
-                                class="btn btn-primary btn-primary-outline-0 py-2 px-4 ms-4">Logout</a>
+                            <a href="/admins_logout/" class="btn btn-primary btn-primary-outline-0 py-2 px-4 ms-4">Logout</a>
                         </div>
                     </div>
                 </nav>
             </div>
         </div>
     </div>
-    <!-- Navbar End -->
 
-
-
-    <!-- Carousel Start -->
-    <div class="container-fluid carousel-header px-0">
-        <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
-
-            <div class="carousel-inner" role="listbox">
-                <div class="carousel-item active">
-                    <img src="{% static 'admins/home/img/carousel-2.jpg' %}" class="img-fluid" alt="Image">
-                    <div class="carousel-caption">
-                        <div class="p-3 mx-auto animated zoomIn" style="width: 100%; max-width: none;">
-
-                            <h2
-                                style="text-align:center; font-size: 30px; color: #EAA636; letter-spacing: 2px; text-shadow: 0 0 6px rgba(234,166,54,0.8), 0 0 16px rgba(234,166,54,0.6), 0 0 32px rgba(140,90,18,0.9);">
-                                ACCUMULATOR APPROVE</h2>
-
-                            <div class="fixed-table-wrapper" style="width: 100%;">
-                                <div class="table-responsive">
-                                    <table class="fixed-table">
-                                        <thead>
-                                            <tr>
-                                                <th>ID</th>
-                                                <th>NAME</th>
-                                                <th>DEPARTMENT</th>
-                                                <th>EMAIL</th>
-                                                <th>MOBILE NUMBER</th>
-                                                <th colspan="2">ACTION</th>
-                                            </tr>
-                                        </thead>
-
-                                        <tbody>
-                                            {% if data %}
-                                            {% for i in data %}
-                                            <tr>
-                                                <td>{{ i.rh_id }}</td>
-                                                <td>{{ i.name }}</td>
-                                                <td>{{ i.department }}</td>
-                                                <td>{{ i.email }}</td>
-                                                <td>{{ i.mobile_no }}</td>
-
-                                                {% if not i.accept and not i.reject %}
-                                                <td><a href="/accept/{{ i.id }}" class="action-btn">ACCEPT</a></td>
-                                                <td><a href="/reject/{{ i.id }}" class="action-btn">REJECT</a></td>
-
-                                                {% elif i.accept and not i.reject %}
-                                                <td><span class="badge bg-success rounded-pill px-3 py-2" style="letter-spacing: 1px;">ACCEPTED</span></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1" style="font-weight: bold; letter-spacing: 1px;" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}">
-                                                        REMOVE
-                                                    </button>
-                                                </td>
-
-                                                {% elif not i.accept and i.reject %}
-                                                <td>
-                                                    <button type="button" class="btn btn-sm btn-outline-danger rounded-pill px-3 py-1" style="font-weight: bold; letter-spacing: 1px;" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}">
-                                                        REMOVE
-                                                    </button>
-                                                </td>
-                                                <td><span class="badge bg-danger rounded-pill px-3 py-2" style="letter-spacing: 1px;">REJECTED</span></td>
-                                                {% endif %}
-                                            </tr>
-                                            {% endfor %}
-                                            {% else %}
-                                            <tr>
-                                                <td colspan="7">NO DATA</td>
-                                            </tr>
-                                            {% endif %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-
-
-            </div>
-
+    <!-- Page Hero -->
+    <div class="page-hero">
+        <div class="container">
+            <div class="hero-badge"><i class="fas fa-database fa-sm"></i> AUDIT MODULE</div>
+            <h1>ACCUMULATOR APPROVAL</h1>
+            <p>Review, approve, update and manage accumulator registrations</p>
         </div>
     </div>
-    <!-- Carousel End -->
 
+    <!-- Main Content -->
+    <div class="container">
+        <div class="audit-card">
+            <div class="audit-card-header">
+                <h2 class="audit-card-title"><i class="fas fa-users-cog"></i> Accumulator Registry</h2>
+                <div class="search-box">
+                    <i class="fas fa-search search-icon"></i>
+                    <input type="text" id="tableSearch" placeholder="Search records…" oninput="filterTable()">
+                </div>
+            </div>
+            <div class="table-scroll">
+                <table class="audit-table" id="auditTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th><th>USER</th><th>DEPARTMENT</th><th>EMAIL</th><th>MOBILE</th><th>STATUS</th><th>ACTIONS</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if data %}
+                        {% for i in data %}
+                        <tr>
+                            <td><span class="id-badge">{{ i.rh_id }}</span></td>
+                            <td>
+                                <div class="user-cell">
+                                    <div class="user-avatar">{{ i.name|slice:":2"|upper }}</div>
+                                    <span class="user-name">{{ i.name }}</span>
+                                </div>
+                            </td>
+                            <td>{{ i.department }}</td>
+                            <td>{{ i.email }}</td>
+                            <td>{{ i.mobile_no }}</td>
+                            <td>
+                                {% if i.accept and not i.reject %}
+                                <span class="status-accepted"><i class="fas fa-check-circle fa-xs"></i> ACCEPTED</span>
+                                {% elif not i.accept and i.reject %}
+                                <span class="status-rejected"><i class="fas fa-times-circle fa-xs"></i> REJECTED</span>
+                                {% else %}
+                                <span style="color:#94a3b8;font-size:0.8rem;font-weight:600;">— PENDING —</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="actions-cell">
+                                    {% if not i.accept and not i.reject %}
+                                    <a href="/accept/{{ i.id }}" class="btn-accept"><i class="fas fa-check fa-xs"></i> Accept</a>
+                                    <a href="/reject/{{ i.id }}" class="btn-reject"><i class="fas fa-times fa-xs"></i> Reject</a>
+                                    {% endif %}
+                                    <button class="btn-edit" data-bs-toggle="modal" data-bs-target="#editModal{{ i.id }}"><i class="fas fa-pen fa-xs"></i> Edit</button>
+                                    <button class="btn-remove" data-bs-toggle="modal" data-bs-target="#deleteModal{{ i.id }}"><i class="fas fa-trash fa-xs"></i> Remove</button>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        {% else %}
+                        <tr><td colspan="7"><div class="empty-state"><i class="fas fa-inbox"></i><p>No accumulator records found.</p></div></td></tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
-
-    <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{% static 'admins/home/lib/wow/wow.min.js' %}"></script>
     <script src="{% static 'admins/home/lib/easing/easing.min.js' %}"></script>
     <script src="{% static 'admins/home/lib/waypoints/waypoints.min.js' %}"></script>
     <script src="{% static 'admins/home/lib/lightbox/js/lightbox.min.js' %}"></script>
-
-
-    <!-- Template Javascript -->
     <script src="{% static 'admins/home/js/main.js' %}"></script>
+    <script>
+        function filterTable() {
+            var q = document.getElementById('tableSearch').value.toLowerCase();
+            document.querySelectorAll('#auditTable tbody tr').forEach(function(row) {
+                row.style.display = row.textContent.toLowerCase().includes(q) ? '' : 'none';
+            });
+        }
+    </script>
 
-    <!-- Modals -->
     {% if data %}
     {% for i in data %}
-                                            <!-- Delete Modal -->
-                                            <div class="modal fade" id="deleteModal{{ i.id }}" tabindex="-1" aria-hidden="true">
-                                              <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content" style="border-radius: 12px; border: 1px solid #ff4d4d; box-shadow: 0 10px 30px rgba(255, 77, 77, 0.2);">
-                                                  <div class="modal-header" style="background-color: #ffe6e6; border-bottom: 1px solid #ffcccc; border-radius: 12px 12px 0 0;">
-                                                    <h5 class="modal-title" style="color: #d9534f; font-weight: bold;"><i class="fas fa-exclamation-triangle me-2"></i>Confirm Deletion</h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                  </div>
-                                                  <div class="modal-body text-start" style="padding: 25px;">
-                                                    <p style="color: #555; font-size: 15px;">This action <strong>cannot</strong> be undone. This will permanently delete the user <strong style="color: #333;">{{ i.name }}</strong> ({{ i.email }}).</p>
-                                                    <p style="color: #555; font-size: 15px;">Please type <strong style="user-select: none;">{{ i.name }}</strong> to confirm.</p>
-                                                    <input type="text" class="form-control" onkeyup="if(this.value === '{{ i.name }}') { document.getElementById('deleteBtn{{ i.id }}').classList.remove('disabled'); } else { document.getElementById('deleteBtn{{ i.id }}').classList.add('disabled'); }" style="border: 2px solid #ddd; border-radius: 8px; padding: 10px; color: #000 !important;">
-                                                  </div>
-                                                  <div class="modal-footer" style="border-top: 1px solid #eee; background-color: #f9f9f9; border-radius: 0 0 12px 12px;">
-                                                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
-                                                    <a href="/remove_user/{{ i.id }}/" class="btn btn-danger disabled rounded-pill px-4" id="deleteBtn{{ i.id }}" style="font-weight: bold;">I understand, delete user</a>
-                                                  </div>
-                                                </div>
-                                              </div>
-                                            </div>
-                                            <!-- End Modal -->
+    <div class="modal fade" id="editModal{{ i.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content modal-light">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-title-edit"><i class="fas fa-user-edit"></i> Update User — {{ i.name }}</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="POST" action="/update_user/{{ i.id }}/">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="row g-3">
+                            <div class="col-md-6"><label>FULL NAME</label><input type="text" name="name" class="form-control" value="{{ i.name }}" required></div>
+                            <div class="col-md-6"><label>DEPARTMENT</label><input type="text" name="department" class="form-control" value="{{ i.department }}"></div>
+                            <div class="col-md-6"><label>EMAIL ADDRESS</label><input type="email" name="email" class="form-control" value="{{ i.email }}" required></div>
+                            <div class="col-md-6"><label>MOBILE NUMBER</label><input type="text" name="mobile_no" class="form-control" value="{{ i.mobile_no }}"></div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn rounded-pill px-5" style="background:linear-gradient(135deg,#059669,#10b981);color:#fff;border:none;font-weight:600;"><i class="fas fa-save me-2"></i>Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="deleteModal{{ i.id }}" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-light">
+                <div class="modal-header">
+                    <h5 class="modal-title modal-title-delete"><i class="fas fa-exclamation-triangle"></i> Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="delete-warning"><strong>⚠ This action cannot be undone.</strong> This will permanently delete the user <strong>{{ i.name }}</strong> ({{ i.email }}).</div>
+                    <label>Type <strong style="color:#dc2626;">{{ i.name }}</strong> to confirm deletion</label>
+                    <input type="text" class="form-control mt-1" placeholder="Enter name to confirm…"
+                        onkeyup="if(this.value === '{{ i.name }}') { document.getElementById('deleteBtn{{ i.id }}').classList.remove('disabled'); } else { document.getElementById('deleteBtn{{ i.id }}').classList.add('disabled'); }"
+                        style="border-color:#fca5a5;">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-pill px-4" data-bs-dismiss="modal">Cancel</button>
+                    <a href="/remove_user/{{ i.id }}/" class="btn btn-danger disabled rounded-pill px-4" id="deleteBtn{{ i.id }}" style="font-weight:700;"><i class="fas fa-trash me-2"></i>Delete User</a>
+                </div>
+            </div>
+        </div>
+    </div>
     {% endfor %}
     {% endif %}
 
 </body>
-
 </html>
