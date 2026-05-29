@@ -398,37 +398,28 @@
                         {% endif %}
 
                         <!-- Project Selection -->
-                        <form method="GET" action="/phase_two/" class="mb-5" id="projectForm">
-                            <div class="row g-2 align-items-center">
-                                <div class="col-12 col-md-auto">
-                                    <div class="form-control fw-bold text-center border-0 text-white"
-                                        style="background: #10b981;">Select Project ID</div>
-                                </div>
-                                <div class="col-12 col-md">
-                                    <select name="project_id" id="projectSelect" class="form-select w-100" onchange="this.form.submit()" required>
-                                        <option value="" disabled {% if not data %}selected{% endif %}>
-                                            -- Choose a Project --
-                                        </option>
-                                        {% for p in projects %}
-                                        <option value="{{ p.project_id }}" {% if data and data.project_id == p.project_id %}selected{% endif %}>
-                                            Project {{ p.project_id }} -{{ p.location }}
-                                        </option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                                <div class="col-12 col-md-auto">
-                                    <button type="button" class="btn btn-success fw-bold w-100" onclick="toggleScanner()">
-                                        <i class="fas fa-qrcode"></i> Scan QR
-                                    </button>
-                                </div>
+                        <form method="GET" action="/phase_two/" class="mb-5">
+                            <div class="input-group">
+                                <span class="input-group-text fw-bold"
+                                    style="background: #10b981; color: white; border: none;">Select Project ID</span>
+                                <select name="project_id" class="form-select" onchange="this.form.submit()" required>
+
+                                    <option value="" disabled {% if not data %}selected{% endif %}>
+                                        -- Choose a Project --
+                                    </option>
+
+                                    {% for p in projects %}
+
+                                    <option value="{{ p.project_id }}" {% if data and data.project_id==p.project_id
+                                        %}selected{% endif %}>Project {{ p.project_id }} - {{ p.location }}
+
+                                    </option>
+
+                                    {% endfor %}
+
+                                </select>
                             </div>
                         </form>
-
-                        <!-- QR Scanner Container -->
-                        <div id="reader-container" style="display: none; background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                            <div id="reader" width="100%"></div>
-                            <button type="button" class="btn btn-danger btn-sm mt-2 w-100" onclick="toggleScanner()">Close Scanner</button>
-                        </div>
 
                         {% if data %}
                         <div class="mb-4">
@@ -438,9 +429,12 @@
                                 <div class="col-md-6 mb-3"><strong>Project ID:</strong> {{ data.project_id }}</div>
                                 <div class="col-md-6 mb-3"><strong>Location:</strong> {{ data.location }}</div>
                                 <div class="col-md-6 mb-3"><strong>Soil Type:</strong> {{ data.soil_type }}</div>
-                                <div class="col-md-6 mb-3"><strong>Growth Duration:</strong> {{ data.growth_duration }}days</div>
-                                <div class="col-md-6 mb-3"><strong>Initial Fern Biomass:</strong> {{data.initial_fern_biomass }} g</div>
-                                <div class="col-md-6 mb-3"><strong>Initial Soil REE:</strong> {{data.initial_soil_ree}}mg/kg</div>
+                                <div class="col-md-6 mb-3"><strong>Growth Duration:</strong> {{ data.growth_duration }}
+                                    days</div>
+                                <div class="col-md-6 mb-3"><strong>Initial Fern Biomass:</strong> {{
+                                    data.initial_fern_biomass }} g</div>
+                                <div class="col-md-6 mb-3"><strong>Initial Soil REE:</strong> {{ data.initial_soil_ree
+                                    }} mg/kg</div>
                             </div>
                         </div>
 
@@ -456,56 +450,51 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">Final Fern Biomass (g)</label>
-                                    <input type="number" step="0.01" min="50" max="500" class="form-control" name="final_fern_biomass"
-                                        placeholder="Enter value between 50 - 500"
-                                        value="{{ data.final_fern_biomass|default_if_none:'' }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="final_fern_biomass"
+                                        value="{{ data.final_fern_biomass|default_if_none:'' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">Harvested Plant Weight (g)</label>
-                                    <input type="number" step="0.01" min="50" max="500" class="form-control" name="harvested_biomass"
-                                        placeholder="Enter value between 50 - 500"
-                                        value="{{ data.harvested_biomass|default_if_none:'' }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="harvested_biomass"
+                                        value="{{ data.harvested_biomass|default_if_none:'' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">Final Soil REE (mg/kg)</label>
-                                    <input type="number" step="0.01" min="10" max="3000" class="form-control" name="final_soil_ree"
-                                        placeholder="Enter value between 10 - 3000"
-                                        value="{{ data.final_soil_ree|default_if_none:'' }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="final_soil_ree"
+                                        value="{{ data.final_soil_ree|default_if_none:'' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">Plant REE Concentration (mg/kg)</label>
-                                    <input type="number" step="0.01" min="10" max="3000" class="form-control" name="plant_ree_conc"
-                                        placeholder="Enter value between 10 - 3000"
-                                        value="{{ data.plant_ree_conc|default_if_none:'' }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="plant_ree_conc"
+                                        value="{{ data.plant_ree_conc|default_if_none:'' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">Extraction Efficiency (%)</label>
-                                    <input type="number" step="0.01" min="40" max="95" class="form-control" name="extraction_eff"
-                                        placeholder="Enter value between 40 - 95"
-                                        value="{{ data.extraction_eff|default_if_none:'' }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="extraction_eff"
+                                        value="{{ data.extraction_eff|default_if_none:'' }}">
                                 </div>
 
                                 <div class="col-md-6 mb-3">
                                     <label class="form-label fw-bold">Recovery (%)</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="recovery"
-                                        placeholder="Enter value between 0 - 100"
-                                        value="{{ data.recovery|default_if_none:'' }}" required>
+                                    <input type="number" step="0.01" class="form-control" name="recovery"
+                                        value="{{ data.recovery|default_if_none:'' }}">
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Safety Index</label>
+                                    <input type="number" step="0.01" class="form-control" name="safety_index"
+                                        value="{{ data.safety_index|default_if_none:'' }}">
                                 </div>
                             </div>
 
                             <div class="text-center mt-4">
-                                {% if data.final_fern_biomass != None and data.harvested_biomass != None and data.final_soil_ree != None and data.plant_ree_conc != None and data.extraction_eff != None and data.recovery != None %}
-                                <button type="submit" class="btn btn-warning px-5 py-2 fw-bold"
-                                    style="border-radius: 10px;" onclick="return confirm('Are you sure you want to update this Phase 2 data?');">Update Phase 2 Data</button>
-                                {% else %}
                                 <button type="submit" class="btn btn-success px-5 py-2 fw-bold"
                                     style="background: linear-gradient(to right, #059669, #10b981); border: none; border-radius: 10px;">Submit
                                     Phase 2 Data</button>
-                                {% endif %}
                             </div>
                         </form>
                         {% else %}
@@ -515,124 +504,48 @@
                         </div>
                         {% endif %}
 
+                        {% if latest_qr %}
+                        <!-- Modal for QR -->
+                        <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content"
+                                    style="border-radius: 15px; background: rgba(255,255,255,0.95);">
+                                    <div class="modal-header border-0">
+                                        <h5 class="modal-title fw-bold" style="color: #064e3b;">Project Provisioned: QR
+                                            Code</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body text-center">
+                                        <p>Project Tracking ID: <strong>{{ latest_tracking_id }}</strong></p>
+                                        <img src="{{ latest_qr }}" alt="QR Code" class="img-fluid my-2"
+                                            style="max-width: 250px; border: 4px solid #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                                    </div>
+                                    <div class="modal-footer border-0 justify-content-center">
+                                        <a href="{{ latest_qr }}" download="Project_{{ latest_tracking_id }}_QR.png"
+                                            class="btn btn-success"
+                                            style="background: linear-gradient(to right, #059669, #10b981); border: none;">Download
+                                            PNG</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <script>
+                            document.addEventListener("DOMContentLoaded", function () {
+                                var qrModal = new bootstrap.Modal(document.getElementById('qrModal'));
+                                qrModal.show();
+                            });
+                        </script>
+                        {% endif %}
+
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    {% if latest_qr %}
-    <!-- Modal for QR -->
-    <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content"
-                style="border-radius: 15px; background: rgba(255,255,255,0.95);">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold" style="color: #064e3b;">Project Provisioned: QR
-                        Code</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <p>Project Tracking ID: <strong>{{ latest_tracking_id }}</strong></p>
-                    <img src="{{ latest_qr }}" alt="QR Code" class="img-fluid my-2"
-                        style="max-width: 250px; border: 4px solid #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
-                </div>
-                <div class="modal-footer border-0 justify-content-center">
-                    <a href="{{ latest_qr }}" download="Project_{{ latest_tracking_id }}_QR.png"
-                        class="btn btn-success"
-                        style="background: linear-gradient(to right, #059669, #10b981); border: none;">Download
-                        PNG</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var qrModal = new bootstrap.Modal(document.getElementById('qrModal'));
-            qrModal.show();
-        });
-    </script>
-    {% endif %}
-
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <script>
-        // QR Scanner Logic
-        let html5QrcodeScanner = null;
-
-        function toggleScanner() {
-            const container = document.getElementById('reader-container');
-            if (container.style.display === 'none') {
-                container.style.display = 'block';
-                if (!html5QrcodeScanner) {
-                    html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 250, height: 250 } }, false);
-                }
-                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
-            } else {
-                container.style.display = 'none';
-                if (html5QrcodeScanner) {
-                    html5QrcodeScanner.clear();
-                }
-            }
-        }
-
-        function onScanSuccess(decodedText, decodedResult) {
-            const projectId = decodedText;
-            const select = document.getElementById('projectSelect');
-            let optionFound = false;
-
-            for (let i = 0; i < select.options.length; i++) {
-                if (select.options[i].value === projectId) {
-                    select.selectedIndex = i;
-                    optionFound = true;
-                    break;
-                }
-            }
-
-            if (optionFound) {
-                html5QrcodeScanner.clear();
-                document.getElementById('reader-container').style.display = 'none';
-                
-                Toastify({
-                    text: "QR Scanned! Loading Project: " + projectId,
-                    duration: 2000, gravity: "bottom", position: "right",
-                    style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
-                }).showToast();
-                
-                // Submit form after a brief delay
-                setTimeout(() => {
-                    document.getElementById('projectForm').submit();
-                }, 1000);
-            } else {
-                Toastify({
-                    text: "Project ID " + projectId + " not found in the list.",
-                    duration: 3000, gravity: "bottom", position: "right",
-                    style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                }).showToast();
-            }
-        }
-
-        function onScanFailure(error) {
-            // keep scanning
-        }
-
-        // Immediately validate inputs on blur (tabbing away)
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll('input[type="number"]').forEach(input => {
-                input.addEventListener('blur', function() {
-                    if (this.value !== "") {
-                        if (!this.checkValidity()) {
-                            this.reportValidity();
-                            // Use setTimeout to ensure focus is reclaimed after browser events
-                            setTimeout(() => this.focus(), 10);
-                        }
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 
 </html>

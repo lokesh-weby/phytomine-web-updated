@@ -212,66 +212,62 @@
                                             </tr>
                                             {% else %}
                                             <tr>
-                                                {% if i.final_fern_biomass and i.plant_ree_conc and i.harvested_biomass and i.extraction_eff and i.final_soil_ree %}
-                                                    {% if i.cul_decrypt is False %}
-                                                    <td>{{ i.project_id }}</td>
+                                                {% if i.cul_decrypt is False %}
+                                                <td>{{ i.project_id }}</td>
 
-                                                    {% if i.cul_get_key is False %}
-                                                    <td>
-                                                        <a href="/getkey_cul/{{ i.project_id }}/">
-                                                            <button class="action-btn ">Get Key</button>
-                                                        </a>
-                                                    </td>
-                                                    {% else %}
-                                                    <td>
-                                                        <a href="/getkey_cul/{{ i.project_id }}/">
-                                                            <button class="action-btn ">Get Key</button>
-                                                        </a>
-                                                    </td>
-                                                    {% endif %}
-
-                                                    <form action="/decrypt_cul/{{ i.project_id }}/" method="POST">
-                                                        {% csrf_token %}
-                                                        <td>
-                                                            <input type="text" name="decryption_key" required
-                                                                placeholder="Key" class="small-input">
-                                                        </td>
-                                                        <td>
-                                                            <button type="submit" class="action-btn">Decrypt</button>
-                                                        </td>
-                                                    </form>
-
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****"|slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-
-                                                    {% else %}
-                                                    <td>{{ i.project_id }}</td>
-                                                    <td colspan="3" class="decrypted">Decrypted</td>
-                                                    <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.final_fern_biomass }}</td>
-                                                    <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.plant_ree_conc }}</td>
-                                                    <td>{{ i.harvested_biomass }}</td>
-                                                    <td>{{ i.extraction_eff }}</td>
-                                                    <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.final_soil_ree }}</td>
-                                                    <td>{{ i.cul_signed_by|default_if_none:"No Data Available" }}</td>
-                                                    {% endif %}
+                                                {% if i.cul_get_key is False %}
+                                                <td>
+                                                    <a href="/getkey_cul/{{ i.project_id }}/">
+                                                        <button class="action-btn ">Get Key</button>
+                                                    </a>
+                                                </td>
                                                 {% else %}
-                                                    <td>{{ i.project_id }}</td>
-                                                    <td colspan="13" style="color: #e67e22; font-weight: 600; text-align: center;">
-                                                        <i class="fas fa-exclamation-triangle" style="margin-right: 6px;"></i>
-                                                        Phase 2 is not yet completed
+                                                <td>
+                                                    <a href="/getkey_cul/{{ i.project_id }}/">
+                                                        <button class="action-btn ">Get Key</button>
+                                                    </a>
+                                                </td>
+                                                {% endif %}
+
+                                                <form action="/decrypt_cul/{{ i.project_id }}/" method="POST">
+                                                    {% csrf_token %}
+                                                    <td>
+                                                        <input type="text" name="decryption_key" required
+                                                            placeholder="Key" class="small-input">
                                                     </td>
+                                                    <td>
+                                                        <button type="submit" class="action-btn">Decrypt</button>
+                                                    </td>
+                                                </form>
+
+
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****"|slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+
+
+
+                                                {% else %}
+                                                <td>{{ i.project_id }}</td>
+                                                <td colspan="3" class="decrypted">Decrypted</td>
+                                                <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.plant_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.harvested_biomass|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.extraction_eff|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.cul_signed_by|default_if_none:"No Data Available" }}</td>
+
                                                 {% endif %}
                                             </tr>
                                             {% endif %}

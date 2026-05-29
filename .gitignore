@@ -6,4 +6,4 @@ force_unify_fonts.py
 install.cmd
 replace_alerts.py
 fix_table_design.py
-media/qr/*
+
