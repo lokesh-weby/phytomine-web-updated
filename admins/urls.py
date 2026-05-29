@@ -7,6 +7,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("",home),
      path("chat/", chatbot, name="chatbot"),
+     path('update_user/<int:id>/', update_user, name='update_user'),
     path("admins_login/",admins_login),
     path("admins_home/",admins_home),
     path("admins_logout/",admins_logout),
@@ -28,6 +29,8 @@ urlpatterns = [
     path("get_location_proxy/", get_location_proxy),
     path("predict_soil_type_ajax/", predict_soil_type_ajax),
     path("phytomine_dashboard/<str:project_id>/", phytomine_dashboard),
+    path("api/get_project/<str:project_id>/", get_project_data_ajax, name="get_project_data_ajax"),
+    path("phase_two/", phase_two, name="phase_two"),
 ]
 
 urlpatterns += static(settings.MEDIA_URL,document_root=settings

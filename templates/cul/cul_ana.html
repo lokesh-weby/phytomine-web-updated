@@ -198,34 +198,40 @@
                                             {% for i in data %}
                                             <tr>
                                                 {% if i.cul_decrypt is True %}
-                                                <td>{{ i.project_id }}</td>
-                                                <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.final_fern_biomass|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.plant_ree_conc|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.harvested_biomass|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.extraction_eff|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
-                                                <td>{{ i.final_soil_ree|default_if_none:"No Data Available" }}</td>
-                                                <form action="/cul_ana_process/{{ i.project_id }}/" method="POST">
-                                                    {% csrf_token %}
-                                                    {% if i.cul_scan is False %}
-                                                    <td>
-                                                        <button type="submit" class="action-btn">PROCESS</button>
-                                                    </td>
+                                                    {% if i.final_fern_biomass and i.plant_ree_conc and i.harvested_biomass and i.extraction_eff and i.final_soil_ree %}
+                                                    <td>{{ i.project_id }}</td>
+                                                    <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.final_fern_biomass }}</td>
+                                                    <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.plant_ree_conc }}</td>
+                                                    <td>{{ i.harvested_biomass }}</td>
+                                                    <td>{{ i.extraction_eff }}</td>
+                                                    <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                    <td>{{ i.final_soil_ree }}</td>
+                                                    <form action="/cul_ana_process/{{ i.project_id }}/" method="POST">
+                                                        {% csrf_token %}
+                                                        {% if i.cul_scan is False %}
+                                                        <td>
+                                                            <button type="submit" class="action-btn">PROCESS</button>
+                                                        </td>
+                                                        {% else %}
+                                                        <td style="font-style:bold;">SCANNED</td>
+                                                        {% endif %}
+                                                    </form>
                                                     {% else %}
-                                                    <td style="font-style:bold;">SCANNED</td>
+                                                    <td>{{ i.project_id }}</td>
+                                                    <td colspan="12" style="color: #e67e22; font-weight: 600; text-align: center;">
+                                                        <i class="fas fa-exclamation-triangle" style="margin-right: 6px;"></i>
+                                                        Phase 2 is not yet completed
+                                                    </td>
                                                     {% endif %}
-                                                </form>
-
-
-
                                                 {% else %}
-                                                <td colspan="23">Data Not Decrypted</td>
+                                                <td colspan="13">Data Not Decrypted</td>
                                                 {% endif %}
                                             </tr>
                                             {% endfor %}
+
                                             {% else %}
                                             <tr>
                                                 <td colspan="23">NO DATA AVAILABLE</td>

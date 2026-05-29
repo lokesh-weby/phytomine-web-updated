@@ -202,95 +202,26 @@ def sus_ana(request):
     data = phytomine.objects.all() 
     return render(request, "sus/sus_ana.html", {"data": data})
 
-import pandas as pd
-import numpy as np
-from sklearn.preprocessing import StandardScaler
-from sklearn.cluster import KMeans
-
-
-
 def sus_ana_process(request, project_id):
     if request.session.get('department') != "SUSTAINER":
         messages.error(request, "Unauthorized Access")
         return redirect("/sus_login/")
 
-
     data = phytomine.objects.get(project_id=project_id)
 
-
-    dataset_path = os.path.join(settings.BASE_DIR, 'dataset', 'sus.csv')
-    df = pd.read_csv(dataset_path)
-
-    feature_cols = [
-        "INITIAL FERN BIOMASS (g)",
-        "FINAL FERN BIOMASS (g)",
-        "GROWTH DURATION (days)",
-        "SOIL REE CONCENTRATION (mg/kg)",
-        "PLANT REE CONCENTRATION (mg/kg)",
-        "HARVESTED BIOMASS (g)",
-        "EXTRACTION EFFICIENCY (%)",
-        "INITIAL SOIL REE (mg/kg)",
-        "FINAL SOIL REE (mg/kg)",
-        "BIOMASS INCREASE (g)",
-        "GROWTH RATE (g/day)",
-        "GROWTH EFFICIENCY (%)",
-        "TOTAL METAL (mg)",
-        "UPTAKE (%)",
-        "BAF",
-        "RECOVERED METAL (mg)",
-        "EXTRACTION LOSS (mg)",
-        "RECOVERY PERCENTAGE (%)"
-    ]
-
-    target_cols = ["Reduction (%)", "Safety Index"]
-
-    X = df[feature_cols].values
-    y = df[target_cols]
-
-    scaler = StandardScaler()
-    X_scaled = scaler.fit_transform(X)
-
     # ------------------------------
-    # K-Means Clustering
+    # Mathematical Formulas
     # ------------------------------
-    kmeans = KMeans(n_clusters=5, random_state=42)
-    clusters = kmeans.fit_predict(X_scaled)
-    df["cluster"] = clusters
-
-    # ------------------------------
-    # Prepare input
-    # ------------------------------
-    input_data = np.array([[  
-        data.initial_fern_biomass,
-        data.final_fern_biomass,
-        data.growth_duration,
-        data.soil_ree_conc,
-        data.plant_ree_conc,
-        data.harvested_biomass,
-        data.extraction_eff,
-        data.initial_soil_ree,
-        data.final_soil_ree,
-        data.biomass_increase,
-        data.growth_rate,
-        data.growth_eff,
-        data.total_metal,
-        data.uptake,
-        data.baf,
-        data.recovered_metal,
-        data.loss,
-        data.recovery,
-    ]])
-
-    input_scaled = scaler.transform(input_data)
-    cluster_id = kmeans.predict(input_scaled)[0]
-
-    # ------------------------------
-    # Fetch REAL values from dataset
-    # ------------------------------
-    cluster_data = df[df["cluster"] == cluster_id]
-
-    reduction = cluster_data["Reduction (%)"].mean()
-    safety_index = cluster_data["Safety Index"].mean()
+    try:
+        if data.initial_soil_ree > 0:
+            reduction = ((data.initial_soil_ree - data.final_soil_ree) / data.initial_soil_ree) * 100
+            safety_index = (data.final_soil_ree / data.initial_soil_ree) * 10
+        else:
+            reduction = 0.0
+            safety_index = 0.0
+    except (ZeroDivisionError, TypeError, ValueError):
+        reduction = 0.0
+        safety_index = 0.0
 
     # ------------------------------
     # Save results

@@ -12,6 +12,8 @@ from PIL import Image
 import os
 import json
 from google import genai
+import qrcode
+import uuid
 
 # Create your views here.
 
@@ -123,6 +125,7 @@ def reject(request,id):
     messages.info(request, "Rejection Mail Sent")
     return redirect("/admins_home/")
 
+
 def remove_user(request, id):
     if request.session.get('role') != "admin":
         return redirect("/admins_login/")
@@ -135,6 +138,44 @@ def remove_user(request, id):
     elif dept == "ACCUMULATOR": return redirect("/acc_approve/")
     elif dept == "EXTRACTOR": return redirect("/ext_approve/")
     elif dept == "SUSTAINER": return redirect("/sus_approve/")
+    return redirect("/admins_home/") 
+
+def update_user(request, id):
+
+    if request.session.get('role') != "admin":
+        return redirect("/admins_login/")
+
+    data = registration.objects.get(id=id)
+
+    if request.method == "POST":
+
+        data.name = request.POST.get('name')
+        data.department = request.POST.get('department')
+        data.email = request.POST.get('email')
+        data.mobile_no = request.POST.get('mobile_no')
+
+        data.save()
+
+        messages.success(
+            request,
+            f"{data.name} updated successfully."
+        )
+
+        # REDIRECT AFTER UPDATE
+        if data.department == "CULTIVATOR":
+            return redirect("/cul_approve/")
+
+        elif data.department == "ACCUMULATOR":
+            return redirect("/acc_approve/")
+
+        elif data.department == "EXTRACTOR":
+            return redirect("/ext_approve/")
+
+        elif data.department == "SUSTAINER":
+            return redirect("/sus_approve/")
+
+        return redirect("/admins_home/")
+
     return redirect("/admins_home/")
 
 def admins_home(request):
@@ -175,15 +216,39 @@ def admins_req(request):
         try:
             project_id = max(int(last.project_id), 13200) + 1 if last and str(last.project_id).isdigit() else 13201
         except: project_id = 13201
-        phytomine(initial_fern_biomass=p.get("initial_fern_biomass"), final_fern_biomass=p.get("final_fern_biomass"),
-                 growth_duration=p.get("growth_duration"), soil_ree_conc=p.get("soil_ree_conc"),
-                 plant_ree_conc=p.get("plant_ree_conc"), harvested_biomass=p.get("harvested_biomass"),
-                 extraction_eff=p.get("extraction_eff"), initial_soil_ree=p.get("initial_soil_ree"),
-                 final_soil_ree=p.get("final_soil_ree"), project_id=project_id, 
-                 location=p.get("location"), soil_type=p.get("soil_type")).save()
-        messages.info(request,"Requirements Submitted Successfully")
-        return redirect('/admins_req/')
-    return render(request, "admins/admins_req.html")
+        
+        # Save the new entry (Phase 1 fields only)
+        new_project = phytomine(
+            initial_fern_biomass=p.get("initial_fern_biomass"), 
+            growth_duration=p.get("growth_duration"), 
+            soil_ree_conc=p.get("soil_ree_conc"),
+            initial_soil_ree=p.get("initial_soil_ree"),
+            project_id=project_id, 
+            location=p.get("location"), 
+            soil_type=p.get("soil_type")
+        )
+        new_project.save()
+
+        # Generate QR Code (encoding the Project ID)
+        qr = qrcode.make(str(project_id))
+        qr_io = BytesIO()
+        qr.save(qr_io, format='PNG')
+        qr_file = ContentFile(qr_io.getvalue(), name=f"qr_{new_project.tracking_id}.png")
+        new_project.qr_code.save(f"qr_{new_project.tracking_id}.png", qr_file, save=True)
+
+        # Store QR URL in session to display it on the next page
+        request.session['latest_qr'] = new_project.qr_code.url
+        request.session['latest_tracking_id'] = str(new_project.tracking_id)
+
+        messages.info(request,"Phase 1 Data Saved Successfully. QR Code generated!")
+        return redirect(f'/phase_two/?project_id={project_id}')
+    
+    context = {}
+    if 'latest_qr' in request.session:
+        context['latest_qr'] = request.session.pop('latest_qr')
+        context['latest_tracking_id'] = request.session.pop('latest_tracking_id')
+
+    return render(request, "admins/admins_req.html", context)
 
 from django.views.decorators.csrf import csrf_exempt
 from django.core.files.storage import default_storage
@@ -570,3 +635,79 @@ def chatbot(request):
     return JsonResponse({
         "message": "Unrecognized command. Try clicking one of the **Quick Action Tabs** above or type a command like `approvals`, `report [ID]`, or `progress [ID]`."
     })
+
+def phase_two(request):
+    if request.session.get('role') != "admin": return redirect("/admins_login/")
+    
+    # Get all projects for the dropdown
+    projects = phytomine.objects.all().order_by('-id')
+    
+    selected_project = None
+    if request.method == "POST":
+        p = request.POST
+        project_id = p.get("project_id")
+        
+        try:
+            selected_project = phytomine.objects.get(project_id=project_id)
+            
+            # If they submitted the Phase 2 data fields
+            if p.get("final_fern_biomass") or p.get("plant_ree_conc"):
+                if p.get("final_fern_biomass"):
+                    selected_project.final_fern_biomass = float(p.get("final_fern_biomass"))
+                if p.get("harvested_biomass"):
+                    selected_project.harvested_biomass = float(p.get("harvested_biomass"))
+                if p.get("final_soil_ree"):
+                    selected_project.final_soil_ree = float(p.get("final_soil_ree"))
+                if p.get("plant_ree_conc"):
+                    selected_project.plant_ree_conc = float(p.get("plant_ree_conc"))
+                if p.get("extraction_eff"):
+                    selected_project.extraction_eff = float(p.get("extraction_eff"))
+                if p.get("recovery"):
+                    selected_project.recovery = float(p.get("recovery"))
+                if p.get("safety_index"):
+                    selected_project.safety_index = float(p.get("safety_index"))
+                    
+                selected_project.save()
+                messages.success(request, f"Phase 2 data for Project {project_id} updated successfully!")
+                return redirect("/phase_two/")
+                
+        except phytomine.DoesNotExist:
+            messages.error(request, "Invalid Project ID selected.")
+            return redirect("/phase_two/")
+            
+    # If GET or if they just selected a project (via some AJAX or form refresh)
+    project_id_param = request.GET.get('project_id')
+    if project_id_param:
+        try:
+            selected_project = phytomine.objects.get(project_id=project_id_param)
+        except phytomine.DoesNotExist:
+            pass
+            
+    context = {"projects": projects, "data": selected_project}
+    
+    # Check if we just came from Phase 1 and have a new QR code to show
+    if 'latest_qr' in request.session:
+        context['latest_qr'] = request.session.pop('latest_qr')
+        context['latest_tracking_id'] = request.session.pop('latest_tracking_id')
+
+    return render(request, "admins/phase_two.html", context)
+
+@csrf_exempt
+def get_project_data_ajax(request, project_id):
+    if request.session.get('role') != "admin":
+        return JsonResponse({"status": "error", "message": "Unauthorized"}, status=403)
+        
+    try:
+        project = phytomine.objects.get(project_id=project_id)
+        data = {
+            "status": "success",
+            "location": project.location,
+            "soil_type": project.soil_type,
+            "initial_fern_biomass": project.initial_fern_biomass,
+            "growth_duration": project.growth_duration,
+            "initial_soil_ree": project.initial_soil_ree,
+            "soil_ree_conc": project.soil_ree_conc
+        }
+        return JsonResponse(data)
+    except phytomine.DoesNotExist:
+        return JsonResponse({"status": "error", "message": "Project not found"}, status=404)

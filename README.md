@@ -1,71 +1,103 @@
 # Phytomine
 
-Welcome to the **Phytomine** web application project. This is a Django-based platform designed with a multi-modular data processing pipeline.
+**Phytomine** is a Django-based web application built for a modular data processing pipeline. The platform supports staged workflows for cultivation, accumulation, extraction, and sustained data operations.
 
-## Overview
+## What it does
 
-Phytomine is architected to handle complex data workflows, focusing on stages such as cultivation, extraction, and accumulation. The platform ensures data is properly validated, analyzed, and passed through various pipeline stages to maintain high data integrity and flow control.
+Phytomine is designed to process and analyze data through multiple stages while enforcing validation, traceability, and pipeline control.
 
-## Project Modules
+Key capabilities:
+- Modular Django apps for distinct pipeline phases
+- Role-based administration and workflow control
+- Data validation, analysis, and extraction
+- Local development and Docker deployment support
 
-The application is structured around several core Django apps, each handling a distinct phase of the data pipeline:
+## Core Django apps
 
-- **Admins**: Handles overall system administration, user management, and global configurations.
-- **Cultivator**: Responsible for the initial data processing and cultivation stage.
-- **Accumulator**: Analyzes data and acts as an intermediary step, ensuring only successfully analyzed data progresses.
-- **Extractor**: Extracts actionable insights and processed data from the accumulator stage.
-- **Sustainer**: Manages ongoing data maintenance, storage, or sustained operations.
+- **Admins**: system administration, user management, and global configuration
+- **Cultivator**: initial data intake and cultivation processing
+- **Accumulator**: analysis and validation before passing data onward
+- **Extractor**: insight extraction and processed data generation
+- **Sustainer**: ongoing maintenance, storage, and sustained operations
 
-## Technology Stack
+## Technology stack
 
 - **Backend**: Python, Django
-- **Database**: SQLite (default for development/production on current setup)
-- **Frontend**: HTML, CSS, JavaScript (Vanilla/Django Templates)
-- **Deployment**: Docker, AWS (CI/CD via GitHub Actions)
+- **Database**: SQLite (default development configuration)
+- **Frontend**: HTML, CSS, JavaScript with Django templates
+- **Deployment**: Docker / docker-compose
 
-## Setup & Installation
+## Prerequisites
 
-Follow these steps to run the project locally:
+- Python 3.10+ installed
+- `pip` available
+- `git` for cloning
+- Docker and Docker Compose if using containerized deployment
 
-1. **Clone the repository:**
+## Local setup
+
+1. Clone the repository:
    ```bash
    git clone <repository_url>
    cd Phytomine
    ```
 
-2. **Create and activate a virtual environment:**
+2. Create and activate a virtual environment:
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   venv\Scripts\activate   # Windows
+   # source venv/bin/activate   # macOS / Linux
    ```
 
-3. **Install dependencies:**
+3. Install Python dependencies:
    ```bash
    pip install -r requirements.txt
    ```
 
-4. **Environment Variables:**
-   Create a `.env` file in the root directory based on `.env.example` (if available) and configure your database and secret keys.
+4. Configure environment variables:
+   - Create a `.env` file in the repository root if one is required.
+   - Add any required settings such as `SECRET_KEY`, database configuration, and debug flags.
 
-5. **Run Migrations:**
+5. Apply database migrations:
    ```bash
    python manage.py makemigrations
    python manage.py migrate
    ```
 
-6. **Start the Development Server:**
+6. (Optional) Create a superuser for admin access:
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. Run the development server:
    ```bash
    python manage.py runserver
    ```
-   The application will be accessible at `http://127.0.0.1:8000/`.
 
-## Running with Docker
+Open the app in your browser at `http://127.0.0.1:8000/`.
 
-Alternatively, you can run the project using Docker:
+## Running tests
+
+Use Django's test runner to verify the application:
+
+```bash
+python manage.py test
+```
+
+## Docker
+
+Run the app using Docker Compose:
 
 ```bash
 docker-compose up --build
 ```
+
+This builds the image and starts the application using the configuration in `docker-compose.yml`.
+
+## Notes
+
+- This project currently uses SQLite for development by default.
+- Keep confidential keys and sensitive configuration out of version control.
 
 ## License
 

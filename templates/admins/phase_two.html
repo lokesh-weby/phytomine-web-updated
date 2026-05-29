@@ -127,7 +127,9 @@
         }
 
         .form-group input,
-        .form-group select {
+        .form-group select,
+        .form-control,
+        .form-select {
             padding: 12px 16px;
             border-radius: 10px;
             border: 1px solid rgba(6, 78, 59, 0.15);
@@ -139,7 +141,9 @@
         }
 
         .form-group input:focus,
-        .form-group select:focus {
+        .form-group select:focus,
+        .form-control:focus,
+        .form-select:focus {
             outline: none;
             border-color: #10b981;
             background: #ffffff;
@@ -330,8 +334,8 @@
                                     </a>
                                 </div>
                             </div>
-                            <a href="/admins_req/" class="nav-item nav-link active">PROVISION</a>
-                            <a href="/phase_two/" class="nav-item nav-link">PHASE TWO</a>
+                            <a href="/admins_req/" class="nav-item nav-link">PROVISION</a>
+                            <a href="/phase_two/" class="nav-item nav-link active">PHASE TWO</a>
                             <a href="/admins_status/" class="nav-item nav-link">TELEMETRY</a>
                             <div class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="dossierDropdown" role="button"
@@ -371,272 +375,190 @@
 
 
 
-    <!-- Carousel / Form Section -->
-    <div class="container-fluid carousel-header px-0" style="overflow: visible;">
-        <div class="carousel-item active" style="overflow: visible;">
-            <img src="{% static 'admins/home/img/carousel-1.jpg' %}" class="img-fluid w-100" alt="Image"
-                style="position: fixed; top: 0; left: 0; height: 100vh; width: 100vw; object-fit: cover; z-index: -1;">
 
-            <!-- SCROLL FIXED CAPTION -->
-            <div class="carousel-caption d-flex justify-content-center align-items-start"
-                style="position:relative; height:auto; overflow:visible; padding-top:120px; padding-bottom: 80px; left: 0; right: 0;">
+    <!-- Tracking Section -->
+    <div class="container-fluid py-5"
+        style="background: url('/static/admins/home/img/carousel-1.jpg') no-repeat center center fixed; background-size: cover; min-height: 100vh;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
 
-                <div class="form-container">
-                    <h2>PROVISION</h2>
+                    <div
+                        style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 15px; padding: 40px; box-shadow: 0 8px 32px rgba(0,0,0,0.1); color: #000;">
+                        <h2 class="text-center mb-4" style="color: #064e3b; font-weight: 700;">Phase Two: Post-Harvest
+                            Data</h2>
 
-                    <form action="/admins_req/" method="POST">
-                        {% csrf_token %}
+                        {% if messages %}
+                        {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
 
-                        <div class="form-grid">
-
-                            <!-- Location -->
-                            <div class="form-group">
-                                <label>Location</label>
-                                <div class="location-group">
-                                    <input type="text" name="location" id="locationInput" placeholder="Enter Location"
-                                        required>
-                                    <!-- <button type="button" class="btn-get-location" onclick="getLocation()">
-                                        <i class="fas fa-map-marker-alt"></i> Get Location
-                                    </button> -->
+                        <!-- Project Selection -->
+                        <form method="GET" action="/phase_two/" class="mb-5" id="projectForm">
+                            <div class="row g-2 align-items-center">
+                                <div class="col-12 col-md-auto">
+                                    <div class="form-control fw-bold text-center border-0 text-white"
+                                        style="background: #10b981;">Select Project ID</div>
                                 </div>
-                            </div>
-
-                            <!-- Soil Type -->
-                            <div class="form-group">
-                                <label>Soil Type Selection</label>
-                                <div class="location-group">
-                                    <select name="soil_type" id="soilTypeSelect" required>
-                                        <option value="" disabled selected>Select Soil Type</option>
-                                        <option value="Black Soil">Black Soil</option>
-                                        <option value="Clay soil">Clay soil</option>
-                                        <option value="Alluvial soil">Alluvial soil</option>
-                                        <option value="Red soil">Red soil</option>
+                                <div class="col-12 col-md">
+                                    <select name="project_id" id="projectSelect" class="form-select w-100" onchange="this.form.submit()" required>
+                                        <option value="" disabled {% if not data %}selected{% endif %}>
+                                            -- Choose a Project --
+                                        </option>
+                                        {% for p in projects %}
+                                        <option value="{{ p.project_id }}" {% if data and data.project_id == p.project_id %}selected{% endif %}>
+                                            Project {{ p.project_id }} -{{ p.location }}
+                                        </option>
+                                        {% endfor %}
                                     </select>
-
-                                    <input type="file" id="soilImageInput" style="display: none;" accept="image/*"
-                                        onchange="predictSoilType()">
-
-                                    <!-- <button type="button" id="btnPredict" class="btn-get-location"
-                                        onclick="document.getElementById('soilImageInput').click()">
-                                        <i class="fas fa-camera"></i> Predict
-                                    </button> -->
+                                </div>
+                                <div class="col-12 col-md-auto">
+                                    <button type="button" class="btn btn-success fw-bold w-100" onclick="toggleScanner()">
+                                        <i class="fas fa-qrcode"></i> Scan QR
+                                    </button>
                                 </div>
                             </div>
+                        </form>
 
+                        <!-- QR Scanner Container -->
+                        <div id="reader-container" style="display: none; background: #fff; padding: 10px; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                            <div id="reader" width="100%"></div>
+                            <button type="button" class="btn btn-danger btn-sm mt-2 w-100" onclick="toggleScanner()">Close Scanner</button>
                         </div>
 
-                        <div class="form-grid" style="margin-top: 20px;">
-                            <!-- Field Measurement Column -->
-                            <div class="measurement-col">
-                                <h4>Field Measurement</h4>
-
-                                <div class="form-group">
-                                    <label>Initial Plant Weight (g)</label>
-                                    <input type="number" name="initial_fern_biomass" min="20" max="150"
-                                        placeholder="Enter value between 20 - 150" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Growth Duration (days)</label>
-                                    <input type="number" name="growth_duration" min="30" max="180"
-                                        placeholder="Enter value between 30 - 180" required>
-                                </div>
-                            </div>
-
-                            <!-- Lab Measurement Column -->
-                            <div class="measurement-col">
-                                <h4>Lab Measurement</h4>
-
-                                <div class="form-group">
-                                    <label>Initial Soil REE (mg/kg)</label>
-                                    <input type="number" name="initial_soil_ree" min="100" max="5000"
-                                        placeholder="Enter value between 100 - 5000" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label>Soil REE Concentration (mg/kg)</label>
-                                    <input type="number" name="soil_ree_conc" min="50" max="5000"
-                                        placeholder="Enter value between 50 - 5000" required>
-                                </div>
+                        {% if data %}
+                        <div class="mb-4">
+                            <h4 style="color: #15803d; border-bottom: 2px solid #22c55e; padding-bottom: 5px;">Project
+                                Details (Phase 1)</h4>
+                            <div class="row mt-3">
+                                <div class="col-md-6 mb-3"><strong>Project ID:</strong> {{ data.project_id }}</div>
+                                <div class="col-md-6 mb-3"><strong>Location:</strong> {{ data.location }}</div>
+                                <div class="col-md-6 mb-3"><strong>Soil Type:</strong> {{ data.soil_type }}</div>
+                                <div class="col-md-6 mb-3"><strong>Growth Duration:</strong> {{ data.growth_duration }}days</div>
+                                <div class="col-md-6 mb-3"><strong>Initial Fern Biomass:</strong> {{data.initial_fern_biomass }} g</div>
+                                <div class="col-md-6 mb-3"><strong>Initial Soil REE:</strong> {{data.initial_soil_ree}}mg/kg</div>
                             </div>
                         </div>
 
-                        <div class="btn-container">
-                            <button type="submit" class="btn btn-submit">Save</button>
-                            <button type="button" class="btn btn-back" onclick="window.location.href='/admins_home/'">
-                                Back
-                            </button>
-                        </div>
+                        <form method="POST" action="/phase_two/">
+                            {% csrf_token %}
+                            <!-- Hidden field to keep track of selected project during POST -->
+                            <input type="hidden" name="project_id" value="{{ data.project_id }}">
 
-                    </form>
+                            <h4
+                                style="color: #15803d; border-bottom: 2px solid #22c55e; padding-bottom: 5px; margin-bottom: 20px;">
+                                Submit Lab & Harvest Data</h4>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Final Fern Biomass (g)</label>
+                                    <input type="number" step="0.01" min="50" max="500" class="form-control" name="final_fern_biomass"
+                                        placeholder="Enter value between 50 - 500"
+                                        value="{{ data.final_fern_biomass|default_if_none:'' }}" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Harvested Plant Weight (g)</label>
+                                    <input type="number" step="0.01" min="50" max="500" class="form-control" name="harvested_biomass"
+                                        placeholder="Enter value between 50 - 500"
+                                        value="{{ data.harvested_biomass|default_if_none:'' }}" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Final Soil REE (mg/kg)</label>
+                                    <input type="number" step="0.01" min="10" max="3000" class="form-control" name="final_soil_ree"
+                                        placeholder="Enter value between 10 - 3000"
+                                        value="{{ data.final_soil_ree|default_if_none:'' }}" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Plant REE Concentration (mg/kg)</label>
+                                    <input type="number" step="0.01" min="10" max="3000" class="form-control" name="plant_ree_conc"
+                                        placeholder="Enter value between 10 - 3000"
+                                        value="{{ data.plant_ree_conc|default_if_none:'' }}" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Extraction Efficiency (%)</label>
+                                    <input type="number" step="0.01" min="40" max="95" class="form-control" name="extraction_eff"
+                                        placeholder="Enter value between 40 - 95"
+                                        value="{{ data.extraction_eff|default_if_none:'' }}" required>
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label fw-bold">Recovery (%)</label>
+                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="recovery"
+                                        placeholder="Enter value between 0 - 100"
+                                        value="{{ data.recovery|default_if_none:'' }}" required>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                {% if data.final_fern_biomass != None and data.harvested_biomass != None and data.final_soil_ree != None and data.plant_ree_conc != None and data.extraction_eff != None and data.recovery != None %}
+                                <button type="submit" class="btn btn-warning px-5 py-2 fw-bold"
+                                    style="border-radius: 10px;" onclick="return confirm('Are you sure you want to update this Phase 2 data?');">Update Phase 2 Data</button>
+                                {% else %}
+                                <button type="submit" class="btn btn-success px-5 py-2 fw-bold"
+                                    style="background: linear-gradient(to right, #059669, #10b981); border: none; border-radius: 10px;">Submit
+                                    Phase 2 Data</button>
+                                {% endif %}
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="text-center mt-5 text-muted">
+                            <i class="fas fa-search fa-4x mb-3"></i>
+                            <h4>Select a project above to enter Phase 2 data</h4>
+                        </div>
+                        {% endif %}
+
+                    </div>
                 </div>
-
             </div>
         </div>
     </div>
 
+    {% if latest_qr %}
+    <!-- Modal for QR -->
+    <div class="modal fade" id="qrModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content"
+                style="border-radius: 15px; background: rgba(255,255,255,0.95);">
+                <div class="modal-header border-0">
+                    <h5 class="modal-title fw-bold" style="color: #064e3b;">Project Provisioned: QR
+                        Code</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <p>Project Tracking ID: <strong>{{ latest_tracking_id }}</strong></p>
+                    <img src="{{ latest_qr }}" alt="QR Code" class="img-fluid my-2"
+                        style="max-width: 250px; border: 4px solid #fff; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+                </div>
+                <div class="modal-footer border-0 justify-content-center">
+                    <a href="{{ latest_qr }}" download="Project_{{ latest_tracking_id }}_QR.png"
+                        class="btn btn-success"
+                        style="background: linear-gradient(to right, #059669, #10b981); border: none;">Download
+                        PNG</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var qrModal = new bootstrap.Modal(document.getElementById('qrModal'));
+            qrModal.show();
+        });
+    </script>
+    {% endif %}
 
-
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'admins/home/lib/wow/wow.min.js' %}"></script>
-    <script src="{% static 'admins/home/lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'admins/home/lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{% static 'admins/home/lib/lightbox/js/lightbox.min.js' %}"></script>
-
-
-    <!-- Template Javascript -->
-    <script src="{% static 'admins/home/js/main.js' %}"></script>
 
     <script>
-        function getLocation() {
-            const btn = document.querySelector('.btn-get-location');
-            const originalContent = btn.innerHTML;
-
-            // Show loading state
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Locating...';
-            btn.disabled = true;
-
-            if (!navigator.geolocation) {
-                Toastify({
-                    text: "Geolocation not supported by this browser",
-                    duration: 3000,
-                    gravity: "bottom",
-                    position: "right",
-                    style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                }).showToast();
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-                return;
-            }
-
-            navigator.geolocation.getCurrentPosition((position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-
-                // Use backend proxy to avoid CORS issues
-                const url = `/get_location_proxy/?lat=${lat}&lon=${lon}`;
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data && data.address) {
-                            const addr = data.address;
-                            // Priority: village -> town -> city -> suburb -> display_name
-                            const locationName = addr.village || addr.town || addr.city || addr.suburb || data.display_name.split(',')[0];
-
-                            document.getElementById('locationInput').value = locationName;
-
-                            Toastify({
-                                text: " Location: " + locationName,
-                                duration: 3000,
-                                gravity: "bottom",
-                                position: "right",
-                                style: {
-                                    background: "linear-gradient(to right, #00b09b, #96c93d)"
-                                }
-                            }).showToast();
-                        } else {
-                            throw new Error("Invalid response from Proxy");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Toastify({
-                            text: "Failed to resolve address",
-                            duration: 3000,
-                            gravity: "bottom",
-                            position: "right",
-                            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                        }).showToast();
-                    })
-                    .finally(() => {
-                        btn.innerHTML = originalContent;
-                        btn.disabled = false;
-                    });
-            }, (error) => {
-                console.error('Geolocation Error:', error);
-                let msg = "Location Access Denied";
-                if (error.code === 1) msg = "Please Enable Location Access";
-                if (error.code === 3) msg = "Location request timed out";
-
-                Toastify({
-                    text: msg,
-                    duration: 3000,
-                    gravity: "bottom",
-                    position: "right",
-                    style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                }).showToast();
-                btn.innerHTML = originalContent;
-                btn.disabled = false;
-            }, {
-                enableHighAccuracy: true,
-                timeout: 15000, // Increased to 15 seconds
-                maximumAge: 0
-            });
-        }
-        function predictSoilType() {
-            const input = document.getElementById('soilImageInput');
-            const btn = document.getElementById('btnPredict');
-            const select = document.getElementById('soilTypeSelect');
-            const info = document.getElementById('predictionInfo');
-            const confidenceVal = document.getElementById('confidenceVal');
-
-            if (input && input.files && input.files[0]) {
-                const formData = new FormData();
-                formData.append('soil_image', input.files[0]);
-
-                const originalContent = btn ? btn.innerHTML : '';
-                if (btn) {
-                    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Analyzing...';
-                    btn.disabled = true;
-                }
-
-                fetch('/predict_soil_type_ajax/', {
-                    method: 'POST',
-                    body: formData
-                })
-                    .then(response => response.json())
-                    .then(data => {
-                        if (data.status === 'success') {
-                            // Set the select value
-                            if (select) select.value = data.soil_type;
-
-                            // Show confidence
-                            if (info) info.style.display = 'block';
-                            if (confidenceVal) confidenceVal.innerText = data.confidence;
-
-                            Toastify({
-                                text: " Soil Predicted: " + data.soil_type,
-                                duration: 3000,
-                                gravity: "bottom",
-                                position: "right",
-                                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
-                            }).showToast();
-                        } else {
-                            throw new Error(data.message || "Prediction failed");
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Toastify({
-                            text: "Classification Error: " + error.message,
-                            duration: 3000,
-                            gravity: "bottom",
-                            position: "right",
-                            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                        }).showToast();
-                    })
-                    .finally(() => {
-                        if (btn) {
-                            btn.innerHTML = originalContent;
-                            btn.disabled = false;
-                        }
-                    });
-            }
-        }
-
         // QR Scanner Logic
         let html5QrcodeScanner = null;
 
@@ -657,54 +579,59 @@
         }
 
         function onScanSuccess(decodedText, decodedResult) {
-            // decodedText should be the project_id
             const projectId = decodedText;
-            html5QrcodeScanner.clear();
-            document.getElementById('reader-container').style.display = 'none';
+            const select = document.getElementById('projectSelect');
+            let optionFound = false;
 
-            Toastify({
-                text: "QR Scanned! Fetching data for Project: " + projectId,
-                duration: 2000, gravity: "bottom", position: "right",
-                style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
-            }).showToast();
+            for (let i = 0; i < select.options.length; i++) {
+                if (select.options[i].value === projectId) {
+                    select.selectedIndex = i;
+                    optionFound = true;
+                    break;
+                }
+            }
 
-            fetch(`/api/get_project/${projectId}/`)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.status === "success") {
-                        document.querySelector('input[name="location"]').value = data.location;
-                        document.querySelector('select[name="soil_type"]').value = data.soil_type;
-                        document.querySelector('input[name="initial_fern_biomass"]').value = data.initial_fern_biomass;
-                        document.querySelector('input[name="growth_duration"]').value = data.growth_duration;
-                        document.querySelector('input[name="initial_soil_ree"]').value = data.initial_soil_ree;
-                        document.querySelector('input[name="soil_ree_conc"]').value = data.soil_ree_conc;
-
-                        Toastify({
-                            text: "Form populated with project data!",
-                            duration: 3000, gravity: "bottom", position: "right",
-                            style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
-                        }).showToast();
-                    } else {
-                        Toastify({
-                            text: "Error: " + data.message,
-                            duration: 3000, gravity: "bottom", position: "right",
-                            style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                        }).showToast();
-                    }
-                })
-                .catch(err => {
-                    console.error("Fetch error:", err);
-                    Toastify({
-                        text: "Error fetching project data",
-                        duration: 3000, gravity: "bottom", position: "right",
-                        style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
-                    }).showToast();
-                });
+            if (optionFound) {
+                html5QrcodeScanner.clear();
+                document.getElementById('reader-container').style.display = 'none';
+                
+                Toastify({
+                    text: "QR Scanned! Loading Project: " + projectId,
+                    duration: 2000, gravity: "bottom", position: "right",
+                    style: { background: "linear-gradient(to right, #00b09b, #96c93d)" }
+                }).showToast();
+                
+                // Submit form after a brief delay
+                setTimeout(() => {
+                    document.getElementById('projectForm').submit();
+                }, 1000);
+            } else {
+                Toastify({
+                    text: "Project ID " + projectId + " not found in the list.",
+                    duration: 3000, gravity: "bottom", position: "right",
+                    style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
+                }).showToast();
+            }
         }
 
         function onScanFailure(error) {
-            // handle scan failure, usually better to ignore and keep scanning
+            // keep scanning
         }
+
+        // Immediately validate inputs on blur (tabbing away)
+        document.addEventListener("DOMContentLoaded", function () {
+            document.querySelectorAll('input[type="number"]').forEach(input => {
+                input.addEventListener('blur', function() {
+                    if (this.value !== "") {
+                        if (!this.checkValidity()) {
+                            this.reportValidity();
+                            // Use setTimeout to ensure focus is reclaimed after browser events
+                            setTimeout(() => this.focus(), 10);
+                        }
+                    }
+                });
+            });
+        });
     </script>
 </body>
 
