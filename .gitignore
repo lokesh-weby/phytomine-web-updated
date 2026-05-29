@@ -5,4 +5,5 @@ dynamic_toast.py
 force_unify_fonts.py
 install.cmd
 replace_alerts.py
+media/qr/*
 
