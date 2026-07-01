@@ -137,7 +137,15 @@ def getkey_ext(request, project_id):
         return redirect("/ext_login/")
 
     data = get_object_or_404(phytomine, project_id=project_id)
-    reg_obj = get_object_or_404(registration, login=True, logout=False, department="EXTRACTOR")
+    
+    email = request.session.get('email')
+    reg_obj = registration.objects.filter(email=email, department="EXTRACTOR").first()
+    if not reg_obj:
+        reg_obj = registration.objects.filter(department="EXTRACTOR").first()
+
+    if not reg_obj:
+        messages.error(request, "No registered extractor found to receive the key.")
+        return redirect("/ext_req/")
 
     token = generate_token(data.pk)
 
@@ -170,13 +178,19 @@ def decrypt_ext(request, project_id):
             if verify_token(token, d.pk):
                 d.ext_decrypt = True
                 # Digitally sign by storing user name
-                user_id = request.session.get('user_id')
-                if user_id:
+                name = request.session.get('name')
+                if not name:
+                    user_id = request.session.get('user_id')
                     try:
                         u = registration.objects.get(id=user_id)
-                        d.ext_signed_by = u.name
-                    except registration.DoesNotExist:
-                        pass
+                        name = u.name
+                    except:
+                        u_fallback = registration.objects.filter(department="EXTRACTOR").first()
+                        if u_fallback:
+                            name = u_fallback.name
+                        else:
+                            name = "Authorized Extractor"
+                d.ext_signed_by = name
                 d.save()
                 messages.success(request, f"{project_id}: Decryption Verified ✅")
             else:

@@ -241,12 +241,14 @@ def admins_req(request):
         request.session['latest_tracking_id'] = str(new_project.tracking_id)
 
         messages.info(request,"Phase 1 Data Saved Successfully. QR Code generated!")
-        return redirect(f'/phase_two/?project_id={project_id}')
+        return redirect('/admins_req/')
     
     context = {}
     if 'latest_qr' in request.session:
         context['latest_qr'] = request.session.pop('latest_qr')
         context['latest_tracking_id'] = request.session.pop('latest_tracking_id')
+    
+    context['all_projects'] = phytomine.objects.all().order_by('-id')
 
     return render(request, "admins/admins_req.html", context)
 

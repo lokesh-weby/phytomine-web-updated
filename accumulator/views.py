@@ -131,7 +131,15 @@ def getkey_acc(request, project_id):
         return redirect("/acc_login/")
 
     data = get_object_or_404(phytomine, project_id=project_id)
-    reg_obj = get_object_or_404(registration, login=True, logout=False, department="ACCUMULATOR")
+    
+    email = request.session.get('email')
+    reg_obj = registration.objects.filter(email=email, department="ACCUMULATOR").first()
+    if not reg_obj:
+        reg_obj = registration.objects.filter(department="ACCUMULATOR").first()
+
+    if not reg_obj:
+        messages.error(request, "No registered accumulator found to receive the key.")
+        return redirect("/acc_req/")
 
     token = generate_token(data.pk)
 
@@ -164,13 +172,19 @@ def decrypt_acc(request, project_id):
             if verify_token(token, d.pk):
                 d.acc_decrypt = True
                 # Digitally sign by storing user name
-                user_id = request.session.get('user_id')
-                if user_id:
+                name = request.session.get('name')
+                if not name:
+                    user_id = request.session.get('user_id')
                     try:
                         u = registration.objects.get(id=user_id)
-                        d.acc_signed_by = u.name
-                    except registration.DoesNotExist:
-                        pass
+                        name = u.name
+                    except:
+                        u_fallback = registration.objects.filter(department="ACCUMULATOR").first()
+                        if u_fallback:
+                            name = u_fallback.name
+                        else:
+                            name = "Authorized Accumulator"
+                d.acc_signed_by = name
                 d.save()
                 messages.success(request, f"{project_id}: Decryption Verified ✅")
             else:

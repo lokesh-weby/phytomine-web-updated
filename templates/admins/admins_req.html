@@ -384,6 +384,31 @@
                 <div class="form-container">
                     <h2>PROVISION</h2>
 
+                    <!-- QR Code Lookup Section -->
+                    <div class="form-group" style="margin-bottom: 25px; background: rgba(209, 250, 229, 0.3); padding: 15px; border-radius: 12px; border: 1px solid rgba(16, 185, 129, 0.2); text-align: left;">
+                        <label for="projectQrSelect" style="margin-top: 0; display: block; font-weight: 600; color: #14532d; font-size: 0.95rem; margin-bottom: 8px;">Select Project to View/Download QR Code</label>
+                        <select id="projectQrSelect" onchange="showSelectedProjectQr()" style="padding: 10px; border-radius: 8px; border: 1px solid rgba(6, 78, 59, 0.15); width: 100%; color: #064e3b; font-weight: 600; background: white;">
+                            <option value="" selected>-- Select a Project --</option>
+                            {% for p in all_projects %}
+                                {% if p.qr_code %}
+                                    <option value="{{ p.qr_code.url }}" data-tracking="{{ p.tracking_id }}" data-project-id="{{ p.project_id }}">Project ID: {{ p.project_id }} ({{ p.location|default:"No Location" }})</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                        
+                        <!-- Selected QR Preview Container -->
+                        <div id="selectedQrContainer" style="display: none; margin-top: 15px; text-align: center; justify-content: center; flex-direction: column; align-items: center; gap: 10px;">
+                            <div style="display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 320px;">
+                                <a id="selectedQrPreviewBtn" href="" target="_blank" class="btn btn-back" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 8px 16px; font-size: 13px; flex: 1; gap: 6px; margin: 0; white-space: nowrap;">
+                                    <i class="fas fa-external-link-alt"></i> Preview QR
+                                </a>
+                                <a id="selectedQrDownloadBtn" href="" download="" class="btn btn-submit" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 8px 16px; font-size: 13px; flex: 1; gap: 6px; margin: 0; white-space: nowrap;">
+                                    <i class="fas fa-download"></i> Download QR
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
                     <form action="/admins_req/" method="POST">
                         {% csrf_token %}
 
@@ -469,6 +494,21 @@
                         </div>
 
                     </form>
+
+                    {% if latest_qr %}
+                    <div class="qr-preview-container animate__animated animate__zoomIn" style="margin-top: 30px; padding: 25px; border-radius: 16px; background: rgba(209, 250, 229, 0.6); border: 2px dashed #059669; text-align: center; max-width: 320px; margin-left: auto; margin-right: auto; box-shadow: 0 4px 15px rgba(6, 78, 59, 0.1);">
+                        <h4 style="color: #064e3b; margin-bottom: 15px; font-weight: 700;">Generated QR Code</h4>
+                        <img src="{{ latest_qr }}" alt="QR Code" style="max-width: 100% !important; width: 180px !important; height: 180px !important; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); margin-bottom: 15px; background: white; padding: 10px; object-fit: contain !important;">
+                        <div style="display: flex; gap: 10px; justify-content: center; width: 100%; max-width: 320px; margin: 0 auto;">
+                            <a href="{{ latest_qr }}" target="_blank" class="btn btn-back" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 8px 16px; font-size: 13px; flex: 1; gap: 6px; margin: 0; white-space: nowrap;">
+                                <i class="fas fa-external-link-alt"></i> Preview QR
+                            </a>
+                            <a href="{{ latest_qr }}" download="qr_{{ latest_tracking_id }}.png" class="btn btn-submit" style="display: inline-flex; align-items: center; justify-content: center; text-decoration: none; padding: 8px 16px; font-size: 13px; flex: 1; gap: 6px; margin: 0; white-space: nowrap;">
+                                <i class="fas fa-download"></i> Download QR
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
                 </div>
 
             </div>
@@ -700,6 +740,28 @@
                         style: { background: "linear-gradient(to right, #ff5f6d, #ffc371)" }
                     }).showToast();
                 });
+        }
+
+        function showSelectedProjectQr() {
+            const select = document.getElementById('projectQrSelect');
+            const container = document.getElementById('selectedQrContainer');
+            const previewBtn = document.getElementById('selectedQrPreviewBtn');
+            const downloadBtn = document.getElementById('selectedQrDownloadBtn');
+            
+            const qrUrl = select.value;
+            if (qrUrl) {
+                const selectedOption = select.options[select.selectedIndex];
+                const trackingId = selectedOption.getAttribute('data-tracking');
+                const projectId = selectedOption.getAttribute('data-project-id');
+                
+                previewBtn.href = qrUrl;
+                downloadBtn.href = qrUrl;
+                downloadBtn.download = `qr_${projectId}_${trackingId}.png`;
+                
+                container.style.display = 'flex';
+            } else {
+                container.style.display = 'none';
+            }
         }
 
         function onScanFailure(error) {

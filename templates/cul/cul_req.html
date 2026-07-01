@@ -223,11 +223,7 @@
                                                         </a>
                                                     </td>
                                                     {% else %}
-                                                    <td>
-                                                        <a href="/getkey_cul/{{ i.project_id }}/">
-                                                            <button class="action-btn ">Get Key</button>
-                                                        </a>
-                                                    </td>
+                                                    <td class="status-text">Got Key</td>
                                                     {% endif %}
 
                                                     <form action="/decrypt_cul/{{ i.project_id }}/" method="POST">
