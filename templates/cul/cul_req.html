@@ -146,7 +146,6 @@
             <div class="navbar-nav mx-auto p-4 p-lg-0">
                 <a href="/cul_home/" class="nav-item nav-link">HOME</a>
                 <a href="/cul_req/" class="nav-item nav-link active">SEEDING</a>
-                <a href="/cul_ana/" class="nav-item nav-link">MORPHOGENESIS</a>
                 <a href="/cul_rep/" class="nav-item nav-link">CANOPY</a>
                 <a href="/cul_logout/" class="nav-item nav-link">LOGOUT</a>
             </div>
@@ -208,66 +207,90 @@
                                             {% if i.initial_fern_biomass is None %}
                                             <tr>
                                                 <td>{{ i.project_id }}</td>
-                                                <td colspan="13" style="text-align: center; font-weight: bold; color: gray; letter-spacing: 2px;">DATA NOT PROCESSED</td>
+                                                <td colspan="13"
+                                                    style="text-align: center; font-weight: bold; color: gray; letter-spacing: 2px;">
+                                                    DATA NOT PROCESSED</td>
                                             </tr>
                                             {% else %}
                                             <tr>
-                                                {% if i.final_fern_biomass and i.plant_ree_conc and i.harvested_biomass and i.extraction_eff and i.final_soil_ree %}
-                                                    {% if i.cul_decrypt is False %}
-                                                    <td>{{ i.project_id }}</td>
+                                                {% if i.final_fern_biomass and i.plant_ree_conc %}
+                                                {% if i.harvested_biomass and i.extraction_eff and i.final_soil_ree %}
+                                                {% if i.cul_decrypt is False %}
+                                                <td>{{ i.project_id }}</td>
 
-                                                    {% if i.cul_get_key is False %}
-                                                    <td>
-                                                        <a href="/getkey_cul/{{ i.project_id }}/">
-                                                            <button class="action-btn ">Get Key</button>
-                                                        </a>
-                                                    </td>
-                                                    {% else %}
-                                                    <td class="status-text">Got Key</td>
-                                                    {% endif %}
-
-                                                    <form action="/decrypt_cul/{{ i.project_id }}/" method="POST">
-                                                        {% csrf_token %}
-                                                        <td>
-                                                            <input type="text" name="decryption_key" required
-                                                                placeholder="Key" class="small-input">
-                                                        </td>
-                                                        <td>
-                                                            <button type="submit" class="action-btn">Decrypt</button>
-                                                        </td>
-                                                    </form>
-
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****"|slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-                                                    <td>{{ "*****" |slice:":6" }}</td>
-
-                                                    {% else %}
-                                                    <td>{{ i.project_id }}</td>
-                                                    <td colspan="3" class="decrypted">Decrypted</td>
-                                                    <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.final_fern_biomass }}</td>
-                                                    <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.plant_ree_conc }}</td>
-                                                    <td>{{ i.harvested_biomass }}</td>
-                                                    <td>{{ i.extraction_eff }}</td>
-                                                    <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
-                                                    <td>{{ i.final_soil_ree }}</td>
-                                                    <td>{{ i.cul_signed_by|default_if_none:"No Data Available" }}</td>
-                                                    {% endif %}
+                                                {% if i.cul_get_key is False %}
+                                                <td>
+                                                    <a href="/getkey_cul/{{ i.project_id }}/">
+                                                        <button class="action-btn ">Get Key</button>
+                                                    </a>
+                                                </td>
                                                 {% else %}
-                                                    <td>{{ i.project_id }}</td>
-                                                    <td colspan="13" style="color: #e67e22; font-weight: 600; text-align: center;">
-                                                        <i class="fas fa-exclamation-triangle" style="margin-right: 6px;"></i>
-                                                        Phase 2 is not yet completed
+                                                <td class="status-text">Got Key</td>
+                                                {% endif %}
+
+                                                <form action="/decrypt_cul/{{ i.project_id }}/" method="POST">
+                                                    {% csrf_token %}
+                                                    <td>
+                                                        <input type="text" name="decryption_key" required
+                                                            placeholder="Key" class="small-input">
                                                     </td>
+                                                    <td>
+                                                        <button type="submit" class="action-btn">Decrypt</button>
+                                                    </td>
+                                                </form>
+
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****"|slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+                                                <td>{{ "*****" |slice:":6" }}</td>
+
+                                                {% else %}
+                                                <td>{{ i.project_id }}</td>
+                                                <td colspan="3">
+                                                    {% if i.cul_scan is False %}
+                                                    <form action="/cul_ana_process/{{ i.project_id }}/" method="POST">
+                                                        {% csrf_token %}
+                                                        <button type="submit" class="action-btn">PROCESS</button>
+                                                    </form>
+                                                    {% else %}
+                                                    <span style="font-weight: bold; color: green;">SCANNED</span>
+                                                    {% endif %}
+                                                </td>
+                                                <td>{{ i.initial_fern_biomass|default_if_none:"No Data Available" }}
+                                                </td>
+                                                <td>{{ i.final_fern_biomass }}</td>
+                                                <td>{{ i.growth_duration|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.soil_ree_conc|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.plant_ree_conc }}</td>
+                                                <td>{{ i.harvested_biomass }}</td>
+                                                <td>{{ i.extraction_eff }}</td>
+                                                <td>{{ i.initial_soil_ree|default_if_none:"No Data Available" }}</td>
+                                                <td>{{ i.final_soil_ree }}</td>
+                                                <td>{{ i.cul_signed_by|default_if_none:"No Data Available" }}</td>
+                                                {% endif %}
+                                                {% else %}
+                                                <td>{{ i.project_id }}</td>
+                                                <td colspan="13"
+                                                    style="color: #e67e22; font-weight: 600; text-align: center;">
+                                                    <i class="fas fa-exclamation-triangle"
+                                                        style="margin-right: 6px;"></i>
+                                                    Phase 2 is not yet completed
+                                                </td>
+                                                {% endif %}
+                                                {% else %}
+                                                <td>{{ i.project_id }}</td>
+                                                <td colspan="13"
+                                                    style="color: #e67e22; font-weight: 600; text-align: center;">
+                                                    <i class="fas fa-exclamation-triangle"
+                                                        style="margin-right: 6px;"></i>
+                                                    Phase 2 is not yet completed
+                                                </td>
                                                 {% endif %}
                                             </tr>
                                             {% endif %}

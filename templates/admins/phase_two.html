@@ -453,60 +453,59 @@
                                 style="color: #15803d; border-bottom: 2px solid #22c55e; padding-bottom: 5px; margin-bottom: 20px;">
                                 Submit Lab & Harvest Data</h4>
 
-                            <div class="row">
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Final Fern Biomass (g)</label>
-                                    <input type="number" step="0.01" min="50" max="500" class="form-control" name="final_fern_biomass"
-                                        placeholder="Enter value between 50 - 500"
-                                        value="{{ data.final_fern_biomass|default_if_none:'' }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Harvested Plant Weight (g)</label>
-                                    <input type="number" step="0.01" min="50" max="500" class="form-control" name="harvested_biomass"
-                                        placeholder="Enter value between 50 - 500"
-                                        value="{{ data.harvested_biomass|default_if_none:'' }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Final Soil REE (mg/kg)</label>
-                                    <input type="number" step="0.01" min="10" max="3000" class="form-control" name="final_soil_ree"
-                                        placeholder="Enter value between 10 - 3000"
-                                        value="{{ data.final_soil_ree|default_if_none:'' }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Plant REE Concentration (mg/kg)</label>
-                                    <input type="number" step="0.01" min="10" max="3000" class="form-control" name="plant_ree_conc"
-                                        placeholder="Enter value between 10 - 3000"
-                                        value="{{ data.plant_ree_conc|default_if_none:'' }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Extraction Efficiency (%)</label>
-                                    <input type="number" step="0.01" min="40" max="95" class="form-control" name="extraction_eff"
-                                        placeholder="Enter value between 40 - 95"
-                                        value="{{ data.extraction_eff|default_if_none:'' }}" required>
-                                </div>
-
-                                <div class="col-md-6 mb-3">
-                                    <label class="form-label fw-bold">Recovery (%)</label>
-                                    <input type="number" step="0.01" min="0" max="100" class="form-control" name="recovery"
-                                        placeholder="Enter value between 0 - 100"
-                                        value="{{ data.recovery|default_if_none:'' }}" required>
-                                </div>
-                            </div>
-
-                            <div class="text-center mt-4">
-                                {% if data.final_fern_biomass != None and data.harvested_biomass != None and data.final_soil_ree != None and data.plant_ree_conc != None and data.extraction_eff != None and data.recovery != None %}
-                                <button type="submit" class="btn btn-warning px-5 py-2 fw-bold"
-                                    style="border-radius: 10px;" onclick="return confirm('Are you sure you want to update this Phase 2 data?');">Update Phase 2 Data</button>
-                                {% else %}
-                                <button type="submit" class="btn btn-success px-5 py-2 fw-bold"
-                                    style="background: linear-gradient(to right, #059669, #10b981); border: none; border-radius: 10px;">Submit
-                                    Phase 2 Data</button>
-                                {% endif %}
-                            </div>
+                             <div class="row">
+                                 <div class="col-md-6 mb-3">
+                                     <label class="form-label fw-bold">Final Fern Biomass (g)</label>
+                                     <input type="number" step="0.01" min="50" max="500" class="form-control" name="final_fern_biomass"
+                                         placeholder="Enter value between 50 - 500"
+                                         value="{{ data.final_fern_biomass|default_if_none:'' }}" {% if data.final_fern_biomass != None %}readonly{% endif %} required>
+                                 </div>
+ 
+                                 <div class="col-md-6 mb-3">
+                                     <label class="form-label fw-bold">Harvested Plant Weight (g)</label>
+                                     <input type="number" step="0.01" min="50" max="500" class="form-control" name="harvested_biomass"
+                                         placeholder="Enter value between 50 - 500"
+                                         value="{{ data.harvested_biomass|default_if_none:'' }}" {% if data.final_fern_biomass != None %}readonly{% endif %} required>
+                                 </div>
+ 
+                                 <div class="col-md-6 mb-3">
+                                     <label class="form-label fw-bold">Final Soil REE (mg/kg)</label>
+                                     <input type="number" step="0.01" min="10" max="3000" class="form-control" name="final_soil_ree"
+                                         placeholder="Enter value between 10 - 3000"
+                                         value="{{ data.final_soil_ree|default_if_none:'' }}" {% if data.final_fern_biomass != None %}readonly{% endif %} required>
+                                 </div>
+ 
+                                 <div class="col-md-6 mb-3">
+                                     <label class="form-label fw-bold">Plant REE Concentration (mg/kg)</label>
+                                     <input type="number" step="0.01" min="10" max="3000" class="form-control" name="plant_ree_conc"
+                                         placeholder="Enter value between 10 - 3000"
+                                         value="{{ data.plant_ree_conc|default_if_none:'' }}" {% if data.final_fern_biomass != None %}readonly{% endif %} required>
+                                 </div>
+ 
+                                 <div class="col-md-6 mb-3">
+                                     <label class="form-label fw-bold">Extraction Efficiency (%)</label>
+                                     <input type="number" step="0.01" min="40" max="95" class="form-control" name="extraction_eff"
+                                         placeholder="Enter value between 40 - 95"
+                                         value="{{ data.extraction_eff|default_if_none:'' }}" {% if data.final_fern_biomass != None %}readonly{% endif %} required>
+                                 </div>
+ 
+                                 <div class="col-md-6 mb-3">
+                                     <label class="form-label fw-bold">Recovery (%)</label>
+                                     <input type="number" step="0.01" min="0" max="100" class="form-control" name="recovery"
+                                         placeholder="Enter value between 0 - 100"
+                                         value="{{ data.recovery|default_if_none:'' }}" {% if data.final_fern_biomass != None %}readonly{% endif %} required>
+                                 </div>
+                             </div>
+ 
+                             <div class="text-center mt-4">
+                                 {% if data.final_fern_biomass != None and data.harvested_biomass != None and data.final_soil_ree != None and data.plant_ree_conc != None and data.extraction_eff != None and data.recovery != None %}
+                                 <!-- Values are already updated, button is hidden -->
+                                 {% else %}
+                                 <button type="submit" class="btn btn-success px-5 py-2 fw-bold"
+                                     style="background: linear-gradient(to right, #059669, #10b981); border: none; border-radius: 10px;">Submit
+                                     Phase 2 Data</button>
+                                 {% endif %}
+                             </div>
                         </form>
                         {% else %}
                         <div class="text-center mt-5 text-muted">
@@ -567,7 +566,14 @@
             if (container.style.display === 'none') {
                 container.style.display = 'block';
                 if (!html5QrcodeScanner) {
-                    html5QrcodeScanner = new Html5QrcodeScanner("reader", { fps: 10, qrbox: { width: 250, height: 250 } }, false);
+                    html5QrcodeScanner = new Html5QrcodeScanner("reader", {
+                        fps: 10,
+                        qrbox: { width: 250, height: 250 },
+                        supportedScanTypes: [
+                            Html5QrcodeScanType.SCAN_TYPE_FILE,
+                            Html5QrcodeScanType.SCAN_TYPE_CAMERA
+                        ]
+                    }, false);
                 }
                 html5QrcodeScanner.render(onScanSuccess, onScanFailure);
             } else {

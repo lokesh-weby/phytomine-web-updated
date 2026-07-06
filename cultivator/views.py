@@ -218,7 +218,7 @@ def cul_ana_process(request, project_id):
     data.save()
 
     messages.info(request,"CULTIVATOR Analysis Completed")
-    return redirect("/cul_ana/")
+    return redirect("/cul_req/")
 
 def cul_rep(request):
     if request.session.get('department') != "CULTIVATOR":
